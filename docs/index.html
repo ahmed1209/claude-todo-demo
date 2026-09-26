@@ -453,14 +453,14 @@ footer p span{color:var(--signal);margin:0 10px}
 /* Motion: section hops */
 .warp{position:fixed;inset:0;z-index:58;pointer-events:none;opacity:0;--p:0;--w:0}
 .warp.on{opacity:1}
-.warp i{position:absolute;left:-10%;right:-10%;height:140px;top:calc(var(--p) * 120% - 70px);opacity:calc(var(--w) * .9);background:linear-gradient(180deg,transparent,rgba(94,230,255,.25) 40%,rgba(255,255,255,.55) 50%,rgba(143,123,255,.25) 60%,transparent);filter:blur(6px);display:none}
+.warp i{position:absolute;left:-10%;right:-10%;height:200px;top:calc(var(--p) * 120% - 100px);opacity:var(--w);background:linear-gradient(180deg,transparent,rgba(94,230,255,.25) 40%,rgba(255,255,255,.55) 50%,rgba(143,123,255,.25) 60%,transparent);filter:blur(6px);display:none}
 body[data-dir="up"] .warp i{top:calc((1 - var(--p)) * 120% - 70px)}
 body[data-transition="warp"] .warp{background:radial-gradient(ellipse at 50% 50%,rgba(6,8,15,0) 40%,rgba(6,8,15,calc(var(--w) * .55)) 100%);backdrop-filter:blur(calc(var(--w) * 2px));-webkit-backdrop-filter:blur(calc(var(--w) * 2px))}
 body[data-transition="warp"] .warp i{display:block}
 body[data-transition="fade"] .warp{background:rgba(6,8,15,calc(var(--w) * .7))}
 body[data-transition="slide"] .warp{background:rgba(6,8,15,calc(var(--w) * .25))}
 main{transition:transform .45s cubic-bezier(.2,.8,.2,1);transform-origin:50% 50%}
-html.hopping body[data-transition="warp"] main{transform:scale(.982)}
+html.hopping body[data-transition="warp"] main{transform:scale(.972)}
 html.hopping body[data-transition="slide"][data-dir="down"] main{transform:translateY(-18px)}
 html.hopping body[data-transition="slide"][data-dir="up"] main{transform:translateY(18px)}
 .sheet.arrived .rail .ref,.courses.arrived .section-label b,.notes-section.arrived .section-label b,.updates.arrived .section-label b,.follow.arrived .section-label b,.contact.arrived .section-label b{animation:arrive-pulse 1.2s ease-out}
@@ -472,22 +472,21 @@ html.hopping body[data-transition="slide"][data-dir="up"] main{transform:transla
 .button,.header-cta,.chip,.vbtn,.contact-email{position:relative;overflow:hidden;isolation:isolate}
 .button span[aria-hidden]{display:inline-block;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
 .button:hover span[aria-hidden]{transform:translateX(6px)}
-.button:active,.header-cta:active,.chip:active,.vbtn:active{transform:translateY(0) scale(.97)!important;transition-duration:.08s}
+.button:active,.header-cta:active{transform:translateY(0) scale(.97)!important;transition-duration:.08s}
 .ripple{position:absolute;z-index:-1;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(255,255,255,.35),rgba(255,255,255,0) 60%);transform:scale(0);animation:ripple .65s ease-out forwards}
 @keyframes ripple{to{transform:scale(1);opacity:0}}
 /* shimmer */
-body[data-hover="shimmer"] :is(.button,.header-cta,.contact-email)::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(115deg,transparent 25%,rgba(255,255,255,.38) 50%,transparent 75%);transform:translateX(-130%) skewX(-12deg);transition:transform .75s cubic-bezier(.2,.8,.2,1);pointer-events:none}
-body[data-hover="shimmer"] :is(.button,.header-cta,.contact-email):hover::before{transform:translateX(130%) skewX(-12deg)}
+body[data-hover="shimmer"] :is(.button,.header-cta)::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(115deg,transparent 25%,rgba(255,255,255,.38) 50%,transparent 75%);transform:translateX(-130%) skewX(-12deg);transition:transform .75s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+body[data-hover="shimmer"] :is(.button,.header-cta):hover::before{transform:translateX(130%) skewX(-12deg)}
 body[data-hover="shimmer"] .button:hover{box-shadow:0 0 28px rgba(94,230,255,.35)}
 /* liquid fill from the cursor */
-body[data-hover="liquid"] :is(.button,.header-cta,.chip,.vbtn,.contact-email)::before{content:"";position:absolute;z-index:-1;left:var(--mx,50%);top:var(--my,50%);width:250%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%) scale(0);background:radial-gradient(circle,rgba(94,230,255,.95),rgba(143,123,255,.9) 55%,rgba(143,123,255,0) 72%);transition:transform .55s cubic-bezier(.2,.8,.2,1);pointer-events:none}
-body[data-hover="liquid"] :is(.button,.header-cta,.chip,.vbtn,.contact-email):hover::before{transform:translate(-50%,-50%) scale(1)}
-body[data-hover="liquid"] :is(.button,.chip,.vbtn,.contact-email):hover{color:#06121a;border-color:transparent;box-shadow:0 0 30px rgba(94,230,255,.4)}
-body[data-hover="liquid"] .contact-email:hover span,body[data-hover="liquid"] .vbtn:hover,body[data-hover="liquid"] .chip:hover{color:#06121a}
+body[data-hover="liquid"] :is(.button,.header-cta)::before{content:"";position:absolute;z-index:-1;left:var(--mx,50%);top:var(--my,50%);width:250%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%) scale(0);background:radial-gradient(circle,rgba(94,230,255,.95),rgba(143,123,255,.9) 55%,rgba(143,123,255,0) 72%);transition:transform .55s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+body[data-hover="liquid"] :is(.button,.header-cta):hover::before{transform:translate(-50%,-50%) scale(1)}
+body[data-hover="liquid"] .button:hover{color:#06121a;border-color:transparent;box-shadow:0 0 30px rgba(94,230,255,.4)}
 body[data-hover="liquid"] :is(.button-primary,.header-cta)::before{background:radial-gradient(circle,rgba(255,255,255,.75),rgba(255,255,255,.35) 45%,rgba(255,255,255,0) 72%)}
 /* rotating border beam */
-body[data-hover="beam"] :is(.button,.header-cta,.chip,.vbtn,.contact-email)::after{content:"";position:absolute;inset:0;z-index:2;border-radius:inherit;padding:1.5px;background:conic-gradient(from var(--ang,0deg),transparent 0 62%,var(--signal) 78%,#fff 84%,var(--violet) 90%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;opacity:0;transition:opacity .3s;pointer-events:none}
-body[data-hover="beam"] :is(.button,.header-cta,.chip,.vbtn,.contact-email):hover::after{opacity:1;animation:spin 1.4s linear infinite}
+body[data-hover="beam"] :is(.button,.header-cta)::after{content:"";position:absolute;inset:0;z-index:2;border-radius:inherit;padding:1.5px;background:conic-gradient(from var(--ang,0deg),transparent 0 62%,var(--signal) 78%,#fff 84%,var(--violet) 90%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;opacity:0;transition:opacity .3s;pointer-events:none}
+body[data-hover="beam"] :is(.button,.header-cta):hover::after{opacity:1;animation:spin 1.4s linear infinite}
 body[data-hover="beam"] :is(.button,.header-cta):hover{box-shadow:0 0 34px rgba(94,230,255,.45),inset 0 0 18px rgba(94,230,255,.12)}
 /* magnetic */
 body[data-hover="magnetic"] :is(.button,.header-cta){transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,background .2s,color .2s,border-color .2s}
@@ -495,6 +494,30 @@ body[data-hover="magnetic"] :is(.button,.header-cta):hover{box-shadow:0 0 34px r
 body[data-hover="magnetic"] :is(.button,.header-cta)::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(120px 60px at var(--mx,50%) var(--my,50%),rgba(255,255,255,.28),transparent 70%);opacity:0;transition:opacity .25s;pointer-events:none}
 body[data-hover="magnetic"] :is(.button,.header-cta):hover::before{opacity:1}
 @media (prefers-reduced-motion:reduce){.warp,.nav-ind,.ripple{display:none!important} main{transform:none!important}}
+/* Scroll-driven section transitions */
+.divider{position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--glass-border-2),transparent);overflow:hidden;pointer-events:none;z-index:1}
+.divider::after{content:"";position:absolute;top:0;bottom:0;left:-35%;width:35%;background:linear-gradient(90deg,transparent,var(--signal),#fff,var(--violet),transparent);opacity:0;box-shadow:0 0 14px rgba(94,230,255,.8)}
+.entered .divider::after{animation:sweep 1.5s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes sweep{0%{left:-35%;opacity:1}100%{left:100%;opacity:1}}
+.reveal{transition-delay:calc(var(--i,0) * 80ms)}
+.hero .wrap{will-change:transform,opacity}
+.panes>[role=tabpanel].switch{animation:paneIn .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes paneIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.dlg[open] .dlg-panel{animation:dlgIn .5s cubic-bezier(.2,.8,.2,1)}
+.dlg[open]::backdrop{animation:fadeIn .4s ease}
+@keyframes dlgIn{from{opacity:0;transform:translateY(22px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.course,.frow,.pan{animation:popIn .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0) * 60ms)}
+@keyframes popIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.course.reveal,.pan.reveal{animation:none}
+.dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:57;display:flex;flex-direction:column;gap:12px;margin:0;padding:0}
+.dots a{position:relative;display:block;width:10px;height:10px;border-radius:50%;border:1px solid var(--glass-border-2);background:var(--glass);transition:transform .3s,background .3s,border-color .3s,box-shadow .3s}
+.dots a:hover{border-color:var(--signal)}
+.dots a.active{background:var(--signal);border-color:var(--signal);box-shadow:0 0 14px var(--signal);transform:scale(1.3)}
+.dots a::after{content:attr(data-label);position:absolute;right:22px;top:50%;transform:translate(8px,-50%);white-space:nowrap;padding:6px 11px;border-radius:999px;background:rgba(8,11,24,.92);border:1px solid var(--glass-border-2);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text);opacity:0;transition:opacity .2s,transform .25s;pointer-events:none}
+.dots a:hover::after{opacity:1;transform:translate(0,-50%)}
+@media (max-width:980px){.dots{display:none}}
+@media (prefers-reduced-motion:reduce){.divider::after,.dots{display:none} .course,.frow,.pan{animation:none}}
 </style>
 </head>
 <body>
@@ -958,7 +981,7 @@ let CONTENT = loadContent(); applyContent(); applyText();
 /* ===================== plugin demo: tabs ===================== */
 (() => {
   const tabs = $$('#plugin-demo [role=tab]'), titles = { scatter:'Surface Scatter — preview', shadow:'Shadow Analysis — site plan', align:'Align Tags — sheet view' };
-  const show = id => { tabs.forEach(t => { const on = t.id === 'tab-' + id; t.setAttribute('aria-selected', String(on)); $('#' + t.getAttribute('aria-controls')).hidden = !on; }); $('#vp-title').textContent = titles[id]; document.dispatchEvent(new CustomEvent('demo:show', { detail: id })); };
+  const show = id => { tabs.forEach(t => { const on = t.id === 'tab-' + id; t.setAttribute('aria-selected', String(on)); const pn = $('#' + t.getAttribute('aria-controls')); pn.hidden = !on; if (on) { pn.classList.remove('switch'); void pn.offsetWidth; pn.classList.add('switch'); } }); $('#vp-title').textContent = titles[id]; document.dispatchEvent(new CustomEvent('demo:show', { detail: id })); };
   tabs.forEach(t => t.addEventListener('click', () => show(t.id.replace('tab-', ''))));
   tabs.forEach((t, i) => t.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const n = (i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length; tabs[n].focus(); tabs[n].click(); } }));
 })();
@@ -1100,7 +1123,7 @@ const renderPanels = () => {
     const m = (k, v, max) => `<div>${k}<b>${v}</b><i style="--w:${Math.min(100, Math.round(v / max * 100))}%"></i></div>`;
     $('#fb-detail').innerHTML = `<div><span class="pill on"><i></i>${esc(f.type)}</span><h4 style="margin-top:12px">${esc(f.name)}</h4><p>${esc(f.inside)}</p><p style="margin-top:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--on-dark-3)">Revit ${f.versions.join(' · ')} · ${esc(f.size)}</p></div><div class="meters">${m('Views', f.views, 140)}${m('Sheets', f.sheets, 48)}${m('Families', f.families, 420)}${m('Schedules', f.schedules, 30)}</div>`; };
   const render = () => { const rows = list(); if (!rows.includes(FILES[st.sel])) st.sel = FILES.indexOf(rows[0]);
-    tbody.innerHTML = rows.map(f => `<tr class="frow" data-i="${FILES.indexOf(f)}" aria-selected="${FILES.indexOf(f) === st.sel}" tabindex="0"><td><span class="sn">${esc(f.name)}</span></td><td>${esc(f.type)}</td><td>${esc(f.disc)}</td><td style="font-family:var(--mono);font-size:12px">${f.versions.join(' · ')}</td><td class="num">${esc(f.size)}</td></tr>`).join('');
+    tbody.innerHTML = rows.map((f, ri) => `<tr class="frow" style="--i:${Math.min(ri, 9)}" data-i="${FILES.indexOf(f)}" aria-selected="${FILES.indexOf(f) === st.sel}" tabindex="0"><td><span class="sn">${esc(f.name)}</span></td><td>${esc(f.type)}</td><td>${esc(f.disc)}</td><td style="font-family:var(--mono);font-size:12px">${f.versions.join(' · ')}</td><td class="num">${esc(f.size)}</td></tr>`).join('');
     $('#fb-stats').innerHTML = `<b>${rows.length}</b> of ${FILES.length} files`; detail(FILES[st.sel]); };
   tbody.addEventListener('click', e => { const r = e.target.closest('.frow'); if (r) { st.sel = +r.dataset.i; render(); } });
   tbody.addEventListener('keydown', e => { const r = e.target.closest('.frow'); if (r && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); st.sel = +r.dataset.i; render(); } });
@@ -1112,7 +1135,7 @@ const renderPanels = () => {
 /* ===================== courses ===================== */
 (() => {
   const art = (i) => { const c = ['#5ee6ff', '#8f7bff', '#b9c6ff', '#3f9a6e'][i % 4]; return `<svg viewBox="0 0 320 180" aria-hidden="true"><rect width="320" height="180" fill="#070a14"/>${Array.from({ length: 9 }, (_, k) => `<line x1="${20 + k * 35}" y1="20" x2="${20 + k * 35}" y2="160" stroke="rgba(241,242,248,.07)"/>`).join('')}<path d="M20 ${140 - i * 10} C 90 ${60 + i * 12}, 160 ${150 - i * 20}, 300 ${50 + i * 15}" fill="none" stroke="${c}" stroke-width="2.5"/><circle cx="20" cy="${140 - i * 10}" r="5" fill="${c}"/><circle cx="300" cy="${50 + i * 15}" r="5" fill="${c}"/><rect x="${120 + i * 20}" y="${70 - i * 6}" width="60" height="40" fill="none" stroke="rgba(241,242,248,.4)" stroke-dasharray="4 3"/></svg>`; };
-  const renderCourses = () => { $('#course-grid').innerHTML = COURSES.map((c, i) => `<article class="course" data-level="${c.level}"><div class="course-art">${art(i)}<span class="dur">${c.hours} h</span></div><div class="course-meta"><span><b>${c.n}</b> ${esc(c.cat)}</span><span>${c.lessons} lessons</span></div><h3>${esc(c.title)}</h3><p>${esc(c.blurb)}</p><div><span class="lvl">${c.level}</span></div><details><summary>Syllabus</summary><ol>${c.syllabus.map(([t, d]) => `<li><span>${esc(t)}</span><span>${d}</span></li>`).join('')}</ol></details></article>`).join(''); }; renderCourses(); __render.courses = renderCourses;
+  const renderCourses = () => { $('#course-grid').innerHTML = COURSES.map((c, i) => `<article class="course" style="--i:${i}" data-level="${c.level}"><div class="course-art">${art(i)}<span class="dur">${c.hours} h</span></div><div class="course-meta"><span><b>${c.n}</b> ${esc(c.cat)}</span><span>${c.lessons} lessons</span></div><h3>${esc(c.title)}</h3><p>${esc(c.blurb)}</p><div><span class="lvl">${c.level}</span></div><details><summary>Syllabus</summary><ol>${c.syllabus.map(([t, d]) => `<li><span>${esc(t)}</span><span>${d}</span></li>`).join('')}</ol></details></article>`).join(''); }; renderCourses(); __render.courses = renderCourses;
   seg($('#level-bar'), 'data-level', v => $$('#course-grid .course').forEach(c => c.hidden = !(v === 'all' || c.dataset.level === v)));
 })();
 
@@ -1220,25 +1243,38 @@ window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.
   const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   let raf = 0, current = '';
   const moveInd = a => { if (!a || getComputedStyle(nav).position === 'absolute') { ind.style.opacity = 0; return; } ind.style.opacity = 1; ind.style.width = a.offsetWidth + 'px'; ind.style.transform = `translateX(${a.offsetLeft}px)`; };
-  const setActive = id => { if (id === current) return; current = id; links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id)); moveInd(links.find(a => a.getAttribute('href') === '#' + id)); };
+  const setActive = id => { if (id === current) return; current = id; links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id)); if (window.__dotLinks) window.__dotLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id)); moveInd(links.find(a => a.getAttribute('href') === '#' + id)); };
   const spotlight = el => { el.classList.remove('arrived'); void el.offsetWidth; el.classList.add('arrived'); $$('.reveal.pre', el).forEach(r => r.classList.add('in')); setTimeout(() => el.classList.remove('arrived'), 1400); };
   const hopTo = el => {
     const start = scrollY, end = Math.max(0, Math.round(el.getBoundingClientRect().top + scrollY - (el.id === 'top' ? 0 : 88))), dist = end - start;
     if (reduced() || Math.abs(dist) < 24) { scrollTo(0, end); spotlight(el); return; }
-    const style = document.body.dataset.transition || 'warp', D = Math.min(1500, 650 + Math.abs(dist) * .22), t0 = performance.now();
+    const style = document.body.dataset.transition || 'warp', D = Math.min(1700, 850 + Math.abs(dist) * .2), t0 = performance.now();
     document.body.dataset.dir = dist > 0 ? 'down' : 'up'; document.documentElement.classList.add('hopping'); if (style !== 'none') overlay.classList.add('on');
     cancelAnimationFrame(raf);
     const step = now => { const k = Math.min(1, (now - t0) / D); scrollTo(0, start + dist * ease(k)); overlay.style.setProperty('--p', k.toFixed(4)); overlay.style.setProperty('--w', Math.sin(k * Math.PI).toFixed(4)); if (k < 1) raf = requestAnimationFrame(step); else { overlay.classList.remove('on'); document.documentElement.classList.remove('hopping'); spotlight(el); } };
     raf = requestAnimationFrame(step);
   };
   window.hopTo = hopTo;
+  // section dots (desktop) + divider sweeps + staggered entrances + hero recede
+  const dots = document.createElement('nav'); dots.className = 'dots'; dots.setAttribute('aria-label', 'Sections'); dots.innerHTML = links.map(a => `<a href="${a.getAttribute('href')}" data-label="${a.textContent.trim()}" aria-label="${a.textContent.trim()}"></a>`).join(''); document.body.appendChild(dots);
+  const dotLinks = $$('a', dots); window.__dotLinks = dotLinks;
+  const allSections = $$('main > section');
+  allSections.forEach(sec => { if (sec.classList.contains('hero')) return; sec.insertAdjacentHTML('afterbegin', '<i class="divider" aria-hidden="true"></i>'); });
+  const stagger = $$('.notes .note, #panel-grid .pan, #family-grid .pan, .note-card, .social-card, .changelog li, .contact-actions > *');
+  if (!reduced()) { stagger.forEach(el => { const i = Array.prototype.indexOf.call(el.parentNode.children, el); el.style.setProperty('--i', Math.min(i, 8)); el.classList.add('reveal'); if (el.getBoundingClientRect().top > innerHeight) el.classList.add('pre'); }); }
+  if ('IntersectionObserver' in window) {
+    const enter = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('entered'); enter.unobserve(en.target); } }), { threshold: .12 }); allSections.forEach(s => enter.observe(s));
+    const rv = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); rv.unobserve(en.target); } }), { threshold: .05 }); stagger.forEach(el => { if (el.classList.contains('pre')) rv.observe(el); });
+    setTimeout(() => stagger.forEach(el => el.classList.add('in')), 7000);
+  } else { stagger.forEach(el => el.classList.add('in')); }
+  const heroWrap = $('.hero .wrap'), hero = $('.hero');
   document.addEventListener('click', e => { const a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a) return; const id = a.getAttribute('href').slice(1); if (!id || id === 'admin') return; const el = document.getElementById(id); if (!el) return; e.preventDefault(); try { history.pushState(null, '', '#' + id); } catch (err) {} if (links.includes(a)) setActive(id); hopTo(el); });
   const stop = () => cancelAnimationFrame(raf); window.addEventListener('wheel', stop, { passive: true }); window.addEventListener('touchstart', stop, { passive: true }); window.addEventListener('keydown', e => { if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(e.key)) stop(); });
   // active section tracking
   const sections = links.map(a => document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
   if ('IntersectionObserver' in window) { const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) setActive(en.target.id); }), { rootMargin: '-38% 0px -55% 0px' }); sections.forEach(s => io.observe(s)); }
   // scroll progress
-  let ticking = false; const onScroll = () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const max = document.documentElement.scrollHeight - innerHeight; prog.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`; ticking = false; }); };
+  let ticking = false; const onScroll = () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const max = document.documentElement.scrollHeight - innerHeight; prog.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`; if (heroWrap && !reduced()) { const hh = hero.offsetHeight || 1; const k = Math.min(1, Math.max(0, scrollY / (hh * .85))); heroWrap.style.opacity = (1 - k * .9).toFixed(3); heroWrap.style.transform = `translateY(${(k * 70).toFixed(1)}px) scale(${(1 - k * .04).toFixed(4)})`; } ticking = false; }); };
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
   window.addEventListener('resize', () => moveInd(links.find(a => a.classList.contains('active'))));
   if (location.hash && location.hash !== '#admin') { const el = document.getElementById(location.hash.slice(1)); if (el) setTimeout(() => { scrollTo(0, el.getBoundingClientRect().top + scrollY - 88); setActive(el.id); spotlight(el); }, 60); }
@@ -1246,12 +1282,12 @@ window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.
 
 /* ===================== hover effects: cursor position, magnetic pull, ripple ===================== */
 (() => {
-  const SEL = '.button, .header-cta, .chip, .vbtn, .contact-email, .seg button, .vptabs button, .admin-fab';
+  const SEL = '.button, .header-cta';
   const fine = () => window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches;
   document.addEventListener('pointermove', e => { const b = e.target.closest && e.target.closest(SEL); if (!b) return; const r = b.getBoundingClientRect(); b.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%'); b.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
     if (document.body.dataset.hover === 'magnetic' && fine() && !reduced() && b.matches('.button, .header-cta')) { const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2); b.style.transform = `translate(${(dx * .22).toFixed(1)}px, ${(dy * .3).toFixed(1)}px)`; } }, { passive: true });
   document.addEventListener('pointerout', e => { const b = e.target.closest && e.target.closest(SEL); if (b && !(e.relatedTarget && b.contains(e.relatedTarget)) && b.matches('.button, .header-cta') && document.body.dataset.hover === 'magnetic') b.style.transform = ''; });
-  document.addEventListener('pointerdown', e => { const b = e.target.closest && e.target.closest('.button, .header-cta, .chip, .vbtn, .contact-email'); if (!b || reduced()) return; const r = b.getBoundingClientRect(); const s = document.createElement('i'); s.className = 'ripple'; const d = Math.max(r.width, r.height) * 2; s.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px`; b.appendChild(s); setTimeout(() => s.remove(), 700); });
+  document.addEventListener('pointerdown', e => { const b = e.target.closest && e.target.closest('.button, .header-cta'); if (!b || reduced()) return; const r = b.getBoundingClientRect(); const s = document.createElement('i'); s.className = 'ripple'; const d = Math.max(r.width, r.height) * 2; s.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px`; b.appendChild(s); setTimeout(() => s.remove(), 700); });
 })();
 
 /* ===================== admin mode: edit content on the live page ===================== */
