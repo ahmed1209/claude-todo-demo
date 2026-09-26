@@ -194,7 +194,7 @@ main > section:not(.hero) > .wrap{backface-visibility:hidden}
 .panels{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-top:clamp(28px,4vw,44px)}
 .pan{padding:20px 20px 22px;border:1px solid var(--glass-border);border-radius:18px;background:var(--glass);position:relative;overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s,background .25s}
 .pan::after{content:"";position:absolute;inset:0;background:radial-gradient(240px 140px at var(--mx,50%) var(--my,0%),rgba(94,230,255,.12),transparent 70%);opacity:0;transition:opacity .25s;pointer-events:none}
-.pan:hover{transform:translateY(-4px);border-color:var(--glass-border-2);background:var(--glass-2);box-shadow:0 20px 50px -30px rgba(94,230,255,.4)}
+.pan:hover{--t:translateY(-4px);border-color:var(--glass-border-2);background:var(--glass-2);box-shadow:0 20px 50px -30px rgba(94,230,255,.4)}
 .pan:hover::after{opacity:1}
 .pan .k{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
 .pan .k b{font-family:var(--display);font-size:14px;font-weight:700;letter-spacing:-.01em}
@@ -522,6 +522,71 @@ body[data-hover="magnetic"] :is(.button,.header-cta):hover::before{opacity:1}
 .dots a:hover::after{opacity:1;transform:translate(0,-50%)}
 @media (max-width:980px){.dots{display:none}}
 @media (prefers-reduced-motion:reduce){.divider::after,.dots{display:none} .course,.frow,.pan{animation:none}}
+/* 3D scroll motion composition */
+.m3d{transform:var(--m,none);transition:opacity .12s linear;backface-visibility:hidden;animation:none!important}
+.m3d.tilted{transform:var(--m,translateZ(0)) var(--t,translateZ(0))}
+.pan.m3d:hover{transform:var(--m,translateZ(0)) var(--t,translateZ(0))}
+.pan,.course{cursor:pointer}
+.pan:hover .k b::after,.course:hover h3::after{content:" ↗";color:var(--signal)}
+.pan:focus-visible,.course:focus-visible{outline:2px solid var(--signal);outline-offset:4px}
+
+/* Detail pages */
+.page{position:fixed;inset:0;z-index:66;overflow:auto;overscroll-behavior:contain;background:rgba(6,8,15,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--text);transform-origin:var(--ox,50%) var(--oy,50%)}
+.page.opening{animation:pageIn .7s cubic-bezier(.2,.8,.2,1)}
+.page.swapping .page-body{animation:pageSwap .5s cubic-bezier(.2,.8,.2,1)}
+.page.closing{animation:pageOut .42s cubic-bezier(.4,0,.8,.4) forwards}
+@keyframes pageIn{from{opacity:0;transform:perspective(1400px) scale(.72) rotateX(7deg);filter:blur(12px)}to{opacity:1;transform:none;filter:none}}
+@keyframes pageSwap{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes pageOut{to{opacity:0;transform:perspective(1400px) scale(.9) rotateX(-5deg);filter:blur(8px)}}
+.page-bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:14px;padding:calc(12px + env(safe-area-inset-top,0px)) clamp(16px,4vw,40px) 12px;background:rgba(8,11,24,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--glass-border)}
+.page-back{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--glass-border-2);background:var(--glass);color:var(--text);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:border-color .2s,background .2s}
+.page-back:hover{border-color:var(--signal);background:var(--glass-2)}
+.page-crumb{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3)}
+.page-crumb b{color:var(--signal);margin:0 8px}
+.page-body{max-width:1240px;margin:0 auto;padding:clamp(28px,5vw,56px) clamp(20px,5vw,64px) 90px;animation:pageBody .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes pageBody{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+.page-hero{max-width:820px}
+.page-hero h1{font-family:var(--display);font-size:clamp(30px,4.6vw,58px);font-weight:800;letter-spacing:-.02em;line-height:1.04;margin:14px 0 16px}
+.page-hero .lede{font-size:clamp(16px,1.3vw,18px)}
+.page-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.page-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);margin-top:clamp(28px,4vw,44px);align-items:start}
+.page-detail h3{font-size:18px;margin-bottom:10px}
+.page-detail>p{color:var(--text-2);line-height:1.7}
+.page-detail .ctas{margin-top:26px}
+.page-list{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:8px}
+.page-list li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--glass-border);border-radius:12px;background:var(--glass);font-size:14px}
+.page-list li>span:first-child{display:inline-flex;align-items:center;gap:8px;min-width:0}
+.page-list li svg{width:18px;height:18px;stroke:var(--signal);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.page-list .mono{color:var(--text-3);white-space:nowrap}
+.page-related{margin-top:clamp(40px,6vw,64px)}
+.rel-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:16px}
+.rel-card{text-align:left;padding:16px;border:1px solid var(--glass-border);border-radius:16px;background:var(--glass);cursor:pointer;color:var(--text);transition:transform .25s,border-color .25s,background .25s}
+.rel-card:hover{transform:translateY(-4px);border-color:var(--signal);background:var(--glass-2)}
+.rel-card b{display:block;font-family:var(--display);font-size:13px;margin-bottom:6px}
+.rel-card span{font-size:12.5px;color:var(--text-2);line-height:1.5}
+.pv{padding:16px;display:grid;gap:14px}
+.pv-note{color:var(--text-2);font-size:13px;line-height:1.55}
+.ribbon{border:1px solid var(--glass-border-2);border-radius:12px;overflow:hidden;background:#0d1226}
+.rb-tabs{display:flex;gap:2px;padding:6px 8px 0;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--text-3);overflow:hidden}
+.rb-tabs span{padding:6px 10px;border-radius:8px 8px 0 0;white-space:nowrap}
+.rb-tabs .on{background:#151b36;color:var(--signal);border:1px solid var(--glass-border-2);border-bottom:0}
+.rb-body{background:#151b36;padding:10px;border-top:1px solid var(--glass-border-2);overflow-x:auto}
+.rb-panel{display:inline-flex;flex-direction:column;border-right:1px solid var(--glass-border);padding-right:10px}
+.rb-tools{display:flex;gap:6px}
+.rb-tool{display:flex;flex-direction:column;align-items:center;gap:6px;width:66px;padding:8px 4px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--text);font:10px/1.2 var(--body);text-align:center;cursor:default;transition:background .25s,border-color .25s,box-shadow .25s,transform .25s}
+.rb-tool svg{width:26px;height:26px;stroke:var(--signal);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.rb-tool.hot,.rb-tool:hover{background:rgba(94,230,255,.12);border-color:var(--signal);box-shadow:0 0 14px rgba(94,230,255,.35);transform:translateY(-2px)}
+.rb-name{margin-top:6px;padding-top:6px;border-top:1px solid var(--glass-border);font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);text-align:center;white-space:nowrap}
+.pv svg.fam,.pv svg.sheet{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--glass-border)}
+.pv .meters{grid-template-columns:1fr 1fr}
+.player{display:grid;gap:10px}
+.player-bar{height:4px;border-radius:2px;background:rgba(150,175,255,.15);overflow:hidden}
+.player-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--signal),var(--violet));animation:play 14s linear infinite}
+@keyframes play{to{width:100%}}
+.player-row{display:flex;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}
+body.page-open{overflow:hidden}
+@media (max-width:900px){.page-grid{grid-template-columns:1fr} .page-bar .header-cta{display:none}}
+@media (prefers-reduced-motion:reduce){.page.opening,.page.closing,.page-body{animation:none}}
 </style>
 </head>
 <body>
@@ -867,7 +932,7 @@ const SITE = {
   name: 'Parametra',
   email: 'hello@parametra.studio',
   links: { linkedin: 'https://www.linkedin.com/', youtube: 'https://www.youtube.com/' },
-  effects: { hover: 'liquid', transition: 'warp', depth: 'walk' }, // hover: shimmer | liquid | beam | magnetic · transition: warp | fade | slide | none · depth: walk | off
+  effects: { hover: 'liquid', transition: 'warp', depth: 'motion' }, // hover: shimmer | liquid | beam | magnetic · transition: warp | fade | slide | none · depth: motion | off
   formEndpoint: '' // e.g. 'https://formsubmit.co/ajax/you@example.com' — leave empty to prepare the request locally
 };
 
@@ -938,6 +1003,45 @@ const inPoly = (x, y, poly) => { let inside = false; for (let i = 0, j = poly.le
 const hull = pts => { const p = pts.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]); const cross = (o, a, b) => (a[0]-o[0])*(b[1]-o[1]) - (a[1]-o[1])*(b[0]-o[0]); const lo = [], up = []; for (const q of p) { while (lo.length >= 2 && cross(lo[lo.length-2], lo[lo.length-1], q) <= 0) lo.pop(); lo.push(q); } for (let i = p.length - 1; i >= 0; i--) { const q = p[i]; while (up.length >= 2 && cross(up[up.length-2], up[up.length-1], q) <= 0) up.pop(); up.push(q); } up.pop(); lo.pop(); return lo.concat(up); };
 const fmt = (n, d=0) => n.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
 const seg = (root, attr, cb) => { $$('button[' + attr + ']', root).forEach(b => b.addEventListener('click', () => { $$('button[' + attr + ']', root).forEach(x => x.setAttribute('aria-pressed', String(x === b))); cb(b.getAttribute(attr)); })); };
+
+/* ===================== longer descriptions for the detail pages (editable in the admin editor as "details") ===================== */
+const DETAILS = {
+  'Annotation': 'Region Tools reshapes, merges and re-hatches filled regions in one pass instead of vertex by vertex. Revisions renumbers clouds by sheet order, syncs revision tags and reports clouds that lost their tag, so a revision issue leaves the office in minutes.',
+  'Auto Dimension & Tag': 'Pick a view and a rule set, and Auto Dim & Tag places dimension strings on grids, walls and openings and tags every untagged element in one command. Rules live in a small settings dialog, so the office standard is applied the same way by everyone.',
+  'BIMCAD Tools': 'CAD Converter turns linked DWG layers into native lines, regions and text. Transfer to CAD exports a view with layer mapping the consultants asked for, and Update from CAD re-reads a revised DWG and moves only what changed.',
+  'Ahmed Tools': 'Floor to Topo builds a toposolid from a floor sketch and its levels. Topo Links keeps a toposolid tied to the elements that cut it, and Parametric Pattern spreads a seeded paving pattern across a floor with live preview before committing elements.',
+  'Line Styles': 'Audit every line style in the project, see where each is used, rename in bulk and swap one style for another across all views. Unused styles can be purged with a report of what was removed.',
+  'Manage': 'Two housekeeping utilities for keeping a project tidy between issues. Their names are placeholders in this preview; rename them in the admin editor when you decide what to publish.',
+  'Model': 'Floor Tools splits, joins and re-slopes floors while keeping openings intact. Create Edgers places kerbs and edging families along floor boundaries and updates them when the boundary moves.',
+  'Planting Audit': 'Checks every plant against spacing rules, flags plants too close to hard edges or each other, finds untagged plants and compares placed quantities against the schedule before the set is issued.',
+  'Planting Scatter': 'Plant Library holds your species with sizes and water needs. Surface Scatter fills any floor, toposolid or filled region at a spacing you set, Path Scatter follows a model line, and Edit Scatter re-flows the set when the boundary changes.',
+  'Position': 'Six alignment tools with one idea: select, pick an edge, done. Align Tags, Align Elements and Align Railing tidy the model and the annotation; Align Viewports, Manage Viewports and Manage Legends keep whole sheet sets consistent.',
+  'Print': 'Print Browser lists sheets by set, revision or filter, prints or exports PDF, DWG and images in one queue and names the files with a preset, with a transmittal record of what left the office.',
+  'Shadow Analysis': 'Shadow Analysis reads the project location and sun settings and reports shaded area per surface for any date and time. Shadow Links keeps those results attached to the elements, so schedules update when the massing changes.',
+  'Sheet Manager': 'Create sheets from a list, renumber whole sets while keeping revision clouds and view references attached, and reorganise the browser by any parameter.',
+  'Standards Checker': 'Runs the office checklist against the model: naming, view templates applied, unplaced rooms, duplicate marks, missing sheet parameters and warnings by type, with a report you can attach to the issue.',
+  'View Manager': 'Create views from levels and templates in bulk, rename with patterns, apply view templates and tidy the project browser at scale.',
+  'Site & landscape': 'Pergolas, planters, benches, bollards, kerbs and steps with a type catalog per family. Every member size and count is derived from a few instance parameters, so the same family works from a courtyard to a promenade.',
+  'Planting': 'Trees, palms, shrubs and groundcovers with height, spread, water need and native status as parameters. Built to be scattered by the plugins and scheduled by mix, area and water need.',
+  'Doors & windows': 'Curtain doors, sliders and screens whose panels, mullions and frames follow the opening size through guarded formulas, with type catalogs for the standard sizes.',
+  'Furniture & fixtures': 'Loose and fixed furniture that schedules cleanly: consistent shared parameters for finish, supplier and cost, and low-detail representations for fast views.',
+  'Annotation': 'Tags, symbols, title blocks and key plans that match the templates, including tags the scatter and audit tools rely on.',
+  'Detail items': '2D components for sections and details, organised by assembly and keyed to the codes used in the detail libraries, so they transfer between projects without renaming.',
+  'Architecture template': 'View templates for plans, sections and 3D, browser organisation by phase and discipline, graphic overrides, filters and the office title blocks. Start a project here and the standards checker passes on day one.',
+  'Landscape template': 'Toposolid and planting settings, planting schedules by mix, hardscape filters and the tags the scatter tools expect. Pairs with the landscape sample project used in the courses.',
+  'Interiors template': 'Finish schedules, room data sheets, furniture legends and elevation-per-room view templates.',
+  'Courtyard housing sample': 'A complete small project from massing to issue, with the sheet set and worksets used in the courses. Open it to see how the templates, families and tools fit together.',
+  'Park and promenade sample': 'Toposolids, scattered planting, shadow study views and a full landscape documentation set, built with the tools on the BIM Tools tab.',
+  'Hardscape details': 'Paving, kerb, step and wall details drawn as detail items so they transfer between projects with Transfer Project Standards.',
+  'Envelope details': 'Wall, roof, parapet and opening details keyed to the assembly codes in the architecture template.',
+  'Planting schedule pack': 'Schedules by mix, by area and by water need, plus a QA schedule that flags untagged plants. Drop them into any project that uses the planting families.',
+  'QA schedule pack': 'Model checking schedules: unplaced rooms, duplicate marks, missing sheet parameters and warnings by type. The same checks the Standards Checker runs, as plain schedules.',
+  'Build your first ribbon tab with C#': 'Start from an empty Visual Studio project and finish with a signed add-in that has its own panel, a command with a settings dialog and an installer. Along the way you build a small scatter tool, so every API concept lands in something you can use.',
+  'Parametric families masterclass': 'Reference planes that behave, formulas with guards, nested and shared families and type catalogs, built into a pergola, a planter and a tag. Ends with a flex-testing routine you can run on any family.',
+  'Landscape in Revit: topo, planting, scatter': 'Toposolids and floors, a planting library, surface and path scatter, shadow studies, and the schedules and tags that make a landscape set coordinate. Uses the park sample project throughout.',
+  'Sheets, views and standards that scale': 'Template anatomy, view templates and filters, sheet management with Sheet Manager and Print Browser, and a standards check before every issue.'
+};
+[PANELS, FAMILIES, FILES, COURSES].forEach(arr => arr.forEach(it => { const k = it.name || it.title; if (!it.details && DETAILS[k]) it.details = DETAILS[k]; }));
 
 /* ===================== editable content (defaults above, overrides from the embedded block, content.json or a local draft) ===================== */
 const __render = {};
@@ -1118,7 +1222,7 @@ const renderPanels = () => {
   const fmax = Math.max(...FAMILIES.map(f => f.count));
   $('#family-grid').innerHTML = FAMILIES.map(f => `<div class="pan"><div class="k"><b>${esc(f.name)}</b><span>${f.count}</span></div><div class="meter"><i style="width:${Math.round(f.count / fmax * 100)}%"></i></div><p>${esc(f.desc)}</p></div>`).join('');
   $('#fam-count').textContent = `${FAMILIES.length} categories · ${FAMILIES.reduce((s, f) => s + f.count, 0)} families`;
-}; renderPanels(); __render.panels = renderPanels;
+document.dispatchEvent(new Event('content:rendered')); }; renderPanels(); __render.panels = renderPanels;
 
 /* ===================== files browser ===================== */
 (() => {
@@ -1140,7 +1244,7 @@ const renderPanels = () => {
 /* ===================== courses ===================== */
 (() => {
   const art = (i) => { const c = ['#5ee6ff', '#8f7bff', '#b9c6ff', '#3f9a6e'][i % 4]; return `<svg viewBox="0 0 320 180" aria-hidden="true"><rect width="320" height="180" fill="#070a14"/>${Array.from({ length: 9 }, (_, k) => `<line x1="${20 + k * 35}" y1="20" x2="${20 + k * 35}" y2="160" stroke="rgba(241,242,248,.07)"/>`).join('')}<path d="M20 ${140 - i * 10} C 90 ${60 + i * 12}, 160 ${150 - i * 20}, 300 ${50 + i * 15}" fill="none" stroke="${c}" stroke-width="2.5"/><circle cx="20" cy="${140 - i * 10}" r="5" fill="${c}"/><circle cx="300" cy="${50 + i * 15}" r="5" fill="${c}"/><rect x="${120 + i * 20}" y="${70 - i * 6}" width="60" height="40" fill="none" stroke="rgba(241,242,248,.4)" stroke-dasharray="4 3"/></svg>`; };
-  const renderCourses = () => { $('#course-grid').innerHTML = COURSES.map((c, i) => `<article class="course" style="--i:${i}" data-level="${c.level}"><div class="course-art">${art(i)}<span class="dur">${c.hours} h</span></div><div class="course-meta"><span><b>${c.n}</b> ${esc(c.cat)}</span><span>${c.lessons} lessons</span></div><h3>${esc(c.title)}</h3><p>${esc(c.blurb)}</p><div><span class="lvl">${c.level}</span></div><details><summary>Syllabus</summary><ol>${c.syllabus.map(([t, d]) => `<li><span>${esc(t)}</span><span>${d}</span></li>`).join('')}</ol></details></article>`).join(''); }; renderCourses(); __render.courses = renderCourses;
+  const renderCourses = () => { $('#course-grid').innerHTML = COURSES.map((c, i) => `<article class="course" style="--i:${i}" data-level="${c.level}"><div class="course-art">${art(i)}<span class="dur">${c.hours} h</span></div><div class="course-meta"><span><b>${c.n}</b> ${esc(c.cat)}</span><span>${c.lessons} lessons</span></div><h3>${esc(c.title)}</h3><p>${esc(c.blurb)}</p><div><span class="lvl">${c.level}</span></div><details><summary>Syllabus</summary><ol>${c.syllabus.map(([t, d]) => `<li><span>${esc(t)}</span><span>${d}</span></li>`).join('')}</ol></details></article>`).join(''); document.dispatchEvent(new Event('content:rendered')); }; renderCourses(); __render.courses = renderCourses;
   seg($('#level-bar'), 'data-level', v => $$('#course-grid .course').forEach(c => c.hidden = !(v === 'all' || c.dataset.level === v)));
 })();
 
@@ -1151,7 +1255,7 @@ const renderNotes = () => {
   $('#ver-num').textContent = CHANGELOG[0][0];
   $('#follow-grid').innerHTML = `<a class="social-card li" href="${SITE.links.linkedin}" target="_blank" rel="noopener noreferrer"><span class="ic">in</span><span class="social-copy"><small>LinkedIn</small><strong>Follow ${SITE.name}</strong><span>Releases, family walkthroughs and studio news.</span></span><b aria-hidden="true">↗</b></a><a class="social-card yt" href="${SITE.links.youtube}" target="_blank" rel="noopener noreferrer"><span class="ic">▶</span><span class="social-copy"><small>YouTube</small><strong>Watch the tools</strong><span>Short demos of every plugin and course previews.</span></span><b aria-hidden="true">↗</b></a>`;
   $('#footer-social').innerHTML = `<a href="${SITE.links.linkedin}" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="${SITE.links.youtube}" target="_blank" rel="noopener noreferrer">YouTube ↗</a>`;
-  $('#copy-email .addr').textContent = SITE.email; $$('.brand span').forEach(s => s.textContent = SITE.name); document.title = SITE.name;
+  $('#copy-email .addr').textContent = SITE.email; $$('.brand span').forEach(s => s.textContent = SITE.name); document.title = SITE.name; document.dispatchEvent(new Event('content:rendered'));
 }; renderNotes(); __render.notes = renderNotes;
 (() => {
   $('#copy-email').addEventListener('click', async () => { const b = $('#copy-email'), s = b.querySelector('span:last-child'); try { await navigator.clipboard.writeText(SITE.email); s.textContent = 'Copied'; } catch (e) { const r = document.createRange(); r.selectNodeContents(b.querySelector('.addr')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); s.textContent = 'Selected'; } setTimeout(() => s.textContent = 'Copy', 1600); });
@@ -1186,71 +1290,73 @@ const renderNotes = () => {
 /* ===================== reveal on scroll ===================== */
 (() => { const els = $$('.reveal'); if (!('IntersectionObserver' in window) || reduced()) return; const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold:.08 }); els.forEach(e => { if (e.getBoundingClientRect().top > innerHeight) { e.classList.add('pre'); io.observe(e); } }); setTimeout(() => els.forEach(e => e.classList.add('in')), 6000); })();
 
-/* ===================== WebGL hero: holographic site model ===================== */
+/* ===================== WebGL: particle sculpture that morphs and flies with the scroll ===================== */
 (() => {
   const canvas = $('#scene'); if (!canvas || typeof THREE === 'undefined') return;
-  let renderer; try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' }); } catch (e) { return; }
+  let renderer; try { renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: 'high-performance' }); } catch (e) { return; }
   const flat = $('#contours'); if (flat) flat.style.display = 'none';
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, innerWidth < 720 ? 1 : 1.6)); renderer.setClearColor(0x000000, 0);
-  const scene = new THREE.Scene(); scene.fog = new THREE.FogExp2(0x06080f, 0.03);
-  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 200); camera.position.set(0, 7.5, 17);
-  const SIZE = 124, SEG = 160;
-  const hgt = (x, z) => 1.5 * Math.sin(x * .18 + 1.2) * Math.cos(z * .14) + .8 * Math.sin(x * .42 + z * .31) + .45 * Math.cos(x * .9 - z * .7) + 2.4 * Math.exp(-((x - 7) ** 2 + (z + 5) ** 2) / 70) - 1.6 * Math.exp(-((x + 10) ** 2 + (z - 7) ** 2) / 100) + 2.2 * Math.exp(-((x + 9) ** 2 + (z + 26) ** 2) / 90) - 1.3 * Math.exp(-((x - 13) ** 2 + (z + 44) ** 2) / 130) + 1.8 * Math.exp(-((x - 2) ** 2 + (z + 58) ** 2) / 110);
-  const geo = new THREE.PlaneGeometry(SIZE, SIZE, SEG, SEG); geo.rotateX(-Math.PI / 2);
-  const pos = geo.attributes.position, hs = new Float32Array(pos.count);
-  for (let i = 0; i < pos.count; i++) { const y = hgt(pos.getX(i), pos.getZ(i)); pos.setY(i, y); hs[i] = y; }
-  geo.setAttribute('h', new THREE.BufferAttribute(hs, 1));
-  const uniforms = { uTime: { value: 0 }, uCyan: { value: new THREE.Color(0x5ee6ff) }, uViolet: { value: new THREE.Color(0x8f7bff) } };
-  const terrain = new THREE.Mesh(geo, new THREE.ShaderMaterial({ uniforms, transparent: true, depthWrite: false, side: THREE.DoubleSide,
-    vertexShader: 'attribute float h; varying float vH; varying vec3 vP; void main(){ vH = h; vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
-    fragmentShader: 'uniform float uTime; uniform vec3 uCyan; uniform vec3 uViolet; varying float vH; varying vec3 vP; void main(){ float c = fract(vH * 1.7 - uTime * 0.1); float line = smoothstep(0.0, 0.05, c) * (1.0 - smoothstep(0.05, 0.13, c)); float gx = abs(fract(vP.x * 0.5) - 0.5); float gz = abs(fract(vP.z * 0.5) - 0.5); float grid = (1.0 - smoothstep(0.0, 0.035, min(gx, gz))) * 0.16; float d = length(vP.xz) / 32.0; float fade = 1.0 - smoothstep(0.5, 1.0, d); vec3 col = mix(uViolet, uCyan, clamp(vH * 0.22 + 0.5, 0.0, 1.0)); float a = (line * 0.95 + grid + 0.04) * fade; gl_FragColor = vec4(col, a); }' }));
-  scene.add(terrain);
-  const r = rng(90210), N = 3600, pts = new Float32Array(N * 3);
-  for (let i = 0; i < N; i++) { const x = (r() - .5) * SIZE * .92, z = (r() - .5) * SIZE * .92; pts[i*3] = x; pts[i*3+1] = hgt(x, z) + .1; pts[i*3+2] = z; }
-  const pgeo = new THREE.BufferGeometry(); pgeo.setAttribute('position', new THREE.BufferAttribute(pts, 3));
-  scene.add(new THREE.Points(pgeo, new THREE.PointsMaterial({ color: 0x9df1ff, size: .085, transparent: true, opacity: .8 })));
-  // floating parameter nodes along the walk
-  const FN = 140, fpts = new Float32Array(FN * 3); for (let i = 0; i < FN; i++) { const x = (r() - .5) * 30, z = 24 - r() * 92; fpts[i*3] = x; fpts[i*3+1] = hgt(x, z) + 1.4 + r() * 4.2; fpts[i*3+2] = z; }
-  const fgeo = new THREE.BufferGeometry(); fgeo.setAttribute('position', new THREE.BufferAttribute(fpts, 3));
-  scene.add(new THREE.Points(fgeo, new THREE.PointsMaterial({ color: 0xdff6ff, size: .2, transparent: true, opacity: .9, blending: THREE.AdditiveBlending, depthWrite: false })));
-  // parametric pergolas, drawn as glowing edges, placed along the path
-  const node = new THREE.SphereGeometry(.09, 10, 10), nmat = new THREE.MeshBasicMaterial({ color: 0xffffff }), lmat = new THREE.LineBasicMaterial({ color: 0x5ee6ff, transparent: true, opacity: .95 }), rmat = new THREE.MeshBasicMaterial({ color: 0x8f7bff, transparent: true, opacity: .7 });
-  const buildFrame = (W, D, H, S, rings) => { const g = new THREE.Group(), segs = [], v = (x, y, z) => new THREE.Vector3(x, y, z);
-    [[-W/2,-D/2],[W/2,-D/2],[W/2,D/2],[-W/2,D/2]].forEach(([x, z]) => { segs.push(v(x, -1.2, z), v(x, H, z)); const mm = new THREE.Mesh(node, nmat); mm.position.set(x, H, z); g.add(mm); });
-    [-D/2, D/2].forEach(z => segs.push(v(-W/2 - .3, H, z), v(W/2 + .3, H, z)));
-    for (let x = -W/2; x <= W/2 + 1e-6; x += S) segs.push(v(x, H + .18, -D/2 - .4), v(x, H + .18, D/2 + .4));
-    g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(segs), lmat));
-    if (rings) { const ring = new THREE.Mesh(new THREE.TorusGeometry(W * .87, .012, 6, 160), rmat); ring.rotation.x = Math.PI / 2 - .25; ring.position.y = H * .6; g.add(ring); const ring2 = ring.clone(); ring2.scale.setScalar(.72); ring2.rotation.x = Math.PI / 2 + .35; g.add(ring2); g.userData.rings = [ring, ring2]; }
-    return g; };
-  const pergola = buildFrame(6, 4, 3, .5, true); const base = hgt(4, 1) + 1.2; pergola.position.set(4, base, 1); scene.add(pergola);
-  const frames = [[-7.5, -17, 4.5, 3.2, 2.7, .45], [7, -33, 7, 4.5, 3.1, .5], [-5.5, -49, 5, 3.6, 2.9, .5], [6, -63, 8, 5, 3.4, .55]].map(([x, z, W, D, H, S], i) => { const g = buildFrame(W, D, H, S, i % 2 === 0); g.position.set(x, hgt(x, z) + 1.2, z); scene.add(g); return g; });
-  const ring = pergola.userData.rings[0], ring2 = pergola.userData.rings[1];
-  let tx = 0, ty = 0, mx = 0, my = 0, visible = true; const still = reduced(), clock = new THREE.Clock();
+  const small = innerWidth < 720; renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, small ? 1 : 1.5)); renderer.setClearColor(0x000000, 0);
+  const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(50, 1, .1, 200); camera.position.set(0, 0, 26);
+  const N = small ? 3000 : 6500, r = rng(4213);
+  const tex = (() => { const c = document.createElement('canvas'); c.width = 128; c.height = 64; const g = c.getContext('2d');
+    const rg = g.createRadialGradient(32, 32, 0, 32, 32, 30); rg.addColorStop(0, 'rgba(255,255,255,1)'); rg.addColorStop(.35, 'rgba(255,255,255,.85)'); rg.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = rg; g.fillRect(0, 0, 64, 64);
+    g.strokeStyle = 'rgba(255,255,255,1)'; g.lineWidth = 6; g.lineJoin = 'round'; g.beginPath(); g.moveTo(96, 12); g.lineTo(118, 52); g.lineTo(74, 52); g.closePath(); g.stroke();
+    const t = new THREE.CanvasTexture(c); t.minFilter = THREE.LinearFilter; return t; })();
+  const T = [0, 1, 2, 3, 4].map(() => new Float32Array(N * 3)), col = new Float32Array(N * 3), kind = new Float32Array(N), seed = new Float32Array(N), sz = new Float32Array(N);
+  const palette = [[.37, .9, 1], [.56, .48, 1], [.9, .94, 1], [.62, 1, .86]];
+  const set = (a, i, x, y, z) => { a[i*3] = x; a[i*3+1] = y; a[i*3+2] = z; };
+  const W = 12, D = 8, H = 7;
+  for (let i = 0; i < N; i++) {
+    if (r() < .58) { const part = r(); let x, y, z;
+      if (part < .22) { const c = [[-W/2, -D/2], [W/2, -D/2], [W/2, D/2], [-W/2, D/2]][Math.floor(r() * 4)]; x = c[0]; z = c[1]; y = -H/2 + r() * H; }
+      else if (part < .42) { x = -W/2 - .5 + r() * (W + 1); z = r() < .5 ? -D/2 : D/2; y = H/2; }
+      else { x = -W/2 + Math.floor(r() * 13) * (W / 12); z = -D/2 - .7 + r() * (D + 1.4); y = H/2 + .35; }
+      set(T[0], i, x + (r() - .5) * .12, y + (r() - .5) * .12, z + (r() - .5) * .12); }
+    else { const ring = 1 + Math.floor(r() * 5), a = r() * Math.PI * 2, rr = ring * 2.4 + (r() - .5) * .3; set(T[0], i, Math.cos(a) * rr * 1.15, -H/2 - .6 + Math.sin(a * 3 + ring) * .25, Math.sin(a) * rr * .8); }
+    { const th = Math.acos(2 * r() - 1), ph = r() * Math.PI * 2, rad = 8.5 + (r() - .5) * 2.2; set(T[1], i, rad * Math.sin(th) * Math.cos(ph), rad * Math.cos(th), rad * Math.sin(th) * Math.sin(ph)); }
+    set(T[2], i, (r() - .5) * 46, (r() - .5) * 28, (r() - .5) * 60);
+    { const cols = 24, rows = 12, ci = Math.floor(r() * cols), ri = Math.floor(r() * rows); set(T[3], i, (ci - cols/2 + .5) * 1.25 + (r() - .5) * .35, (ri - rows/2 + .5) * 1.15 + (r() - .5) * .35, (r() - .5) * .6); }
+    { const a = r() * Math.PI * 2, b = r() * Math.PI * 2, R = 9, tr = 1.4 + r() * .6; set(T[4], i, (R + tr * Math.cos(b)) * Math.cos(a), tr * Math.sin(b), (R + tr * Math.cos(b)) * Math.sin(a)); }
+    const u = r(), c = palette[u < .55 ? 0 : u < .62 ? 3 : u < .84 ? 1 : 2]; col[i*3] = c[0]; col[i*3+1] = c[1]; col[i*3+2] = c[2];
+    kind[i] = r() < .16 ? 1 : 0; seed[i] = r(); sz[i] = kind[i] ? 2 + r() * 3 : .9 + r() * 1.5;
+  }
+  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(T[0].slice(), 3));
+  T.forEach((t, k) => geo.setAttribute('t' + k, new THREE.BufferAttribute(t, 3)));
+  geo.setAttribute('col', new THREE.BufferAttribute(col, 3)); geo.setAttribute('kind', new THREE.BufferAttribute(kind, 1)); geo.setAttribute('seed', new THREE.BufferAttribute(seed, 1)); geo.setAttribute('sz', new THREE.BufferAttribute(sz, 1));
+  const uniforms = { uP: { value: 0 }, uTime: { value: 0 }, uVel: { value: 0 }, uTex: { value: tex }, uPR: { value: renderer.getPixelRatio() }, uAlpha: { value: 1 } };
+  const mat = new THREE.ShaderMaterial({ uniforms, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    vertexShader: 'attribute vec3 t1; attribute vec3 t2; attribute vec3 t3; attribute vec3 t4; attribute vec3 col; attribute float kind; attribute float seed; attribute float sz; uniform float uP; uniform float uTime; uniform float uVel; uniform float uPR; varying vec3 vCol; varying float vKind; varying float vFade;' +
+      'void main(){ float p = uP; float w1 = smoothstep(0.04, 0.17, p), w2 = smoothstep(0.2, 0.34, p), w3 = smoothstep(0.62, 0.8, p), w4 = smoothstep(0.86, 0.98, p);' +
+      ' vec3 pos = mix(position, t1, w1); float sp = 4.0 + seed * 6.0; vec3 s2 = t2; s2.z = mod(t2.z + 30.0 + uTime * sp, 60.0) - 30.0; pos = mix(pos, s2, w2); pos = mix(pos, t3, w3); pos = mix(pos, t4, w4);' +
+      ' vec3 dir = normalize(vec3(sin(seed * 43.7), cos(seed * 17.3), sin(seed * 91.1))); pos += dir * (sin(uTime * (0.6 + seed) + seed * 20.0) * 0.18 + uVel * (0.8 + seed * 2.6));' +
+      ' float ang = p * 3.2 + uTime * 0.04; float ca = cos(ang), sa = sin(ang); pos = vec3(pos.x * ca - pos.z * sa, pos.y, pos.x * sa + pos.z * ca);' +
+      ' vec4 mv = modelViewMatrix * vec4(pos, 1.0); float dist = -mv.z; gl_PointSize = sz * uPR * (30.0 / max(dist, 1.0)) * (kind > 0.5 ? 2.6 : 1.4);' +
+      ' vFade = smoothstep(0.6, 6.0, dist) * (1.0 - smoothstep(60.0, 90.0, dist)); vCol = col; vKind = kind; gl_Position = projectionMatrix * mv; }',
+    fragmentShader: 'uniform sampler2D uTex; uniform float uAlpha; varying vec3 vCol; varying float vKind; varying float vFade; void main(){ vec2 uv = gl_PointCoord; uv.x = uv.x * 0.5 + (vKind > 0.5 ? 0.5 : 0.0); float a = texture2D(uTex, uv).a; if (a < 0.03) discard; gl_FragColor = vec4(vCol, a * vFade * uAlpha * (vKind > 0.5 ? 0.9 : 0.75)); }' });
+  const points = new THREE.Points(geo, mat); points.frustumCulled = false; scene.add(points);
+  let tx = 0, ty = 0, mx = 0, my = 0, lastY = scrollY, vel = 0; const still = reduced(), clock = new THREE.Clock();
   window.addEventListener('pointermove', e => { tx = e.clientX / innerWidth - .5; ty = e.clientY / innerHeight - .5; }, { passive: true });
   const size = () => { const b = canvas.getBoundingClientRect(); const w = Math.max(1, Math.round(b.width)), h = Math.max(1, Math.round(b.height)); renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); };
-  const walkOn = () => document.body.dataset.depth !== 'off' && !still;
+  const motionOn = () => document.body.dataset.depth !== 'off' && !still;
   const frame = t => { uniforms.uTime.value = t; mx += (tx - mx) * .04; my += (ty - my) * .04;
-    const max = Math.max(1, document.documentElement.scrollHeight - innerHeight), sp = walkOn() ? Math.min(1, Math.max(0, scrollY / max)) : 0, cz = 20 - sp * 76, bob = walkOn() ? Math.sin(scrollY * .017) * .09 : 0;
-    camera.position.set(mx * 5, 7.4 - my * 2.2 + bob, cz); camera.lookAt(1.5 + mx * 2, 1.3 + bob * .5, cz - 15);
-    pergola.rotation.y = t * .1; pergola.position.y = base + Math.sin(t * .7) * .18; ring.rotation.z = t * .25; ring2.rotation.z = -t * .18;
-    frames.forEach((g, i) => { g.rotation.y = t * (.06 + i * .025) * (i % 2 ? -1 : 1); if (g.userData.rings) { g.userData.rings[0].rotation.z = t * .2; g.userData.rings[1].rotation.z = -t * .15; } });
-    renderer.render(scene, camera); };
-  window.__camZ = () => camera.position.z;
+    const max = Math.max(1, document.documentElement.scrollHeight - innerHeight), p = Math.min(1, Math.max(0, scrollY / max));
+    uniforms.uP.value = motionOn() ? p : 0; const dy = scrollY - lastY; lastY = scrollY; vel += (Math.min(1, Math.abs(dy) / 90) - vel) * .12; uniforms.uVel.value = motionOn() ? vel : 0;
+    camera.position.set(mx * 3, -my * 2, 26); camera.lookAt(0, 0, 0); renderer.render(scene, camera); };
+  window.__particleP = () => uniforms.uP.value;
   size(); frame(0);
-  let lastT = 0; if (!still) { const tick = () => { requestAnimationFrame(tick); const el = clock.getElapsedTime(); if (visible && el - lastT > .028) { lastT = el; frame(el); } }; tick(); } else { window.addEventListener('scroll', () => frame(clock.getElapsedTime()), { passive: true }); }
-  if ('IntersectionObserver' in window) new IntersectionObserver(es => es.forEach(e => visible = e.isIntersecting)).observe(canvas);
+  let lastT = 0; if (!still) { const tick = () => { requestAnimationFrame(tick); const el = clock.getElapsedTime(); if (el - lastT > .028) { lastT = el; frame(el); } }; tick(); } else { window.addEventListener('scroll', () => frame(clock.getElapsedTime()), { passive: true }); }
   let tm; window.addEventListener('resize', () => { clearTimeout(tm); tm = setTimeout(() => { size(); frame(clock.getElapsedTime()); }, 120); });
 })();
 
-/* ===================== 3D tilt + pointer glare ===================== */
+/* ===================== pointer tilt on cards (composes with the scroll motion via --t) ===================== */
 (() => {
   const sel = '.course, .note-card, .social-card, .fact, .pan, .version';
-  document.addEventListener('pointermove', e => { const el = e.target.closest && e.target.closest(sel); if (!el) return; const b = el.getBoundingClientRect(); const px = (e.clientX - b.left) / b.width, py = (e.clientY - b.top) / b.height; el.style.setProperty('--mx', (px * 100).toFixed(1) + '%'); el.style.setProperty('--my', (py * 100).toFixed(1) + '%'); if (!reduced() && e.pointerType === 'mouse' && el.matches('.course, .note-card, .social-card')) el.style.transform = `perspective(1200px) rotateX(${((.5 - py) * 7).toFixed(2)}deg) rotateY(${((px - .5) * 9).toFixed(2)}deg) translateZ(4px)`; }, { passive: true });
-  document.addEventListener('pointerout', e => { const el = e.target.closest && e.target.closest(sel); if (el && !(e.relatedTarget && el.contains(e.relatedTarget))) el.style.transform = ''; });
+  document.addEventListener('pointermove', e => { const el = e.target.closest && e.target.closest(sel); if (!el) return; const b = el.getBoundingClientRect(); const px = (e.clientX - b.left) / b.width, py = (e.clientY - b.top) / b.height; el.style.setProperty('--mx', (px * 100).toFixed(1) + '%'); el.style.setProperty('--my', (py * 100).toFixed(1) + '%'); if (!reduced() && e.pointerType === 'mouse' && el.matches('.course, .note-card, .social-card')) { el.style.setProperty('--t', `rotateX(${((.5 - py) * 7).toFixed(2)}deg) rotateY(${((px - .5) * 9).toFixed(2)}deg) translateZ(4px)`); el.classList.add('tilted'); } }, { passive: true });
+  document.addEventListener('pointerout', e => { const el = e.target.closest && e.target.closest(sel); if (el && !(e.relatedTarget && el.contains(e.relatedTarget))) { el.style.removeProperty('--t'); el.classList.remove('tilted'); } });
 })();
 
 /* ===================== motion: section hops, nav indicator, progress ===================== */
-window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.body.dataset.hover = fx.hover || 'liquid'; document.body.dataset.transition = fx.transition || 'warp'; document.body.dataset.depth = fx.depth || 'walk'; };
+window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.body.dataset.hover = fx.hover || 'liquid'; document.body.dataset.transition = fx.transition || 'warp'; document.body.dataset.depth = fx.depth === 'off' ? 'off' : 'motion'; };
 (() => {
   applyEffects();
   const overlay = document.createElement('div'); overlay.className = 'warp'; overlay.setAttribute('aria-hidden', 'true'); overlay.innerHTML = '<i></i>'; document.body.appendChild(overlay);
@@ -1291,7 +1397,7 @@ window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.
   const sections = links.map(a => document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
   if ('IntersectionObserver' in window) { const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) setActive(en.target.id); }), { rootMargin: '-38% 0px -55% 0px' }); sections.forEach(s => io.observe(s)); }
   // scroll progress
-  let ticking = false; const onScroll = () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const max = document.documentElement.scrollHeight - innerHeight; prog.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`; if (heroWrap && !reduced()) { const hh = hero.offsetHeight || 1; const k = Math.min(1, Math.max(0, scrollY / (hh * .85))); const wl = document.querySelector('.world'); if (wl) wl.style.opacity = (1 - k * .42).toFixed(3); heroWrap.style.opacity = (1 - k * .9).toFixed(3); heroWrap.style.transform = `translateY(${(k * 70).toFixed(1)}px) scale(${(1 - k * .04).toFixed(4)})`; } ticking = false; }); };
+  let ticking = false; const onScroll = () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const max = document.documentElement.scrollHeight - innerHeight; prog.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`; if (heroWrap && !reduced()) { const hh = hero.offsetHeight || 1; const k = Math.min(1, Math.max(0, scrollY / (hh * .85))); const wl = document.querySelector('.world'); if (wl) wl.style.opacity = (1 - k * .28).toFixed(3); heroWrap.style.opacity = (1 - k * .9).toFixed(3); heroWrap.style.transform = `translateY(${(k * 70).toFixed(1)}px) scale(${(1 - k * .04).toFixed(4)})`; } ticking = false; }); };
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
   window.addEventListener('resize', () => moveInd(links.find(a => a.classList.contains('active'))));
   if (location.hash && location.hash !== '#admin') { const el = document.getElementById(location.hash.slice(1)); if (el) setTimeout(() => { scrollTo(0, el.getBoundingClientRect().top + scrollY - 88); setActive(el.id); spotlight(el); }, 60); }
@@ -1307,27 +1413,126 @@ window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.
   document.addEventListener('pointerdown', e => { const b = e.target.closest && e.target.closest('.button, .header-cta'); if (!b || reduced()) return; const r = b.getBoundingClientRect(); const s = document.createElement('i'); s.className = 'ripple'; const d = Math.max(r.width, r.height) * 2; s.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px`; b.appendChild(s); setTimeout(() => s.remove(), 700); });
 })();
 
-/* ===================== depth walk: content approaches down the corridor as you scroll ===================== */
+/* ===================== 3D motion: panels tilt, cards fly in, text parallaxes as you scroll ===================== */
 (() => {
-  const stages = $$('main > section:not(.hero) > .wrap');
+  const spec = [
+    ['.viewport, .version, .return-strip, .follow-grid, .contact-actions', 'panel'],
+    ['.head, .dark-heading, .notes-heading, .updates .copy, .contact .copy', 'text'],
+    ['.notes .note, .note-card, .course, .social-card, .changelog li', 'card'],
+    ['#panel-grid .pan, #family-grid .pan', 'tile']
+  ];
+  const items = [];
+  spec.forEach(([sel, type]) => $$(sel).forEach((el, i) => { if (el.closest('.hero') || el.closest('#item-page')) return; el.classList.add('m3d'); items.push({ el, type, i }); }));
+  $$('.reveal').forEach(el => { el.classList.remove('reveal', 'pre'); el.classList.add('in'); });
+  const on = () => document.body.dataset.depth !== 'off' && !reduced();
   let ticking = false;
-  const clear = s => { if (s.style.transform) { s.style.transform = ''; s.style.opacity = ''; s.style.transformOrigin = ''; } };
-  const update = () => { ticking = false; if (document.body.dataset.depth === 'off' || reduced()) { stages.forEach(clear); return; }
-    const vh = innerHeight, mid = vh * .5;
-    stages.forEach(s => { const r = s.getBoundingClientRect(); if (r.bottom < -vh * .5 || r.top > vh * 2.4) { clear(s); return; }
-      const anchor = r.top + Math.min(r.height, vh) * .38, d = (anchor - mid) / vh, ahead = Math.max(0, d), passed = Math.max(0, -d);
-      const z = -Math.min(ahead, 1.7) * 440 + Math.min(passed, .9) * 150, rx = -Math.min(ahead, 1.2) * 6, op = 1 - Math.min(1, Math.max(0, ahead - .6) * 1.1);
-      s.style.transformOrigin = `50% ${(mid - r.top).toFixed(0)}px`; s.style.transform = `perspective(1500px) translateZ(${z.toFixed(1)}px) rotateX(${rx.toFixed(2)}deg)`; s.style.opacity = op.toFixed(3); }); };
+  const update = () => { ticking = false; const vh = innerHeight, mid = vh * .5, active = on();
+    for (const it of items) { const el = it.el, r = el.getBoundingClientRect();
+      if (!active || r.bottom < -vh * .3 || r.top > vh * 1.3) { if (el.style.getPropertyValue('--m')) { el.style.removeProperty('--m'); el.style.removeProperty('opacity'); } continue; }
+      const d = Math.max(-1, Math.min(1, (r.top + r.height * .5 - mid) / vh)); let m = '', op = 1;
+      if (it.type === 'panel') { m = `perspective(1400px) rotateX(${(d * 12).toFixed(2)}deg) translateY(${(-d * 28).toFixed(1)}px) scale(${(1 - Math.abs(d) * .06).toFixed(4)})`; op = 1 - Math.max(0, Math.abs(d) - .62) * 1.6; }
+      else if (it.type === 'text') { m = `translateY(${(-d * 46).toFixed(1)}px) translateZ(0)`; op = 1 - Math.max(0, Math.abs(d) - .7) * 2; }
+      else if (it.type === 'card') { const s = it.i % 2 ? 1 : -1, b = Math.max(0, d); m = `perspective(1200px) rotateY(${(s * b * 34).toFixed(2)}deg) rotateX(${(d * 8).toFixed(2)}deg) translateX(${(s * b * 60).toFixed(1)}px) translateZ(${(-b * 160).toFixed(1)}px)`; op = 1 - Math.max(0, Math.abs(d) - .55) * 1.8; }
+      else { const cx = r.left + r.width / 2 - innerWidth / 2, ry = Math.max(-16, Math.min(16, cx / innerWidth * 22)), b = Math.max(0, d); m = `perspective(1200px) rotateY(${ry.toFixed(2)}deg) rotateX(${(b * 18).toFixed(2)}deg) translateY(${(b * 40).toFixed(1)}px) translateZ(${(-b * 120).toFixed(1)}px)`; op = 1 - Math.max(0, b - .5) * 1.8; }
+      el.style.setProperty('--m', m); el.style.opacity = Math.max(0, Math.min(1, op)).toFixed(3); } };
   const req = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
-  addEventListener('scroll', req, { passive: true }); addEventListener('resize', req); document.addEventListener('effects:changed', req); update();
+  addEventListener('scroll', req, { passive: true }); addEventListener('resize', req); document.addEventListener('effects:changed', req); document.addEventListener('content:rendered', () => { items.length = 0; spec.forEach(([sel, type]) => $$(sel).forEach((el, i) => { if (el.closest('.hero') || el.closest('#item-page')) return; el.classList.add('m3d'); items.push({ el, type, i }); })); req(); }); update();
+})();
+
+/* ===================== detail pages: every panel, card and file opens its own page with a preview ===================== */
+(() => {
+  const slug = s => String(s).toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const TYPES = {
+    plugins: { list: () => PANELS, label: 'Revit plugins', ref: 'P-100', cta: 'Get the toolkit', open: 'tools', heading: 'What it does' },
+    families: { list: () => FAMILIES, label: 'Parametric families', ref: 'F-200', cta: 'Get the library', open: 'tools', heading: 'How these families are built' },
+    files: { list: () => FILES, label: 'Revit files', ref: 'R-300', cta: 'Get the files', open: 'tools', heading: 'What is inside' },
+    courses: { list: () => COURSES, label: 'Courses', ref: 'C-400', cta: 'Ask about this course', open: 'quote', heading: 'What you learn' }
+  };
+  const DEMO = { 'Planting Scatter': 'scatter', 'Shadow Analysis': 'shadow', 'Position': 'align' };
+  const nameOf = it => it.name || it.title;
+  const G = { scatter: '<circle cx="6" cy="8" r="2"/><circle cx="14" cy="6" r="2"/><circle cx="18" cy="14" r="2"/><circle cx="9" cy="16" r="2"/><circle cx="15" cy="19" r="1.5"/>', align: '<path d="M4 4v16M9 8h11M9 14h7M9 20h9"/>', sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>', sheet: '<rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/>', print: '<path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2"/><rect x="6" y="14" width="12" height="7"/>', cad: '<path d="M3 17l6-10 4 6 3-4 5 8z"/>', topo: '<path d="M3 16c4-6 8 2 12-4s6 0 6 0M3 20c5-5 9 1 12-3s6 0 6 0"/>', view: '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>', check: '<path d="M20 6L9 17l-5-5"/>', line: '<path d="M3 6h18M3 12h12M3 18h18"/>', cloud: '<path d="M7 18a4 4 0 0 1 0-8 5 5 0 0 1 9.6-1A4 4 0 0 1 17 18z"/>', dim: '<path d="M4 12h16M4 8v8M20 8v8M8 12l-2-2M8 12l-2 2M16 12l2-2M16 12l2 2"/>', cube: '<path d="M12 2l9 5v10l-9 5-9-5V7zM12 12l9-5M12 12L3 7M12 12v10"/>', sliders: '<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>', grid: '<rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 10h18M9 10v10"/>', rail: '<path d="M3 8h18M4 8v10M9 8v10M14 8v10M19 8v10"/>', pattern: '<path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/>', swap: '<path d="M4 8h12l-3-3M20 16H8l3 3"/>', book: '<path d="M4 4h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4zM20 4h-6a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h7z"/>', audit: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11l2 2 4-4"/>', link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>', plus: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12h8M12 8v8"/>' };
+  const KEYS = [['scatter', 'scatter'], ['plant', 'scatter'], ['align', 'align'], ['shadow', 'sun'], ['sun', 'sun'], ['sheet', 'sheet'], ['print', 'print'], ['cad', 'cad'], ['topo', 'topo'], ['view', 'view'], ['standard', 'check'], ['check', 'check'], ['line', 'line'], ['revision', 'cloud'], ['dim', 'dim'], ['floor', 'cube'], ['edger', 'cube'], ['model', 'cube'], ['manage', 'sliders'], ['legend', 'grid'], ['viewport', 'grid'], ['railing', 'rail'], ['pattern', 'pattern'], ['transfer', 'swap'], ['update', 'swap'], ['library', 'book'], ['audit', 'audit'], ['link', 'link'], ['region', 'pattern'], ['tag', 'sheet'], ['door', 'grid'], ['window', 'grid'], ['furniture', 'cube'], ['annotation', 'sheet'], ['detail', 'line'], ['site', 'topo'], ['landscape', 'topo']];
+  const glyph = name => { const n = String(name).toLowerCase(); const hit = KEYS.find(([k]) => n.includes(k)); return `<svg viewBox="0 0 24 24" aria-hidden="true">${G[hit ? hit[1] : 'plus']}</svg>`; };
+  const chip = t => `<span class="tag">${esc(t)}</span>`;
+
+  const previews = {
+    plugins: it => { const tools = it.hideTools ? it.tools.map((t, i) => 'Tool ' + (i + 1)) : it.tools; return `<div class="ribbon" aria-label="Ribbon preview"><div class="rb-tabs"><span>Architecture</span><span>Annotate</span><span>View</span><span class="on">BIM Tools</span><span>Modify</span></div><div class="rb-body"><div class="rb-panel"><div class="rb-tools">${tools.map(t => `<button type="button" class="rb-tool" tabindex="-1">${glyph(t)}<span>${esc(t)}</span></button>`).join('')}</div><div class="rb-name">${esc(it.name)}</div></div></div></div><p class="pv-note">${tools.length} button${tools.length > 1 ? 's' : ''} on the ${esc(it.name)} panel of the BIM Tools tab.${DEMO[it.name] ? ' A live version of this tool runs on the main page.' : ''}</p>`; },
+    families: it => `<svg class="fam" viewBox="0 0 520 300" role="img" aria-label="Parametric preview"></svg><p class="pv-note">Flex test: the family is driven through its width range while the derived count and dimensions update, exactly what the type catalog does inside Revit.</p>`,
+    files: it => { const m = (k, v, max) => `<div>${k}<b>${v}</b><i style="--w:${Math.min(100, Math.round(v / max * 100))}%"></i></div>`; return `<svg class="sheet" viewBox="0 0 520 300" role="img" aria-label="Sheet preview"><rect x="0" y="0" width="520" height="300" fill="#0b0f1d"/><rect x="18" y="18" width="484" height="264" fill="none" stroke="rgba(150,175,255,.35)"/><rect x="392" y="18" width="110" height="264" fill="rgba(150,175,255,.05)" stroke="rgba(150,175,255,.35)"/>${[0,1,2,3,4,5].map(i => `<line x1="392" y1="${60 + i * 36}" x2="502" y2="${60 + i * 36}" stroke="rgba(150,175,255,.25)"/>`).join('')}<text x="400" y="46" fill="#5ee6ff" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.5">${esc(it.type.toUpperCase())}</text><text x="400" y="272" fill="rgba(228,234,255,.6)" font-family="JetBrains Mono, monospace" font-size="8">${esc(it.name.toUpperCase().slice(0, 18))}</text><rect x="36" y="36" width="200" height="130" fill="rgba(94,230,255,.06)" stroke="#5ee6ff" stroke-dasharray="4 3"/><rect x="252" y="36" width="122" height="130" fill="rgba(143,123,255,.08)" stroke="#8f7bff" stroke-dasharray="4 3"/><rect x="36" y="184" width="338" height="80" fill="rgba(150,175,255,.05)" stroke="rgba(150,175,255,.35)"/>${[0,1,2,3].map(i => `<line x1="48" y1="${200 + i * 16}" x2="${180 + i * 40}" y2="${200 + i * 16}" stroke="rgba(228,234,255,.35)"/>`).join('')}<circle cx="352" cy="58" r="10" fill="none" stroke="rgba(228,234,255,.6)"/><path d="M352 50v16M348 56l4-6 4 6" fill="none" stroke="#5ee6ff"/></svg><div class="meters">${m('Views', it.views, 140)}${m('Sheets', it.sheets, 48)}${m('Families', it.families, 420)}${m('Schedules', it.schedules, 30)}</div>`; },
+    courses: (it, i) => { const c = ['#5ee6ff', '#8f7bff', '#b9c6ff', '#3f9a6e'][i % 4]; return `<svg class="sheet" viewBox="0 0 520 300" role="img" aria-label="Course preview"><rect width="520" height="300" fill="#0b0f1d"/>${Array.from({ length: 12 }, (_, k) => `<line x1="${30 + k * 42}" y1="30" x2="${30 + k * 42}" y2="270" stroke="rgba(241,242,248,.06)"/>`).join('')}<path d="M30 ${230 - i * 14} C 150 ${90 + i * 18}, 260 ${250 - i * 30}, 490 ${70 + i * 20}" fill="none" stroke="${c}" stroke-width="3" stroke-dasharray="900" stroke-dashoffset="900"><animate attributeName="stroke-dashoffset" from="900" to="0" dur="2.6s" fill="freeze" repeatCount="indefinite"/></path><circle cx="30" cy="${230 - i * 14}" r="6" fill="${c}"/><circle cx="490" cy="${70 + i * 20}" r="6" fill="${c}"/><rect x="${190 + i * 24}" y="${110 - i * 8}" width="90" height="60" fill="none" stroke="rgba(241,242,248,.45)" stroke-dasharray="5 4"/></svg><div class="player"><div class="player-row"><span>Now playing · ${esc(it.syllabus[0][0])}</span><span>${esc(it.syllabus[0][1])}</span></div><div class="player-bar"><i></i></div><div class="player-row"><span>${it.lessons} lessons · ${it.hours} h</span><span>${esc(it.level)}</span></div></div>`; }
+  };
+  const lists = {
+    plugins: it => it.hideTools ? '' : `<ul class="page-list">${it.tools.map(t => `<li><span>${glyph(t)} ${esc(t)}</span><span class="mono">tool</span></li>`).join('')}</ul>`,
+    families: it => `<ul class="page-list"><li><span>Shared parameters</span><span class="mono">schedules</span></li><li><span>Type catalog with office sizes</span><span class="mono">types</span></li><li><span>Guarded formulas</span><span class="mono">flex-safe</span></li><li><span>${it.count} families in this category</span><span class="mono">count</span></li></ul>`,
+    files: it => `<ul class="page-list"><li><span>Revit versions</span><span class="mono">${it.versions.join(' · ')}</span></li><li><span>Discipline</span><span class="mono">${esc(it.disc)}</span></li><li><span>File size</span><span class="mono">${esc(it.size)}</span></li></ul>`,
+    courses: it => `<ul class="page-list">${it.syllabus.map(([t, d], k) => `<li><span><b class="mono" style="color:var(--signal);margin-right:8px">${String(k + 1).padStart(2, '0')}</b>${esc(t)}</span><span class="mono">${esc(d)}</span></li>`).join('')}</ul>`
+  };
+  const metaChips = { plugins: it => [it.tools.length + (it.tools.length > 1 ? ' tools' : ' tool'), 'BIM Tools tab', 'Revit 2023 to 2026'], families: it => [it.count + ' families', 'Type catalog', 'Shared parameters'], files: it => [it.type, it.disc, 'Revit ' + it.versions.join(' · '), it.size], courses: it => [it.level, it.lessons + ' lessons', it.hours + ' hours', it.cat] };
+  const summaryOf = it => it.desc || it.blurb || it.inside || '';
+
+  const page = document.createElement('section'); page.id = 'item-page'; page.className = 'page'; page.hidden = true; page.setAttribute('role', 'dialog'); page.setAttribute('aria-modal', 'true'); page.setAttribute('aria-label', 'Item details'); document.body.appendChild(page);
+  let current = null, savedY = 0, pushed = false, closingNow = false, famRaf = 0, ribbonTimer = 0;
+
+  const famPreview = (svg, it) => { const NS = 'http://www.w3.org/2000/svg'; const mk = (t, a) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); svg.appendChild(e); return e; };
+    const t0 = performance.now(), n = String(it.name).toLowerCase(), color = n.includes('plant') ? '#62ffdb' : n.includes('annot') ? '#b9c6ff' : '#5ee6ff';
+    mk('rect', { width: 520, height: 300, fill: '#0b0f1d' }); for (let x = 20; x < 520; x += 25) mk('line', { x1: x, y1: 20, x2: x, y2: 280, stroke: 'rgba(241,242,248,.05)' });
+    const body = mk('rect', { x: 0, y: 0, width: 0, height: 0, fill: 'rgba(94,230,255,.06)', stroke: color, 'stroke-width': 1.5 }); const subs = mk('g', {}); const dimL = mk('line', { stroke: color }); const dimT = mk('text', { fill: color, 'font-family': 'JetBrains Mono, monospace', 'font-size': 11, 'text-anchor': 'middle' }); const cap = mk('text', { x: 24, y: 36, fill: 'rgba(228,234,255,.55)', 'font-family': 'JetBrains Mono, monospace', 'font-size': 10, 'letter-spacing': 1.5 }); cap.textContent = (it.name + ' · flex test').toUpperCase();
+    const tick = now => { if (!document.body.contains(svg)) return; const k = (Math.sin((now - t0) / 1400) + 1) / 2; const W = 220 + k * 200, D = 120 + k * 40, x0 = 260 - W / 2, y0 = 150 - D / 2, sp = 34, cnt = Math.floor(W / sp) + 1;
+      body.setAttribute('x', x0); body.setAttribute('y', y0); body.setAttribute('width', W); body.setAttribute('height', D); while (subs.firstChild) subs.removeChild(subs.firstChild);
+      for (let i = 0; i < cnt; i++) { const x = x0 + i * (W / (cnt - 1 || 1)); const l = document.createElementNS(NS, 'line'); l.setAttribute('x1', x); l.setAttribute('y1', y0 - 6); l.setAttribute('x2', x); l.setAttribute('y2', y0 + D + 6); l.setAttribute('stroke', '#8f7bff'); l.setAttribute('stroke-width', 2); subs.appendChild(l); }
+      dimL.setAttribute('x1', x0); dimL.setAttribute('x2', x0 + W); dimL.setAttribute('y1', y0 + D + 34); dimL.setAttribute('y2', y0 + D + 34); dimT.setAttribute('x', 260); dimT.setAttribute('y', y0 + D + 52); dimT.textContent = Math.round(W * 10) + ' mm · ' + cnt + ' members';
+      famRaf = requestAnimationFrame(tick); }; famRaf = requestAnimationFrame(tick); };
+
+  const render = (type, it) => { const T = TYPES[type], list = T.list(), i = list.indexOf(it), name = nameOf(it);
+    const related = list.filter(x => x !== it).slice(0, 4).map(x => `<button type="button" class="rel-card" data-goto="${type}:${slug(nameOf(x))}"><b>${esc(nameOf(x))}</b><span>${esc(summaryOf(x)).slice(0, 90)}${summaryOf(x).length > 90 ? '…' : ''}</span></button>`).join('');
+    page.innerHTML = `<div class="page-bar"><button type="button" class="page-back">← Back</button><span class="page-crumb">${esc(T.label)}<b>/</b>${esc(name)}</span><button type="button" class="header-cta" data-open="${T.open}">${esc(T.cta)}</button></div>
+      <div class="page-body"><header class="page-hero"><p class="eyebrow"><span></span> ${T.ref} · ${esc(T.label)}</p><h1>${esc(name)}</h1><p class="lede">${esc(summaryOf(it))}</p><div class="page-meta">${metaChips[type](it).map(chip).join('')}</div></header>
+      <div class="page-grid"><div class="viewport page-preview"><div class="vpbar"><span>Small preview</span><span><b>${esc(T.label)}</b></span></div><div class="pv">${previews[type](it, i)}</div></div>
+      <div class="page-detail"><h3>${esc(T.heading)}</h3><p>${esc(it.details || summaryOf(it))}</p>${lists[type](it)}<div class="ctas"><button type="button" class="button button-primary" data-open="${T.open}">${esc(T.cta)} <span aria-hidden="true">→</span></button>${type === 'plugins' && DEMO[name] ? `<button type="button" class="button button-ghost page-demo" data-demo="${DEMO[name]}">Try the live demo</button>` : ''}</div></div></div>
+      ${related ? `<div class="page-related"><div class="subhead"><h3>More ${esc(T.label.toLowerCase())}</h3><span class="mono">${list.length} in total</span></div><div class="rel-row">${related}</div></div>` : ''}</div>`;
+    cancelAnimationFrame(famRaf); clearInterval(ribbonTimer);
+    if (type === 'families') famPreview(page.querySelector('svg.fam'), it);
+    if (type === 'plugins') { const tools = $$('.rb-tool', page); let k = 0; ribbonTimer = setInterval(() => { tools.forEach(t => t.classList.remove('hot')); if (tools.length) tools[k % tools.length].classList.add('hot'); k++; }, 1100); } };
+
+  const open = (type, sl, fromEl) => { const it = (TYPES[type] ? TYPES[type].list() : []).find(x => slug(nameOf(x)) === sl); if (!it) return false;
+    const already = !page.hidden; current = { type, sl }; render(type, it);
+    if (!already) { savedY = scrollY; document.body.classList.add('page-open'); page.hidden = false; }
+    page.scrollTop = 0;
+    if (fromEl && fromEl.getBoundingClientRect) { const r = fromEl.getBoundingClientRect(); page.style.setProperty('--ox', (r.left + r.width / 2) + 'px'); page.style.setProperty('--oy', (r.top + r.height / 2) + 'px'); } else { page.style.setProperty('--ox', '50%'); page.style.setProperty('--oy', '50%'); }
+    page.classList.remove('closing', 'opening'); void page.offsetWidth; page.classList.add(already ? 'swapping' : 'opening'); setTimeout(() => page.classList.remove('opening', 'swapping'), 700);
+    const hash = '#item-' + type + '-' + sl; if (location.hash !== hash) { try { if (pushed) history.replaceState({ item: hash }, '', hash); else { history.pushState({ item: hash }, '', hash); pushed = true; } } catch (e) {} }
+    const back = page.querySelector('.page-back'); if (back) back.focus({ preventScroll: true }); return true; };
+  const close = viaHistory => { if (page.hidden || closingNow) return; closingNow = true; current = null; cancelAnimationFrame(famRaf); clearInterval(ribbonTimer); page.classList.add('closing');
+    setTimeout(() => { page.hidden = true; closingNow = false; page.classList.remove('closing'); document.body.classList.remove('page-open'); scrollTo({ top: savedY, behavior: 'instant' }); }, 420);
+    if (!viaHistory) { if (pushed) { pushed = false; history.back(); } else { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} } } else { pushed = false; } };
+  window.openItem = open; window.closeItem = close;
+
+  const fromHash = () => { const m = location.hash.match(/^#item-(plugins|families|files|courses)-([a-z0-9-]+)$/); if (m) { if (closingNow) return; if (!open(m[1], m[2])) close(true); } else if (!page.hidden) close(true); };
+  window.addEventListener('popstate', fromHash);
+  document.addEventListener('click', e => {
+    const t = e.target; if (!t.closest) return;
+    const rel = t.closest('[data-goto]'); if (rel) { const [type, sl] = rel.dataset.goto.split(':'); open(type, sl, rel); return; }
+    if (t.closest('.page-back')) { close(false); return; }
+    const demo = t.closest('.page-demo'); if (demo) { const id = demo.dataset.demo; close(false); setTimeout(() => { const sec = document.getElementById('plugins'); if (window.hopTo && sec) hopTo(sec); setTimeout(() => { const tab = document.getElementById('tab-' + id); if (tab) tab.click(); }, 900); }, 450); return; }
+    const opener = t.closest('#item-page [data-open]'); if (opener) { const proxy = document.querySelector(opener.dataset.open === 'quote' ? '.contact-actions [data-open="quote"]' : '.header-cta[data-open="tools"]'); if (proxy) proxy.click(); return; }
+    if (document.body.classList.contains('admin-on')) return;
+    const pan = t.closest('#panel-grid .pan'); if (pan) { const i = [...pan.parentNode.children].indexOf(pan); if (PANELS[i]) open('plugins', slug(PANELS[i].name), pan); return; }
+    const fam = t.closest('#family-grid .pan'); if (fam) { const i = [...fam.parentNode.children].indexOf(fam); if (FAMILIES[i]) open('families', slug(FAMILIES[i].name), fam); return; }
+    const course = t.closest('#course-grid .course'); if (course && !t.closest('details')) { const i = [...course.parentNode.children].indexOf(course); if (COURSES[i]) open('courses', slug(COURSES[i].title), course); return; }
+    const row = t.closest('.frow'); if (row && row.dataset.i !== undefined) { const f = FILES[+row.dataset.i]; if (f) open('files', slug(f.name), row.isConnected ? row : null); }
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !page.hidden) close(false); if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('#panel-grid .pan, #family-grid .pan, #course-grid .course')) { e.preventDefault(); e.target.click(); } });
+  const arm = () => { $$('#panel-grid .pan, #family-grid .pan, #course-grid .course').forEach(el => { el.setAttribute('tabindex', '0'); el.setAttribute('role', 'link'); }); };
+  arm(); document.addEventListener('content:rendered', arm);
+  fromHash();
 })();
 
 /* ===================== admin mode: edit content on the live page ===================== */
 (() => {
   const LS_KEY = 'parametra-content';
   const RENDER_FOR = { site: 'notes', panels: 'panels', families: 'panels', files: 'files', courses: 'courses', notes: 'notes', changelog: 'notes' };
-  const LABELS = { name: 'Name', email: 'Contact email', formEndpoint: 'Form endpoint (blank keeps preview mode)', links: 'Links', linkedin: 'LinkedIn URL', youtube: 'YouTube URL', tools: 'Tools (comma separated)', desc: 'Description', count: 'Count', hideTools: 'Hide tool names', type: 'Type', disc: 'Discipline', versions: 'Revit versions (comma separated)', size: 'Size', views: 'Views', sheets: 'Sheets', families: 'Families', schedules: 'Schedules', inside: 'What is inside', n: 'Number', cat: 'Category', title: 'Title', level: 'Level (Beginner, Intermediate, Advanced)', lessons: 'Lessons', hours: 'Hours', blurb: 'Blurb', syllabus: 'Syllabus (one per line: Lesson | duration)', body: 'Body', link: 'Link (#section or URL)', cta: 'Button label', 0: 'Version', 1: 'Note', effects: 'Motion and hover options', hover: 'Button hover effect', transition: 'Section transition', depth: '3D walk while scrolling' };
-  const OPTIONS = { hover: ['shimmer', 'liquid', 'beam', 'magnetic'], transition: ['warp', 'fade', 'slide', 'none'], depth: ['walk', 'off'] };
+  const LABELS = { name: 'Name', email: 'Contact email', formEndpoint: 'Form endpoint (blank keeps preview mode)', links: 'Links', linkedin: 'LinkedIn URL', youtube: 'YouTube URL', tools: 'Tools (comma separated)', desc: 'Description', count: 'Count', hideTools: 'Hide tool names', type: 'Type', disc: 'Discipline', versions: 'Revit versions (comma separated)', size: 'Size', views: 'Views', sheets: 'Sheets', families: 'Families', schedules: 'Schedules', inside: 'What is inside', n: 'Number', cat: 'Category', title: 'Title', level: 'Level (Beginner, Intermediate, Advanced)', lessons: 'Lessons', hours: 'Hours', blurb: 'Blurb', syllabus: 'Syllabus (one per line: Lesson | duration)', body: 'Body', link: 'Link (#section or URL)', cta: 'Button label', details: 'Detail page text', 0: 'Version', 1: 'Note', effects: 'Motion and hover options', hover: 'Button hover effect', transition: 'Section transition', depth: '3D motion while scrolling' };
+  const OPTIONS = { hover: ['shimmer', 'liquid', 'beam', 'magnetic'], transition: ['warp', 'fade', 'slide', 'none'], depth: ['motion', 'off'] };
   const TABS = [['text', 'Text'], ['site', 'Site'], ['panels', 'Panels'], ['families', 'Families'], ['files', 'Files'], ['courses', 'Courses'], ['notes', 'Notes'], ['changelog', 'Changelog'], ['data', 'Import / export']];
   let mode = 'local', ns = null, canPublish = false, active = false, dirty = false, tab = 'text', timer = 0;
   const fab = document.createElement('button'); fab.type = 'button'; fab.className = 'admin-fab'; fab.hidden = true; fab.setAttribute('aria-expanded', 'false'); fab.innerHTML = '<i></i><span>Admin</span>'; document.body.appendChild(fab);
