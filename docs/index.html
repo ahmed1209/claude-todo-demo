@@ -592,6 +592,13 @@ body[data-hover="magnetic"] :is(.button,.header-cta):hover::before{opacity:1}
 body.page-open{overflow:hidden}
 @media (max-width:900px){.page-grid{grid-template-columns:1fr} .page-bar .header-cta{display:none}}
 @media (prefers-reduced-motion:reduce){.page.opening,.page.closing,.page-body{animation:none}}
+/* 3D section transitions */
+main.fold3d{perspective:1100px}
+main.fold3d > section{backface-visibility:hidden}
+main.fold3d > section.folding{will-change:transform}
+.fold{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0;transition:opacity .08s linear;background:linear-gradient(to top,rgba(6,8,15,.95),rgba(6,8,15,0) 58%)}
+.fold[data-dir="out"]{background:linear-gradient(to bottom,rgba(6,8,15,.95),rgba(6,8,15,0) 58%)}
+@media (prefers-reduced-motion:reduce){main.fold3d > section{transform:none!important} .fold{display:none}}
 </style>
 </head>
 <body>
@@ -1469,6 +1476,23 @@ window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.
   let ticking = false; const req = () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { ticking = false; pick(); }); } };
   addEventListener('scroll', req, { passive: true }); addEventListener('resize', () => { currentPose = ''; req(); });
   const boot = () => { if (window.setSculpturePose) { currentPose = ''; pick(); } else setTimeout(boot, 200); }; boot();
+})();
+
+/* ===================== 3D section transitions: at each boundary the leaving section folds away and the next stands up ===================== */
+(() => {
+  const main = $('main'); if (!main) return; main.classList.add('fold3d');
+  const secs = $$('main > section').map(el => { const f = document.createElement('i'); f.className = 'fold'; f.setAttribute('aria-hidden', 'true'); el.appendChild(f); return { el, f }; });
+  const on = () => document.body.dataset.depth !== 'off' && !reduced();
+  let ticking = false;
+  const update = () => { ticking = false; const vh = innerHeight, ang = innerWidth < 900 ? 14 : 24, shrink = innerWidth < 900 ? .05 : .08, active = on();
+    const mainTop = main.getBoundingClientRect().top + scrollY; main.style.perspectiveOrigin = active ? `50% ${Math.round(scrollY + vh * .5 - mainTop)}px` : '';
+    for (const s of secs) { const r = s.el.getBoundingClientRect(); let t = '', o = '', k = 0, dir = '';
+      if (active && r.top > 0 && r.top < vh) { k = r.top / vh; t = `rotateX(${(-k * ang).toFixed(2)}deg) scale(${(1 - k * shrink).toFixed(4)})`; o = '50% 0%'; dir = 'in'; }
+      else if (active && r.top <= 0 && r.bottom > 0 && r.bottom < vh) { k = 1 - r.bottom / vh; t = `rotateX(${(k * ang).toFixed(2)}deg) scale(${(1 - k * shrink).toFixed(4)})`; o = '50% 100%'; dir = 'out'; }
+      if (t) { s.el.style.transform = t; s.el.style.transformOrigin = o; s.el.classList.add('folding'); s.f.style.opacity = (Math.min(1, k * 1.25) * .85).toFixed(3); s.f.dataset.dir = dir; }
+      else if (s.el.classList.contains('folding')) { s.el.style.transform = ''; s.el.style.transformOrigin = ''; s.el.classList.remove('folding'); s.f.style.opacity = '0'; } } };
+  const req = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+  addEventListener('scroll', req, { passive: true }); addEventListener('resize', req); document.addEventListener('effects:changed', req); update();
 })();
 
 /* ===================== detail pages: every panel, card and file opens its own page with a preview ===================== */
