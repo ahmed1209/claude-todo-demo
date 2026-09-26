@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>Revit Model Slimmer</Name>
+    <Assembly>RevitModelSlimmer\RevitModelSlimmer.dll</Assembly>
+    <AddInId>7D3E6F1A-5B0C-4C9A-9F2E-1A2B3C4D5E6F</AddInId>
+    <FullClassName>RevitModelSlimmer.App</FullClassName>
+    <VendorId>MSLM</VendorId>
+    <VendorDescription>Revit Model Slimmer, open source</VendorDescription>
+  </AddIn>
+</RevitAddIns>

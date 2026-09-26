@@ -1,0 +1,114 @@
+<Window x:Class="RevitModelSlimmer.UI.SelectionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Model Slimmer"
+        Width="980" Height="640" MinWidth="720" MinHeight="420"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="#F4F5F7" FontFamily="Segoe UI" FontSize="12">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="12,5" />
+            <Setter Property="Margin" Value="4,0,0,0" />
+            <Setter Property="MinWidth" Value="90" />
+        </Style>
+        <Style x:Key="Primary" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#C0392B" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="BorderBrush" Value="#96281B" />
+        </Style>
+        <Style TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="4,2" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,8">
+            <TextBlock x:Name="HeaderText" FontSize="18" FontWeight="SemiBold" Foreground="#2C3E50" Text="Select items" />
+            <TextBlock x:Name="SubHeaderText" TextWrapping="Wrap" Foreground="#5D6D7E" Margin="0,2,0,0" />
+        </StackPanel>
+
+        <!-- Optional summary (used by the performance audit) -->
+        <Expander x:Name="SummaryExpander" Grid.Row="1" Header="Audit summary" IsExpanded="True" Margin="0,0,0,8" Visibility="Collapsed">
+            <Border Background="White" BorderBrush="#D5D8DC" BorderThickness="1" Padding="8" Margin="0,4,0,0">
+                <ScrollViewer MaxHeight="150" VerticalScrollBarVisibility="Auto">
+                    <TextBlock x:Name="SummaryText" TextWrapping="Wrap" FontFamily="Consolas" FontSize="11.5" />
+                </ScrollViewer>
+            </Border>
+        </Expander>
+
+        <!-- Toolbar -->
+        <DockPanel Grid.Row="2" Margin="0,0,0,6" LastChildFill="True">
+            <Button DockPanel.Dock="Right" Content="Uncheck all" Click="UncheckAll_Click" />
+            <Button DockPanel.Dock="Right" Content="Check all" Click="CheckAll_Click" />
+            <Button DockPanel.Dock="Right" Content="Check recommended" Click="CheckRecommended_Click" />
+            <CheckBox x:Name="RecommendedOnly" DockPanel.Dock="Right" Content="Show recommended only" VerticalAlignment="Center"
+                      Margin="12,0" Checked="Filter_Changed" Unchecked="Filter_Changed" />
+            <TextBlock DockPanel.Dock="Left" Text="Search:" VerticalAlignment="Center" Margin="0,0,6,0" />
+            <TextBox x:Name="SearchBox" VerticalContentAlignment="Center" Padding="4,2" TextChanged="Filter_Changed" />
+        </DockPanel>
+
+        <!-- Grid -->
+        <DataGrid x:Name="ItemsGrid" Grid.Row="3" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                  IsReadOnly="False" SelectionMode="Extended" HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                  HorizontalGridLinesBrush="#E5E7E9" Background="White" RowBackground="White" AlternatingRowBackground="#FAFBFC"
+                  BorderBrush="#D5D8DC" BorderThickness="1" RowHeaderWidth="0" EnableRowVirtualization="True"
+                  PreviewKeyDown="ItemsGrid_PreviewKeyDown">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="36" CanUserResize="False" CanUserSort="False">
+                    <DataGridTemplateColumn.Header>
+                        <CheckBox Click="HeaderCheck_Click" ToolTip="Check / uncheck all visible rows" />
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn x:Name="NameColumn" Header="Name" Binding="{Binding Name}" Width="2*" IsReadOnly="True" />
+                <DataGridTextColumn x:Name="GroupColumn" Header="Category" Binding="{Binding Group}" Width="1.2*" IsReadOnly="True" />
+                <DataGridTextColumn x:Name="DetailsColumn" Header="Details" Binding="{Binding Details}" Width="2.2*" IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="ToolTip" Value="{Binding Details}" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="StatusColumn" Header="Status" Binding="{Binding Status}" Width="1.1*" IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="SemiBold" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Recommended}" Value="True">
+                                    <Setter Property="Foreground" Value="#C0392B" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Recommended}" Value="False">
+                                    <Setter Property="Foreground" Value="#7F8C8D" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Footer -->
+        <DockPanel Grid.Row="4" Margin="0,10,0,0" LastChildFill="True">
+            <Button DockPanel.Dock="Right" x:Name="CancelButton" Content="Cancel" IsCancel="True" Click="Cancel_Click" />
+            <Button DockPanel.Dock="Right" x:Name="OkButton" Content="Delete checked" Style="{StaticResource Primary}" Click="Ok_Click" />
+            <TextBlock x:Name="CountText" VerticalAlignment="Center" Foreground="#5D6D7E" />
+        </DockPanel>
+    </Grid>
+</Window>
