@@ -46,7 +46,7 @@ Everything under `docs/` is a complete public build: the page carries a search t
 
 **1. Register the domain.** `parametra.studio` was unregistered when checked on 26 September 2026, and it matches the contact address already on the site. `parametra.tools`, `parametra.dev`, `parametra.build`, `parametra.pro` and `getparametra.com` were free too; `.com`, `.io`, `.app`, `.net` and `.design` are taken. Any registrar works (Cloudflare Registrar, Porkbun and Namecheap are common choices); `.studio` typically costs in the range of USD 20 to 35 a year, and WHOIS privacy should be included or added.
 
-**2. GitHub Pages deploys by itself.** The workflow in `.github/workflows/pages.yml` publishes `docs/` to GitHub Pages on every push to `main` (it can also be started by hand from the Actions tab). Its first run switches Pages on for the repository; if that run stops with a permissions message instead, open Settings → Pages once, set Source to "GitHub Actions" and re-run the workflow. The site is then live at https://ahmed1209.github.io/claude-todo-demo/ .
+**2. Switch GitHub Pages on, once.** Open https://github.com/ahmed1209/claude-todo-demo/settings/pages and under "Build and deployment" set Source to **GitHub Actions** (the workflow token is not allowed to do this by itself, so this is a one-time click). From then on the workflow in `.github/workflows/pages.yml` publishes `docs/` on every push to `main`; to publish right away, open the Actions tab, pick "Deploy website to GitHub Pages" and press "Run workflow". The site is then live at https://ahmed1209.github.io/claude-todo-demo/ .
 
 **3. Point the domain at GitHub.** In the registrar's DNS panel add these records (the values are GitHub Pages' published addresses):
 
