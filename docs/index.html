@@ -20,7 +20,7 @@
   --paper:#06080f; --mist:#0a0e1c; --card:rgba(150,175,255,.05); --field:rgba(150,175,255,.06);
   --ok:#4fd9a0; --warn:#f0b35a; --err:#ff6b8a;
   --glow-c:0 0 24px rgba(94,230,255,.45),0 0 64px rgba(94,230,255,.18);
-  --veil:rgba(6,8,15,.6); --veil-2:rgba(10,14,28,.68);
+  --veil:rgba(6,8,15,.66); --veil-2:rgba(10,14,28,.72);
   --display:"Unbounded","Helvetica Neue",Arial,sans-serif;
   --body:"Instrument Sans","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
   --mono:"JetBrains Mono",Consolas,"SF Mono",Menlo,monospace;
@@ -83,7 +83,7 @@ em{font-style:normal}
 }
 
 /* Hero with WebGL scene */
-.world{position:fixed;inset:0;z-index:0;pointer-events:none}
+.world{position:fixed;inset:0;z-index:0;pointer-events:none;transition:opacity .2s linear}
 .world canvas{position:absolute;inset:0;width:100%;height:100%}
 .hero{position:relative;isolation:isolate;overflow:hidden;background:transparent;color:var(--text);min-height:100svh;display:flex;align-items:flex-end}
 .hero canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0}
@@ -1291,7 +1291,7 @@ window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.
   const sections = links.map(a => document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
   if ('IntersectionObserver' in window) { const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) setActive(en.target.id); }), { rootMargin: '-38% 0px -55% 0px' }); sections.forEach(s => io.observe(s)); }
   // scroll progress
-  let ticking = false; const onScroll = () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const max = document.documentElement.scrollHeight - innerHeight; prog.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`; if (heroWrap && !reduced()) { const hh = hero.offsetHeight || 1; const k = Math.min(1, Math.max(0, scrollY / (hh * .85))); heroWrap.style.opacity = (1 - k * .9).toFixed(3); heroWrap.style.transform = `translateY(${(k * 70).toFixed(1)}px) scale(${(1 - k * .04).toFixed(4)})`; } ticking = false; }); };
+  let ticking = false; const onScroll = () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const max = document.documentElement.scrollHeight - innerHeight; prog.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`; if (heroWrap && !reduced()) { const hh = hero.offsetHeight || 1; const k = Math.min(1, Math.max(0, scrollY / (hh * .85))); const wl = document.querySelector('.world'); if (wl) wl.style.opacity = (1 - k * .42).toFixed(3); heroWrap.style.opacity = (1 - k * .9).toFixed(3); heroWrap.style.transform = `translateY(${(k * 70).toFixed(1)}px) scale(${(1 - k * .04).toFixed(4)})`; } ticking = false; }); };
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
   window.addEventListener('resize', () => moveInd(links.find(a => a.classList.contains('active'))));
   if (location.hash && location.hash !== '#admin') { const el = document.getElementById(location.hash.slice(1)); if (el) setTimeout(() => { scrollTo(0, el.getBoundingClientRect().top + scrollY - 88); setActive(el.id); spotlight(el); }, 60); }
