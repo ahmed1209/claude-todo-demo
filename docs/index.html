@@ -455,14 +455,14 @@ footer p span{color:var(--signal);margin:0 10px}
 .warp.on{opacity:1}
 .warp i{position:absolute;left:-10%;right:-10%;height:200px;top:calc(var(--p) * 120% - 100px);opacity:var(--w);background:linear-gradient(180deg,transparent,rgba(94,230,255,.25) 40%,rgba(255,255,255,.55) 50%,rgba(143,123,255,.25) 60%,transparent);filter:blur(6px);display:none}
 body[data-dir="up"] .warp i{top:calc((1 - var(--p)) * 120% - 70px)}
-body[data-transition="warp"] .warp{background:radial-gradient(ellipse at 50% 50%,rgba(6,8,15,0) 40%,rgba(6,8,15,calc(var(--w) * .55)) 100%);backdrop-filter:blur(calc(var(--w) * 2px));-webkit-backdrop-filter:blur(calc(var(--w) * 2px))}
+body[data-transition="warp"] .warp{background:radial-gradient(ellipse at 50% 50%,rgba(6,8,15,0) 38%,rgba(6,8,15,calc(var(--w) * .6)) 100%)}
 body[data-transition="warp"] .warp i{display:block}
 body[data-transition="fade"] .warp{background:rgba(6,8,15,calc(var(--w) * .7))}
 body[data-transition="slide"] .warp{background:rgba(6,8,15,calc(var(--w) * .25))}
-main{transition:transform .45s cubic-bezier(.2,.8,.2,1);transform-origin:50% 50%}
-html.hopping body[data-transition="warp"] main{transform:scale(.972)}
-html.hopping body[data-transition="slide"][data-dir="down"] main{transform:translateY(-18px)}
-html.hopping body[data-transition="slide"][data-dir="up"] main{transform:translateY(18px)}
+body[data-transition="slide"] .arrived > .wrap,body[data-transition="slide"] .arrived > .sheetgrid{animation:slideIn .8s cubic-bezier(.2,.8,.2,1)}
+body[data-transition="slide"][data-dir="up"] .arrived > .wrap,body[data-transition="slide"][data-dir="up"] .arrived > .sheetgrid{animation-name:slideInUp}
+@keyframes slideIn{from{opacity:.3;transform:translateY(44px)}to{opacity:1;transform:none}}
+@keyframes slideInUp{from{opacity:.3;transform:translateY(-44px)}to{opacity:1;transform:none}}
 .sheet.arrived .rail .ref,.courses.arrived .section-label b,.notes-section.arrived .section-label b,.updates.arrived .section-label b,.follow.arrived .section-label b,.contact.arrived .section-label b{animation:arrive-pulse 1.2s ease-out}
 .arrived .head h2,.arrived .dark-heading h2,.arrived .notes-heading h2,.arrived .updates h2,.arrived .contact h2{animation:arrive-sweep 1.1s ease-out}
 @keyframes arrive-pulse{0%{text-shadow:0 0 0 rgba(94,230,255,0)}30%{text-shadow:0 0 22px rgba(94,230,255,1),0 0 44px rgba(94,230,255,.6)}100%{text-shadow:0 0 10px rgba(94,230,255,.5)}}
@@ -493,7 +493,7 @@ body[data-hover="magnetic"] :is(.button,.header-cta){transition:transform .25s c
 body[data-hover="magnetic"] :is(.button,.header-cta):hover{box-shadow:0 0 34px rgba(94,230,255,.45)}
 body[data-hover="magnetic"] :is(.button,.header-cta)::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(120px 60px at var(--mx,50%) var(--my,50%),rgba(255,255,255,.28),transparent 70%);opacity:0;transition:opacity .25s;pointer-events:none}
 body[data-hover="magnetic"] :is(.button,.header-cta):hover::before{opacity:1}
-@media (prefers-reduced-motion:reduce){.warp,.nav-ind,.ripple{display:none!important} main{transform:none!important}}
+@media (prefers-reduced-motion:reduce){.warp,.nav-ind,.ripple{display:none!important}}
 /* Scroll-driven section transitions */
 .divider{position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--glass-border-2),transparent);overflow:hidden;pointer-events:none;z-index:1}
 .divider::after{content:"";position:absolute;top:0;bottom:0;left:-35%;width:35%;background:linear-gradient(90deg,transparent,var(--signal),#fff,var(--violet),transparent);opacity:0;box-shadow:0 0 14px rgba(94,230,255,.8)}
