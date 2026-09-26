@@ -1,0 +1,80 @@
+<Window x:Class="RevitModelSlimmer.UI.WorksetWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Model Slimmer - Clean Worksets"
+        Width="900" Height="600" MinWidth="700" MinHeight="420"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="#F4F5F7" FontFamily="Segoe UI" FontSize="12">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="12,5" />
+            <Setter Property="Margin" Value="4,0,0,0" />
+            <Setter Property="MinWidth" Value="90" />
+        </Style>
+        <Style x:Key="Primary" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#C0392B" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="BorderBrush" Value="#96281B" />
+        </Style>
+        <Style TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="4,2" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,8">
+            <TextBlock FontSize="18" FontWeight="SemiBold" Foreground="#2C3E50" Text="Choose the worksets to delete" />
+            <TextBlock TextWrapping="Wrap" Foreground="#5D6D7E" Margin="0,2,0,0"
+                       Text="Check the user worksets you want to remove. Empty worksets are pre-checked. Elements living in a deleted workset are either moved to the target workset you pick below or deleted with it. Worksets owned by other users cannot be deleted until they relinquish them." />
+        </StackPanel>
+
+        <DataGrid x:Name="ItemsGrid" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                  SelectionMode="Extended" HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                  HorizontalGridLinesBrush="#E5E7E9" Background="White" RowBackground="White" AlternatingRowBackground="#FAFBFC"
+                  BorderBrush="#D5D8DC" BorderThickness="1" RowHeaderWidth="0">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="36" CanUserResize="False" CanUserSort="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Workset" Binding="{Binding Name}" Width="2*" IsReadOnly="True" />
+                <DataGridTextColumn Header="Elements" Binding="{Binding ElementCount}" Width="0.8*" IsReadOnly="True" />
+                <DataGridTextColumn Header="Owner" Binding="{Binding Owner}" Width="1*" IsReadOnly="True" />
+                <DataGridTextColumn Header="Editable by me" Binding="{Binding EditableText}" Width="1*" IsReadOnly="True" />
+                <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="2*" IsReadOnly="True" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Border Grid.Row="2" Background="White" BorderBrush="#D5D8DC" BorderThickness="1" Padding="10" Margin="0,10,0,0">
+            <StackPanel>
+                <TextBlock FontWeight="SemiBold" Text="What should happen to elements in the deleted worksets?" Margin="0,0,0,6" />
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                    <RadioButton x:Name="MoveRadio" IsChecked="True" VerticalAlignment="Center" Content="Move them to workset:" />
+                    <ComboBox x:Name="TargetCombo" Width="260" Margin="8,0,0,0" DisplayMemberPath="Name" />
+                </StackPanel>
+                <RadioButton x:Name="DeleteRadio" Content="Delete the elements together with the workset (destructive)" Foreground="#C0392B" />
+            </StackPanel>
+        </Border>
+
+        <DockPanel Grid.Row="3" Margin="0,10,0,0" LastChildFill="True">
+            <Button DockPanel.Dock="Right" Content="Cancel" IsCancel="True" Click="Cancel_Click" />
+            <Button DockPanel.Dock="Right" x:Name="OkButton" Content="Delete checked worksets" Style="{StaticResource Primary}" Click="Ok_Click" />
+            <Button DockPanel.Dock="Right" Content="Uncheck all" Click="UncheckAll_Click" />
+            <Button DockPanel.Dock="Right" Content="Check empty" Click="CheckEmpty_Click" />
+            <TextBlock x:Name="CountText" VerticalAlignment="Center" Foreground="#5D6D7E" />
+        </DockPanel>
+    </Grid>
+</Window>

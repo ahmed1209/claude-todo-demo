@@ -1,12 +1,25 @@
 # claude-todo-demo
 
+Two things live in this repository:
+
+- **Revit Model Slimmer**, a Revit add-in (Revit 2023 to 2026) that shrinks and speeds up project files. Details just below and in [RevitModelSlimmer/README.md](RevitModelSlimmer/README.md).
+- **The Parametra website**, the public site for the studio's Revit plugins, parametric families, Revit files and courses, published from `docs/`.
+
+## Revit Model Slimmer
+
+**Revit Model Slimmer** is a Revit add-in (Revit 2023 to 2026) that shrinks and speeds up project files by cleaning unused families, filters, empty views, view templates and worksets, auditing performance hogs and compacting the file.
+
+**To install:** download [RevitModelSlimmer/RevitModelSlimmer-Installer.zip](RevitModelSlimmer/RevitModelSlimmer-Installer.zip), extract it, and double-click `Install.bat`. Then start Revit and look for the **Model Slimmer** ribbon tab.
+
+See [RevitModelSlimmer/README.md](RevitModelSlimmer/README.md) for the full feature list, build instructions and safety notes.
+
 ## Parametra website
 
 `docs/index.html` is a single-file website for the Parametra catalogue: Revit plugins, parametric families, Revit files and courses. It has no build step; its only external dependencies are Google Fonts and three.js (r128, loaded from cdnjs) for the hero's WebGL site model. If WebGL is unavailable the hero falls back to a 2D contour animation.
 
 **Preview locally:** open `docs/index.html` in a browser.
 
-**Publish with GitHub Pages:** Settings → Pages → Source "Deploy from a branch" → the branch that holds `docs/`, folder `/docs`. See **Going live on your own domain** below for the full route to an official address.
+**Publish with GitHub Pages:** automatic; every push to `main` that touches `docs/` runs `.github/workflows/pages.yml`. See **Going live on your own domain** below for the full route to an official address.
 
 **Edit the content:** everything shown on the page comes from two blocks at the top of the `<script>` in `docs/index.html`:
 
@@ -33,7 +46,7 @@ Everything under `docs/` is a complete public build: the page carries a search t
 
 **1. Register the domain.** `parametra.studio` was unregistered when checked on 26 September 2026, and it matches the contact address already on the site. `parametra.tools`, `parametra.dev`, `parametra.build`, `parametra.pro` and `getparametra.com` were free too; `.com`, `.io`, `.app`, `.net` and `.design` are taken. Any registrar works (Cloudflare Registrar, Porkbun and Namecheap are common choices); `.studio` typically costs in the range of USD 20 to 35 a year, and WHOIS privacy should be included or added.
 
-**2. Turn on GitHub Pages.** In this repository open Settings → Pages, set Source to "Deploy from a branch", choose the branch that contains `docs/index.html` with the `/docs` folder, and save. About a minute later the site is live at https://ahmed1209.github.io/claude-todo-demo/ . Once the site branch is merged into `main`, switch the setting to `main`.
+**2. GitHub Pages deploys by itself.** The workflow in `.github/workflows/pages.yml` publishes `docs/` to GitHub Pages on every push to `main` (it can also be started by hand from the Actions tab). Its first run switches Pages on for the repository; if that run stops with a permissions message instead, open Settings → Pages once, set Source to "GitHub Actions" and re-run the workflow. The site is then live at https://ahmed1209.github.io/claude-todo-demo/ .
 
 **3. Point the domain at GitHub.** In the registrar's DNS panel add these records (the values are GitHub Pages' published addresses):
 
@@ -59,4 +72,3 @@ git add docs && git commit -m "Bind the site to parametra.studio" && git push
 The script rewrites the canonical, social-preview, structured-data and sitemap URLs to the new domain and writes `docs/CNAME`, which is the file Pages reads to serve the domain (GitHub writes the same file when you save the custom domain, so the two agree). Recommended afterwards: in your personal GitHub Settings → Pages → "Add a domain", verify the domain so nobody else can attach it to their Pages site.
 
 **Email.** The site shows hello@parametra.studio as the contact address, so that mailbox has to exist once the domain does. Cloudflare Email Routing (free) or the registrar's email forwarding can pass it on to your everyday inbox; or change the address in the admin editor's Site tab.
-

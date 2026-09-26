@@ -1,0 +1,39 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34322.80
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RevitModelSlimmer", "src\RevitModelSlimmer\RevitModelSlimmer.csproj", "{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug R23|Any CPU = Debug R23|Any CPU
+		Debug R24|Any CPU = Debug R24|Any CPU
+		Debug R25|Any CPU = Debug R25|Any CPU
+		Debug R26|Any CPU = Debug R26|Any CPU
+		Release R23|Any CPU = Release R23|Any CPU
+		Release R24|Any CPU = Release R24|Any CPU
+		Release R25|Any CPU = Release R25|Any CPU
+		Release R26|Any CPU = Release R26|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}.Debug R23|Any CPU.ActiveCfg = Debug R23|Any CPU
+		{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}.Debug R23|Any CPU.Build.0 = Debug R23|Any CPU
+		{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}.Debug R24|Any CPU.ActiveCfg = Debug R24|Any CPU
+		{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}.Debug R24|Any CPU.Build.0 = Debug R24|Any CPU
+		{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}.Debug R25|Any CPU.ActiveCfg = Debug R25|Any CPU
+		{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}.Debug R25|Any CPU.Build.0 = Debug R25|Any CPU
+		{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}.Debug R26|Any CPU.ActiveCfg = Debug R26|Any CPU
+		{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}.Debug R26|Any CPU.Build.0 = Debug R26|Any CPU
+		{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}.Release R23|Any CPU.ActiveCfg = Release R23|Any CPU
+		{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}.Release R23|Any CPU.Build.0 = Release R23|Any CPU
+		{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}.Release R24|Any CPU.ActiveCfg = Release R24|Any CPU
+		{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}.Release R24|Any CPU.Build.0 = Release R24|Any CPU
+		{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}.Release R25|Any CPU.ActiveCfg = Release R25|Any CPU
+		{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}.Release R25|Any CPU.Build.0 = Release R25|Any CPU
+		{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}.Release R26|Any CPU.ActiveCfg = Release R26|Any CPU
+		{6B1F0E2C-2C5A-4B4E-9E0C-8B6A6E2F3D11}.Release R26|Any CPU.Build.0 = Release R26|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

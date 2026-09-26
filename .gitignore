@@ -1,0 +1,17 @@
+# Visual Studio / .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.swp
+*.DotSettings.user
+TestResults/
+# Rider
+.idea/
+# OS
+Thumbs.db
+.DS_Store
+
+# Build output (the ready-to-install binaries live in RevitModelSlimmer/dist instead)
+RevitModelSlimmer/build/
