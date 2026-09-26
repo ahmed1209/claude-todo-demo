@@ -1,0 +1,1061 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Parametra: Revit plugins, parametric families, project files and courses, built on live projects.">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style>
+<title>Parametra</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ink:#14162a;            /* brand dark: hero, dark text on amber */
+  --deep:#232b52;           /* closing section */
+  --panel:#171a2f;          /* interactive viewports */
+  --dark-2:#1b1f37;         /* courses */
+  --dark-3:#0f1120;         /* updates, follow */
+  --steel:#6d86d6;          /* mid accent on dark */
+  --steel-ink:#3f57a6;      /* mid accent as text on light */
+  --signal:#f7b955;         /* hot accent */
+  --signal-2:#ffd07a;
+  --paper:#f5f6fa;
+  --mist:#e9ecf4;
+  --card:#ffffff;
+  --text:#14162a;
+  --text-2:#4b5170;
+  --text-3:#7c8199;
+  --rule:rgba(20,22,42,.14);
+  --rule-strong:rgba(20,22,42,.32);
+  --on-dark:#f1f2f8;
+  --on-dark-2:rgba(241,242,248,.72);
+  --on-dark-3:rgba(241,242,248,.5);
+  --on-dark-rule:rgba(241,242,248,.14);
+  --field:#f9fafc;
+  --ok:#3f9a6e; --warn:#c77a2a; --err:#c0503f;
+  --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+  --body:"Instrument Sans","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+  --mono:"IBM Plex Mono",Consolas,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#12142a; --mist:#171a33; --card:#1c2040;
+    --text:#eef0f8; --text-2:#c3c8dd; --text-3:#8d93b0;
+    --rule:rgba(238,240,248,.14); --rule-strong:rgba(238,240,248,.34);
+    --steel-ink:#9db0f0; --field:#141731;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#12142a; --mist:#171a33; --card:#1c2040;
+  --text:#eef0f8; --text-2:#c3c8dd; --text-3:#8d93b0;
+  --rule:rgba(238,240,248,.14); --rule-strong:rgba(238,240,248,.34);
+  --steel-ink:#9db0f0; --field:#141731;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--text);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg{max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;font-variation-settings:"opsz" 96}
+h2{letter-spacing:-.035em;font-size:clamp(31px,4.4vw,54px);font-weight:800;line-height:1.02}
+h3{letter-spacing:-.015em;font-size:19px;font-weight:700;line-height:1.3}
+p{margin:0}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 clamp(20px,5vw,64px)}
+.mono{font-family:var(--mono);letter-spacing:.16em;text-transform:uppercase;font-size:11.5px}
+.eyebrow{font-family:var(--mono);text-transform:uppercase;letter-spacing:.15em;font-size:11px;font-weight:500;display:flex;align-items:center;gap:10px}
+.eyebrow span{width:23px;height:1px;background:var(--signal);display:block}
+em{font-style:italic}
+.button{display:inline-flex;align-items:center;justify-content:space-between;gap:28px;min-height:50px;padding:0 20px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border:1px solid transparent;cursor:pointer;background:transparent;transition:transform .18s,background .18s,color .18s,box-shadow .18s}
+.button:hover{transform:translateY(-2px)}
+.button-primary{background:var(--signal);color:var(--ink);border-color:var(--signal)}
+.button-primary:hover{background:var(--signal-2)}
+.button-ghost{color:var(--on-dark);border-color:rgba(241,242,248,.4)}
+.button-ghost:hover{background:rgba(241,242,248,.09)}
+.button-outline{color:var(--text);border-color:var(--text)}
+.button-outline:hover{background:var(--text);color:var(--paper)}
+
+/* Header */
+.site-header{position:fixed;inset:0 0 auto;z-index:60;height:76px;padding:env(safe-area-inset-top,0px) clamp(16px,5vw,64px) 0;display:flex;align-items:center;justify-content:space-between;color:var(--on-dark);background:rgba(13,15,30,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--on-dark-rule)}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-size:21px;font-weight:700;letter-spacing:-.03em}
+.brand svg{width:30px;height:30px;flex:none}
+.site-header nav{display:flex;gap:26px;font-size:13.5px}
+.site-header nav a{opacity:.86;transition:opacity .2s,color .2s}
+.site-header nav a:hover{opacity:1;color:var(--signal)}
+.header-actions{display:flex;align-items:center;gap:10px}
+.header-cta{background:var(--signal);color:var(--ink);border:0;min-height:42px;padding:0 18px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s}
+.header-cta:hover{background:var(--signal-2);transform:translateY(-1px);box-shadow:0 0 0 4px rgba(247,185,85,.28)}
+.nav-toggle{display:none;align-items:center;gap:9px;background:transparent;border:1px solid rgba(255,255,255,.4);padding:10px 12px;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase}
+.nav-toggle-icon{display:flex;flex-direction:column;gap:4px;width:16px}
+.nav-toggle-icon i{display:block;height:2px;background:currentColor;transition:transform .2s,opacity .2s}
+.nav-toggle[aria-expanded="true"] .nav-toggle-icon i:first-child{transform:translateY(6px) rotate(45deg)}
+.nav-toggle[aria-expanded="true"] .nav-toggle-icon i:nth-child(2){opacity:0}
+.nav-toggle[aria-expanded="true"] .nav-toggle-icon i:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+@media (max-width:900px){
+  .site-header nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;padding:6px 20px 14px;background:#0d0f1e;border-bottom:1px solid var(--on-dark-rule);box-shadow:0 18px 40px rgba(0,0,0,.35)}
+  .site-header nav.is-open{display:flex}
+  .site-header nav a{padding:14px 0;font-size:15px;border-top:1px solid rgba(255,255,255,.1)}
+  .site-header nav a:first-child{border-top:0}
+  .nav-toggle{display:flex}
+  .header-cta{min-height:36px;padding:0 10px;font-size:9px}
+}
+
+/* Hero */
+.hero{position:relative;isolation:isolate;overflow:hidden;background:var(--ink);color:var(--on-dark)}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.9}
+.hero::after{content:"";position:absolute;inset:auto 0 0;height:42%;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(20,22,42,0),var(--ink) 88%)}
+.hero .wrap{position:relative;z-index:2}
+.herobody{max-width:920px;padding:clamp(130px,15vw,190px) 0 clamp(56px,8vw,96px)}
+.hero-eyebrow{color:var(--signal);margin-bottom:26px}
+.hero h1{font-size:clamp(44px,7.4vw,94px);font-weight:800;letter-spacing:-.045em;line-height:.94;margin-bottom:26px}
+.hero h1 em{color:var(--signal);font-style:normal}
+.lede{color:var(--on-dark-2);max-width:60ch;font-size:clamp(17px,1.6vw,21px);line-height:1.55}
+.ctas{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:38px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border-top:1px solid rgba(241,242,248,.24);margin-top:clamp(48px,7vw,84px)}
+.fact{padding:22px 0 34px;border-right:1px solid rgba(241,242,248,.14);padding-right:14px}
+.fact+.fact{padding-left:18px}
+.fact:last-child{border-right:0}
+.fact b{display:block;font-family:var(--display);font-size:38px;font-weight:800;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.fact span{display:block;margin-top:8px;color:var(--on-dark-3);font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+@media (max-width:560px){.fact{border-right:0;border-bottom:1px solid rgba(241,242,248,.14)} .fact+.fact{padding-left:0}}
+
+/* Sheets */
+.sheet{border-top:1px solid var(--rule);background:var(--paper);padding:clamp(56px,8vw,104px) 0}
+.sheet.alt{background:var(--mist)}
+.sheetgrid{display:grid;grid-template-columns:132px minmax(0,1fr);gap:clamp(24px,4vw,56px)}
+.sheetgrid>*{min-width:0}
+.rail{position:relative;border-right:1px solid var(--rule)}
+.rail .ref{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel-ink)}
+.rail .no{display:block;margin-top:6px;font-family:var(--display);font-size:13px;font-weight:800;letter-spacing:.02em;color:var(--text-3)}
+.head{max-width:56ch;margin-bottom:clamp(28px,4vw,44px)}
+.head h2{margin-bottom:18px}
+.head p{color:var(--text-2);font-size:19px}
+.head p+p{margin-top:18px}
+.split{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:clamp(24px,3.5vw,48px);align-items:start}
+.notes{display:flex;flex-direction:column;gap:26px}
+.note{border-left:2px solid var(--rule);padding-left:16px}
+.note h3{margin-bottom:7px}
+.note p{color:var(--text-2);font-size:15.5px;line-height:1.6}
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--rule-strong);padding:5px 9px;color:var(--text-2)}
+@media (max-width:900px){
+  .sheetgrid{grid-template-columns:minmax(0,1fr);gap:20px}
+  .rail{border-right:0;border-bottom:1px solid var(--rule);display:flex;align-items:baseline;gap:14px;padding-bottom:12px}
+  .rail .no{margin-top:0}
+  .split{grid-template-columns:1fr}
+}
+
+/* Viewport (interactive demo frame) */
+.viewport{background:var(--panel);color:var(--on-dark);box-shadow:0 1px rgba(20,22,42,.06),0 18px 44px -30px rgba(20,22,42,.6);min-width:0}
+.vpbar{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:11px 16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-3);border-bottom:1px solid var(--on-dark-rule)}
+.vpbar b{color:var(--signal);font-weight:400}
+.vpbar span:last-child{text-align:right}
+.vptabs{display:flex;border-bottom:1px solid var(--on-dark-rule);overflow-x:auto}
+.vptabs button{flex:1;min-width:max-content;background:transparent;border:0;border-bottom:2px solid transparent;padding:12px 14px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-3);cursor:pointer;transition:color .15s,border-color .15s}
+.vptabs button:hover{color:var(--on-dark)}
+.vptabs button[aria-selected="true"]{color:var(--signal);border-bottom-color:var(--signal)}
+.stage{display:block;width:100%;height:auto;background:var(--panel)}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px 20px;padding:16px;border-top:1px solid var(--on-dark-rule)}
+.ctl label,.ctl .lbl{display:block;margin-bottom:7px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-3)}
+.ctl .val{float:right;color:var(--signal);font-size:11px;letter-spacing:.08em;font-variant-numeric:tabular-nums}
+.ctl input[type=range]{width:100%;height:22px;margin:0;accent-color:var(--signal)}
+.seg{display:flex;border:1px solid rgba(241,242,248,.24)}
+.seg button{flex:1;padding:8px 4px;border:0;background:transparent;color:var(--on-dark-2);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .15s,color .15s}
+.seg button+button{border-left:1px solid rgba(241,242,248,.24)}
+.seg button:hover:not([aria-pressed="true"]){background:rgba(241,242,248,.09);color:var(--on-dark)}
+.seg button[aria-pressed="true"]{background:var(--signal);color:var(--ink);font-weight:500}
+.vbtn{width:100%;padding:8px;background:transparent;border:1px solid rgba(241,242,248,.24);color:var(--on-dark);font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:background .15s}
+.vbtn:hover{background:rgba(241,242,248,.09)}
+.swatches{display:flex;border-top:1px solid var(--on-dark-rule)}
+.sw{flex:1;padding:9px 10px 11px;border-right:1px solid var(--on-dark-rule)}
+.sw:last-child{border-right:0}
+.sw i{display:block;height:6px;margin-bottom:8px}
+.sw span{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--on-dark-3)}
+.sw b{color:var(--on-dark);font-weight:500}
+.scrollx{overflow-x:auto}
+.vtable{border-collapse:collapse;width:100%;font-size:14px}
+.vtable th{text-align:left;font-weight:400;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-3);padding:12px 14px;border-bottom:1px solid var(--on-dark-rule)}
+.vtable td{padding:11px 14px;border-bottom:1px solid rgba(241,242,248,.09);vertical-align:middle}
+.vtable tr:last-child td{border-bottom:0}
+.vtable .num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12.5px}
+.vtable .sn{font-family:var(--mono);letter-spacing:.08em;color:var(--signal);font-size:12px}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:4px 9px;border-radius:99px;background:rgba(241,242,248,.09);color:var(--on-dark-3);font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.pill i{width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.on{color:var(--signal);background:rgba(247,185,85,.16)}
+.pill.mid{color:#a9b8ec;background:rgba(109,134,214,.22)}
+.stat-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));border-top:1px solid var(--on-dark-rule)}
+.stat{padding:12px 14px;border-right:1px solid var(--on-dark-rule)}
+.stat:last-child{border-right:0}
+.stat b{display:block;font-family:var(--display);font-size:24px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--on-dark)}
+.stat span{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-3)}
+.plant{transition:opacity .25s}
+.tagg{cursor:default}
+.tagg rect{fill:#22274a;stroke:var(--steel)}
+.tagg text{fill:var(--on-dark);font-family:var(--mono);font-size:10px}
+.panes>[role=tabpanel][hidden]{display:none}
+
+/* Panel grid (the whole tab) */
+.panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));border-top:1px solid var(--rule);margin-top:clamp(36px,5vw,64px)}
+.pan{padding:22px 22px 24px 0;border-bottom:1px solid var(--rule)}
+.pan .k{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.pan .k b{font-family:var(--display);font-size:17px;font-weight:700;letter-spacing:-.02em}
+.pan .k span{font-family:var(--mono);font-size:12px;color:var(--steel-ink);font-variant-numeric:tabular-nums}
+.pan .meter{height:2px;background:var(--rule);margin:12px 0 11px}
+.pan .meter i{display:block;height:100%;background:var(--steel)}
+.pan p{color:var(--text-2);font-size:13.5px;line-height:1.5}
+.pan .tools{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}
+.pan .tools span{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--text-3);border:1px solid var(--rule);padding:2px 6px}
+.subhead{display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:clamp(40px,6vw,72px)}
+.subhead h3{font-size:clamp(22px,2.6vw,30px);letter-spacing:-.03em}
+.subhead .mono{color:var(--steel-ink)}
+
+/* Files browser */
+.fbar{display:flex;flex-wrap:wrap;gap:8px;padding:12px 16px;border-bottom:1px solid var(--on-dark-rule);align-items:center}
+.chip{background:transparent;border:1px solid rgba(241,242,248,.24);color:var(--on-dark-2);padding:6px 11px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .15s,color .15s}
+.chip:hover{background:rgba(241,242,248,.09);color:var(--on-dark)}
+.chip[aria-pressed="true"]{background:var(--signal);color:var(--ink);border-color:var(--signal)}
+.fbar select{margin-left:auto;background:#22274a;color:var(--on-dark);border:1px solid rgba(241,242,248,.24);padding:6px 10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase}
+#fb-table td,#fb-table th{white-space:nowrap}
+.frow{cursor:pointer;transition:background .15s}
+.frow:hover,.frow[aria-selected="true"]{background:rgba(241,242,248,.06)}
+.frow[aria-selected="true"] td:first-child{box-shadow:inset 3px 0 var(--signal)}
+.fdetail{border-top:1px solid var(--on-dark-rule);padding:16px;display:grid;grid-template-columns:1.2fr 1fr;gap:18px}
+.fdetail h4{margin:0 0 6px;font-family:var(--display);font-size:20px;letter-spacing:-.02em;font-weight:700}
+.fdetail p{color:var(--on-dark-2);font-size:14px;line-height:1.55}
+.meters{display:grid;gap:9px;align-content:start}
+.meters div{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--on-dark-3)}
+.meters div b{float:right;color:var(--on-dark);font-weight:500}
+.meters i{display:block;height:3px;background:rgba(241,242,248,.12);margin-top:6px;position:relative;overflow:hidden}
+.meters i::after{content:"";position:absolute;inset:0;width:var(--w,0%);background:var(--steel);transition:width .5s ease}
+@media (max-width:640px){.fdetail{grid-template-columns:1fr}}
+
+/* Courses (dark section) */
+.courses{background:var(--dark-2);color:var(--on-dark);padding:clamp(80px,9vw,120px) 0 clamp(90px,9vw,125px);overflow:hidden}
+.dark-heading{display:grid;grid-template-columns:.62fr 1.35fr .9fr;gap:6vw;align-items:end}
+.dark-heading h2{font-size:clamp(46px,5.6vw,88px);letter-spacing:-.045em;line-height:.92}
+.dark-heading h2 em{color:var(--signal)}
+.section-label{display:flex;gap:16px;align-items:baseline;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3)}
+.section-label.light{color:var(--on-dark-3)}
+.section-label b{color:var(--steel);font-weight:500}
+.dark-intro{color:var(--on-dark-2);font-size:14px;line-height:1.65}
+.dark-intro a,.dark-intro button{display:inline-flex;gap:18px;margin-top:16px;padding:0 0 8px;background:transparent;border:0;border-bottom:1px solid rgba(247,185,85,.55);color:var(--on-dark);font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;cursor:pointer}
+.levelbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:clamp(36px,5vw,56px)}
+.course-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:rgba(241,242,248,.14);border:1px solid rgba(241,242,248,.14);margin-top:18px}
+.course{background:var(--dark-2);padding:18px 18px 24px;display:flex;flex-direction:column;gap:12px;transition:background .2s,transform .2s;min-width:0}
+.course:hover{background:#22274a;transform:translateY(-3px)}
+.course-art{aspect-ratio:16/9;max-width:100%;background:#0f1120;position:relative;overflow:hidden;display:grid;place-items:center}
+.course-art svg{width:100%;height:100%}
+.course-art .dur{position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.6);color:#fff;font-family:var(--mono);font-size:10px;padding:2px 6px}
+.course-meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-3)}
+.course-meta b{color:var(--signal);font-weight:400}
+.course h3{font-size:24px;letter-spacing:-.025em;line-height:1.12}
+.course>p{color:var(--on-dark-2);font-size:13.5px;line-height:1.55}
+.course details{margin-top:auto;border-top:1px solid var(--on-dark-rule);padding-top:10px}
+.course summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--on-dark)}
+.course summary::-webkit-details-marker{display:none}
+.course summary::after{content:"+";color:var(--signal)}
+.course details[open] summary::after{content:"–"}
+.course ol{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:7px}
+.course li{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--on-dark-2)}
+.course li span:last-child{font-family:var(--mono);font-size:11px;color:var(--on-dark-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+.course .lvl{display:inline-block;padding:3px 8px;border:1px solid rgba(241,242,248,.24);font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--on-dark-2)}
+.course[hidden]{display:none}
+@media (max-width:900px){.dark-heading{grid-template-columns:minmax(0,1fr);gap:34px} .dark-heading h2{font-size:clamp(44px,10vw,60px)}}
+
+/* Studio notes */
+.notes-section{background:var(--mist);padding:clamp(80px,9vw,120px) 0 clamp(90px,9vw,125px)}
+.notes-heading{display:grid;grid-template-columns:.62fr 1.35fr .9fr;gap:6vw;align-items:end}
+.notes-heading h2{font-size:clamp(46px,6vw,92px);letter-spacing:-.045em;line-height:.92}
+.notes-heading p{color:var(--text-2);font-size:14px;line-height:1.65}
+.notes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule-strong);border:1px solid var(--rule-strong);margin-top:clamp(40px,6vw,75px)}
+.note-card{background:var(--card);padding:34px;min-height:400px;display:flex;flex-direction:column}
+.note-top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3)}
+.note-top span:first-child{color:var(--steel-ink)}
+.note-card h3{margin:48px 0 22px;font-size:32px;letter-spacing:-.03em;line-height:1.08}
+.note-card p{color:var(--text-2);font-size:14px;line-height:1.7;margin-bottom:30px}
+.note-card a,.note-card button{margin-top:auto;display:flex;justify-content:space-between;padding:18px 0 0;border:0;border-top:1px solid var(--rule);background:transparent;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;color:var(--text);text-align:left}
+.return-strip{display:grid;grid-template-columns:1fr 1fr auto;gap:24px;align-items:center;padding:22px 0;border-bottom:1px solid var(--rule);margin-top:28px}
+.return-strip small{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px}
+.return-strip .button{margin:0;background:var(--text);color:var(--paper);border-color:var(--text)}
+@media (max-width:900px){.notes-heading{grid-template-columns:minmax(0,1fr);gap:30px} .notes-grid{grid-template-columns:1fr} .note-card{min-height:0;padding:26px} .note-card h3{margin-top:30px;font-size:28px} .return-strip{grid-template-columns:1fr}}
+
+/* Updates */
+.updates{position:relative;overflow:hidden;background:var(--dark-3);color:var(--on-dark);padding:clamp(80px,9vw,110px) 0}
+.updates::after{content:"";position:absolute;left:28%;bottom:-330px;width:520px;height:520px;border:1px solid rgba(247,185,85,.25);border-radius:47% 53% 45% 55%;transform:rotate(15deg);box-shadow:0 0 0 58px rgba(247,185,85,.04),0 0 0 116px rgba(247,185,85,.025);pointer-events:none}
+.updates .wrap{position:relative;z-index:1;display:grid;grid-template-columns:.62fr .55fr 1.4fr;gap:6vw;align-items:center}
+.version{display:flex;flex-direction:column;justify-content:space-between;min-height:265px;padding:28px;border:1px solid rgba(247,185,85,.35);background:rgba(247,185,85,.05)}
+.version span,.version small{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-3)}
+.version strong{font-family:var(--display);font-size:54px;letter-spacing:-.05em;color:var(--signal);line-height:1}
+.updates h2{margin:23px 0 27px;font-size:clamp(46px,6vw,92px);letter-spacing:-.045em;line-height:.91}
+.updates h2 em{color:var(--signal)}
+.updates .copy>p{color:var(--on-dark-2);max-width:560px;line-height:1.7}
+.changelog{margin:26px 0 0;padding:0;list-style:none;display:grid;gap:10px;max-width:560px}
+.changelog li{display:grid;grid-template-columns:78px 1fr;gap:14px;font-size:14px;color:var(--on-dark-2);border-top:1px solid var(--on-dark-rule);padding-top:10px}
+.changelog li span{font-family:var(--mono);font-size:11px;color:var(--signal);letter-spacing:.06em}
+@media (max-width:900px){.updates .wrap{grid-template-columns:minmax(0,1fr);gap:32px} .version{min-height:210px}}
+
+/* Follow */
+.follow{background:var(--dark-3);color:var(--on-dark);padding:clamp(60px,7vw,90px) 0 clamp(80px,9vw,110px);border-top:1px solid var(--on-dark-rule)}
+.follow-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:38px}
+.social-card{display:grid;grid-template-columns:68px 1fr auto;gap:25px;align-items:center;min-height:170px;padding:30px;color:#fff;border:1px solid rgba(255,255,255,.24);transition:transform .2s,box-shadow .2s}
+.social-card:hover{transform:translateY(-4px);box-shadow:0 20px 45px rgba(0,0,0,.35)}
+.social-card.li{background:#0a66c2}
+.social-card.yt{background:#d3271c}
+.social-card .ic{width:52px;height:52px;display:grid;place-items:center;border:2px solid rgba(255,255,255,.7);border-radius:8px;font-family:var(--display);font-weight:800;font-size:22px}
+.social-card.yt .ic{border-radius:50%}
+.social-copy{display:flex;flex-direction:column;gap:8px;min-width:0}
+.social-copy small{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.social-copy strong{font-family:var(--display);font-size:clamp(24px,2.6vw,36px);line-height:1;letter-spacing:-.03em}
+.social-copy span{font-size:12.5px;color:rgba(255,255,255,.8)}
+.social-card>b{font-size:26px}
+@media (max-width:900px){.follow-grid{grid-template-columns:1fr} .social-card{grid-template-columns:52px 1fr auto;gap:16px;padding:23px;min-height:0}}
+
+/* Contact */
+.contact{background:var(--paper);border-top:1px solid var(--rule);padding:clamp(80px,9vw,100px) 0}
+.contact .wrap{display:grid;grid-template-columns:.62fr 1.3fr .9fr;gap:6vw;align-items:center}
+.contact h2{margin:22px 0 27px;font-size:clamp(44px,5.4vw,84px);letter-spacing:-.045em;line-height:.92}
+.contact h2 em{color:var(--steel-ink)}
+.contact .copy>p{color:var(--text-2);max-width:560px;line-height:1.7}
+.contact-actions{display:flex;flex-direction:column;gap:12px}
+.contact-email{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:70px;padding:0 16px 0 22px;border:1px solid var(--text);font-size:13px;font-weight:600;overflow-wrap:anywhere;background:transparent;color:var(--text);cursor:pointer;transition:background .2s,color .2s;text-align:left;width:100%}
+.contact-email:hover{background:var(--text);color:var(--paper)}
+.contact-email span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel-ink);white-space:nowrap}
+.contact-email:hover span{color:var(--signal)}
+.contact-actions .button{justify-content:center;width:100%;margin:0}
+@media (max-width:900px){.contact .wrap{grid-template-columns:minmax(0,1fr);gap:40px}}
+
+/* Closing */
+.closing{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:560px;padding:100px clamp(20px,5vw,64px);background:var(--deep);color:var(--on-dark)}
+.rings{position:absolute;width:900px;height:620px;pointer-events:none}
+.rings i{position:absolute;inset:10%;border:1px solid rgba(247,185,85,.3);border-radius:49%}
+.rings i:nth-child(2){inset:20%;transform:rotate(10deg)}
+.rings i:nth-child(3){inset:30%;transform:rotate(-8deg)}
+.rings i:nth-child(4){inset:40%}
+.closing>*:not(.rings){position:relative;z-index:2}
+.closing h2{margin:25px 0;font-size:clamp(46px,6.5vw,104px);letter-spacing:-.045em;line-height:.92}
+.closing h2 em{color:var(--signal)}
+.closing>p{color:var(--on-dark-2);max-width:70ch;margin:0 0 30px;line-height:1.7}
+.closing .ctas{justify-content:center;margin-top:0}
+.closing .button-ghost{background:rgba(7,10,28,.55);border-color:rgba(255,255,255,.38)}
+@media (max-width:900px){.closing{min-height:480px;padding:80px 20px} .rings{width:650px;height:500px}}
+
+/* Footer */
+footer{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;min-height:100px;padding:25px clamp(20px,6vw,80px);border-top:1px solid var(--rule);color:var(--text-3);font-size:11px;background:var(--paper)}
+footer .brand{color:var(--text);font-size:17px}
+footer .brand svg{width:24px;height:24px}
+.footer-social{display:flex;align-items:center;gap:18px}
+.footer-social a{padding-bottom:5px;border-bottom:1px solid var(--rule-strong);font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--text);transition:color .2s,border-color .2s}
+.footer-social a:hover{color:var(--steel-ink);border-color:var(--steel-ink)}
+footer p:last-child{text-transform:uppercase;letter-spacing:.07em;font-family:var(--mono);font-size:10px}
+footer p span{color:var(--steel-ink);margin:0 10px}
+@media (max-width:640px){footer{flex-direction:column;align-items:flex-start;gap:14px;padding:35px 20px}}
+
+/* Dialog */
+.dlg{width:min(940px,100vw - 40px);max-width:none;max-height:calc(100dvh - 40px);margin:auto;padding:0;border:0;background:transparent;color:var(--text);overflow:auto;box-shadow:0 30px 100px rgba(0,0,0,.45)}
+.dlg::backdrop{background:rgba(6,8,22,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.dlg-panel{position:relative;display:grid;grid-template-columns:.82fr 1.18fr;min-height:610px;background:var(--paper)}
+.dlg-intro{position:relative;overflow:hidden;display:flex;flex-direction:column;min-width:0;padding:68px 48px 48px;background:var(--ink);color:var(--on-dark)}
+.dlg-intro .rings{width:560px;height:500px;left:-195px;bottom:-220px;opacity:.8}
+.dlg-intro>*:not(.rings){position:relative;z-index:1}
+.dlg-intro .eyebrow{color:var(--on-dark-2)}
+.dlg-intro h2{margin:27px 0 30px;font-size:clamp(50px,6vw,84px);letter-spacing:-.045em;line-height:.88}
+.dlg-intro h2 em{color:var(--signal)}
+.dlg-intro>p{color:var(--on-dark-2);font-size:14px;line-height:1.7}
+.dlg-detail{margin-top:auto;padding-top:24px;border-top:1px solid var(--on-dark-rule);display:flex;flex-direction:column;gap:8px}
+.dlg-detail span{font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-3)}
+.dlg-detail strong{font-size:12px;line-height:1.5;color:var(--on-dark)}
+.dlg-close{position:absolute;top:18px;right:20px;z-index:3;width:38px;height:38px;padding:0;border:1px solid var(--rule-strong);background:transparent;color:var(--text);font-size:25px;font-weight:300;line-height:1;cursor:pointer}
+.dlg-close:hover{background:var(--text);color:var(--paper)}
+.dlg-form{display:grid;grid-template-columns:1fr 1fr;gap:22px 18px;align-content:start;padding:82px 54px 50px}
+.field{display:flex;flex-direction:column;gap:9px;min-width:0}
+.field label{font-family:var(--mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--text-2)}
+.field label span{color:var(--err)}
+.field label small{float:right;font-family:var(--mono);font-size:8px;color:var(--text-3)}
+.field input,.field select,.field textarea{width:100%;min-height:52px;padding:0 14px;border:1px solid var(--rule-strong);border-radius:0;background:var(--field);color:var(--text);font:inherit;font-size:14px;outline:0;transition:border-color .18s,box-shadow .18s}
+.field textarea{padding:14px;min-height:96px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--steel-ink);box-shadow:0 0 0 3px rgba(109,134,214,.22)}
+.field.full,.dlg-form fieldset{grid-column:1/-1}
+.dlg-form fieldset{border:0;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.dlg-form legend{grid-column:1/-1;margin-bottom:9px;padding:0;font-family:var(--mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--text-2)}
+.opt{position:relative;display:grid;gap:3px;padding:12px 12px 12px 36px;border:1px solid var(--rule-strong);background:var(--field);cursor:pointer;font-size:13px;transition:border-color .18s,box-shadow .18s}
+.opt input{position:absolute;top:14px;left:12px;width:15px;height:15px;margin:0;accent-color:var(--steel-ink)}
+.opt:has(input:checked){border-color:var(--steel-ink);box-shadow:0 0 0 3px rgba(109,134,214,.22)}
+.opt small{color:var(--text-3);font-size:11px}
+.consent{grid-column:1/-1;font-size:10px;line-height:1.55;color:var(--text-3)}
+.dlg-submit{grid-column:1/-1;width:100%;justify-content:space-between;border:0}
+.dlg-msg{grid-column:1/-1;padding:12px 14px;border-left:3px solid var(--steel-ink);background:var(--mist);font-size:12px;line-height:1.55;color:var(--text-2)}
+.dlg-msg.ok{border-color:var(--ok)}
+.dlg-msg.err{border-color:var(--err)}
+.dlg-summary{grid-column:1/-1;padding:16px 18px;border:1px solid var(--rule-strong);background:var(--card);font-size:13px;line-height:1.6}
+.dlg-summary pre{margin:10px 0 0;white-space:pre-wrap;font-family:var(--mono);font-size:11.5px;color:var(--text-2)}
+.dlg-summary .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.dlg-summary .button{min-height:42px;margin:0}
+@media (max-width:900px){.dlg{width:calc(100vw - 20px);max-height:calc(100dvh - 20px)} .dlg-panel{grid-template-columns:1fr} .dlg-intro{min-height:0;padding:54px 24px 32px} .dlg-form{grid-template-columns:1fr;padding:40px 22px 30px} .dlg-form fieldset{grid-template-columns:1fr 1fr} .dlg-close{color:#fff;border-color:rgba(255,255,255,.35);top:13px;right:13px}}
+@media (max-width:480px){.dlg-form fieldset{grid-template-columns:1fr}}
+
+/* Preview banner */
+.preview{position:fixed;left:16px;right:16px;margin-left:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:70;max-width:520px;padding:14px 16px;background:var(--card);color:var(--text);border:1px solid var(--rule-strong);border-left:4px solid var(--signal);box-shadow:0 20px 50px rgba(0,0,0,.25);font-size:12.5px;line-height:1.5;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}
+.preview b{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--steel-ink);display:block;margin-bottom:4px}
+.preview button{border:1px solid var(--rule-strong);background:transparent;width:30px;height:30px;font-size:18px;line-height:1;cursor:pointer;padding:0}
+
+/* Reveal */
+.reveal{transition:opacity .7s ease,transform .7s ease}
+.reveal.pre{opacity:0;transform:translateY(18px)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+  .reveal.pre{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="#top" aria-label="Parametra home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="3" width="26" height="26" rx="4" fill="none" stroke="#f7b955" stroke-width="2"/><path d="M8.5 21.5 C 12 11, 20 11, 23.5 21.5" fill="none" stroke="#f1f2f8" stroke-width="2" stroke-linecap="round"/><circle cx="8.5" cy="21.5" r="2.3" fill="#f7b955"/><circle cx="23.5" cy="21.5" r="2.3" fill="#f7b955"/><circle cx="16" cy="13.6" r="1.6" fill="#6d86d6"/></svg>
+    <span>Parametra</span>
+  </a>
+  <nav id="primary-nav" aria-label="Primary navigation">
+    <a href="#about">About</a>
+    <a href="#plugins">Plugins</a>
+    <a href="#families">Families</a>
+    <a href="#files">Files</a>
+    <a href="#courses">Courses</a>
+    <a href="#notes">Notes</a>
+    <a href="#updates">Updates</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="header-actions">
+    <button class="header-cta" type="button" data-open="tools">Get the toolkit</button>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav"><span class="nav-toggle-icon" aria-hidden="true"><i></i><i></i><i></i></span> Menu</button>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero" aria-labelledby="hero-title">
+  <canvas id="contours" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="herobody">
+      <p class="mono hero-eyebrow">Revit plugins · parametric families · project files · courses</p>
+      <h1 id="hero-title">Parametric by <em>default.</em></h1>
+      <p class="lede">Thirty-one Revit tools on one ribbon tab. Families that flex instead of break. Project files that start clean. And courses that teach the reasoning behind the button, not just where it is.</p>
+      <div class="ctas">
+        <button class="button button-primary" type="button" data-open="tools">Get the toolkit <span aria-hidden="true">→</span></button>
+        <a class="button button-ghost" href="#plugins">Try the scatter demo</a>
+      </div>
+    </div>
+    <div class="facts">
+      <div class="fact"><b>31</b><span>Tools on the ribbon</span></div>
+      <div class="fact"><b>15</b><span>Ribbon panels</span></div>
+      <div class="fact"><b>1</b><span>Tab to learn</span></div>
+      <div class="fact"><b>4</b><span>Libraries: plugins, families, files, courses</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet alt" id="about">
+  <div class="wrap sheetgrid">
+    <div class="rail"><span class="ref">A-001</span><span class="no">About</span></div>
+    <div>
+      <div class="head reveal">
+        <h2>Fewer workarounds. More design time.</h2>
+        <p>Parametra is one studio's answer to the repetitive parts of Revit: the tags that never line up, the planting that has to be placed twice, the sheets that take an afternoon to renumber.</p>
+        <p>Everything here comes from live projects. The plugins sit on a single BIM Tools tab, the families are built to be flexed, the files are the templates and libraries we actually start from, and the courses explain how each of them was made.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="plugins">
+  <div class="wrap sheetgrid">
+    <div class="rail"><span class="ref">P-100</span><span class="no">Revit plugins</span></div>
+    <div>
+      <div class="head reveal">
+        <h2>Thirty-one tools, one tab, no detours.</h2>
+        <p>Scatter planting across a surface or along a path, read shadows before the client asks, and line up every tag on the sheet in a click. Each tool below is a live preview of what the ribbon button does inside Revit.</p>
+      </div>
+      <div class="split">
+        <div class="viewport reveal" id="plugin-demo">
+          <div class="vpbar"><span id="vp-title">Surface Scatter — preview</span><span id="vp-stats"></span></div>
+          <div class="vptabs" role="tablist" aria-label="Plugin demos">
+            <button role="tab" id="tab-scatter" aria-selected="true" aria-controls="pane-scatter" type="button">Planting Scatter</button>
+            <button role="tab" id="tab-shadow" aria-selected="false" aria-controls="pane-shadow" type="button">Shadow Analysis</button>
+            <button role="tab" id="tab-align" aria-selected="false" aria-controls="pane-align" type="button">Align Tags</button>
+          </div>
+          <div class="panes">
+            <div role="tabpanel" id="pane-scatter" aria-labelledby="tab-scatter">
+              <svg class="stage" id="scatter-svg" viewBox="0 0 760 430" role="img" aria-label="Planting scattered across a garden bed"></svg>
+              <div class="controls">
+                <div class="ctl"><span class="lbl" id="sc-mode-l">Host</span><div class="seg" role="group" aria-labelledby="sc-mode-l"><button type="button" data-sc-mode="surface" aria-pressed="true">Surface</button><button type="button" data-sc-mode="path" aria-pressed="false">Path</button></div></div>
+                <div class="ctl"><span class="lbl" id="sc-lay-l">Layout</span><div class="seg" role="group" aria-labelledby="sc-lay-l"><button type="button" data-sc-lay="grid" aria-pressed="false">Grid</button><button type="button" data-sc-lay="stagger" aria-pressed="true">Stagger</button><button type="button" data-sc-lay="random" aria-pressed="false">Random</button></div></div>
+                <div class="ctl"><label for="sc-spacing">Spacing <span class="val" id="sc-spacing-v">1200 mm</span></label><input id="sc-spacing" type="range" min="600" max="2400" step="50" value="1200"></div>
+                <div class="ctl"><label for="sc-jitter">Jitter <span class="val" id="sc-jitter-v">35%</span></label><input id="sc-jitter" type="range" min="0" max="100" step="5" value="35"></div>
+                <div class="ctl"><span class="lbl">Randomness seed</span><button class="vbtn" type="button" id="sc-reseed">Re-roll seed</button></div>
+              </div>
+              <div class="swatches" id="sc-swatches"></div>
+            </div>
+            <div role="tabpanel" id="pane-shadow" aria-labelledby="tab-shadow" hidden>
+              <svg class="stage" id="shadow-svg" viewBox="0 0 760 430" role="img" aria-label="Shadows cast by buildings across a site plan"></svg>
+              <div class="controls">
+                <div class="ctl"><span class="lbl" id="sh-month-l">Date</span><div class="seg" role="group" aria-labelledby="sh-month-l"><button type="button" data-sh-month="2" aria-pressed="false">21 Mar</button><button type="button" data-sh-month="5" aria-pressed="true">21 Jun</button><button type="button" data-sh-month="8" aria-pressed="false">21 Sep</button><button type="button" data-sh-month="11" aria-pressed="false">21 Dec</button></div></div>
+                <div class="ctl"><label for="sh-hour">Local time <span class="val" id="sh-hour-v">15:00</span></label><input id="sh-hour" type="range" min="5" max="19" step="0.25" value="15"></div>
+                <div class="ctl"><span class="lbl" id="sh-lat-l">Latitude</span><div class="seg" role="group" aria-labelledby="sh-lat-l"><button type="button" data-sh-lat="25" aria-pressed="true">25°N</button><button type="button" data-sh-lat="40" aria-pressed="false">40°N</button><button type="button" data-sh-lat="52" aria-pressed="false">52°N</button></div></div>
+              </div>
+              <div class="stat-strip">
+                <div class="stat"><b id="sh-alt">—</b><span>Sun altitude</span></div>
+                <div class="stat"><b id="sh-az">—</b><span>Azimuth</span></div>
+                <div class="stat"><b id="sh-cover">—</b><span>Lawn in shade</span></div>
+                <div class="stat"><b id="sh-longest">—</b><span>Longest shadow</span></div>
+              </div>
+            </div>
+            <div role="tabpanel" id="pane-align" aria-labelledby="tab-align" hidden>
+              <svg class="stage" id="align-svg" viewBox="0 0 760 430" role="img" aria-label="Tags being aligned on a planting plan"></svg>
+              <div class="controls">
+                <div class="ctl"><span class="lbl">Align</span><div class="seg"><button type="button" data-al="left" aria-pressed="false">Left</button><button type="button" data-al="right" aria-pressed="false">Right</button></div></div>
+                <div class="ctl"><span class="lbl">Distribute</span><div class="seg"><button type="button" data-al="vertical" aria-pressed="false">Vertical</button><button type="button" data-al="column" aria-pressed="false">Column</button></div></div>
+                <div class="ctl"><span class="lbl">Selection</span><button class="vbtn" type="button" data-al="reset">Scatter again</button></div>
+              </div>
+              <div class="swatches">
+                <div class="sw"><i style="background:var(--signal)"></i><span>Selected tags <b id="al-count">6</b></span></div>
+                <div class="sw"><i style="background:var(--steel)"></i><span>Leaders stay attached</span></div>
+                <div class="sw"><i style="background:#a9b8ec"></i><span>Last action <b id="al-last">none</b></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="notes reveal">
+          <div class="note"><h3>Scatter that reads the site</h3><p>Surface Scatter fills a floor, toposolid or filled region from your Plant Library at a spacing you set, with jitter so nothing looks stamped. Path Scatter follows a model line, and Edit Scatter re-flows the set when the boundary moves.</p></div>
+          <div class="note"><h3>Shadows before the meeting</h3><p>Shadow Analysis reads the project location and the sun settings you already have, then reports shaded area per surface. Shadow Links keeps those results tied to the elements, so the schedule updates when the massing does.</p></div>
+          <div class="note"><h3>Sheets that line themselves up</h3><p>Align Tags, Align Elements, Align Viewports and Align Railing share one idea: select, pick an edge, done. Manage Viewports and Manage Legends keep whole sheet sets consistent.</p></div>
+          <div class="tags"><span class="tag">Toposolids</span><span class="tag">Filled regions</span><span class="tag">Model lines</span><span class="tag">Schedules</span><span class="tag">Sheets</span></div>
+        </div>
+      </div>
+
+      <div class="subhead reveal"><h3>The whole tab</h3><span class="mono">15 panels · 31 tools</span></div>
+      <div class="panels reveal" id="panel-grid"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet alt" id="families">
+  <div class="wrap sheetgrid">
+    <div class="rail"><span class="ref">F-200</span><span class="no">Parametric families</span></div>
+    <div>
+      <div class="head reveal">
+        <h2>Families that flex instead of break.</h2>
+        <p>Every family in the library is built the same way: shared parameters, formulas that guard against impossible values, and a type catalog so the office standard sizes are one click away. Drag the sliders and watch the geometry, the schedule values and the material take-off follow.</p>
+      </div>
+      <div class="split">
+        <div class="viewport reveal">
+          <div class="vpbar"><span>Pergola family — flex test</span><span id="pg-stats"></span></div>
+          <svg class="stage" id="pergola-svg" viewBox="0 0 760 430" role="img" aria-label="Plan and elevation of a parametric pergola"></svg>
+          <div class="controls">
+            <div class="ctl"><span class="lbl" id="pg-type-l">Type catalog</span><div class="seg" role="group" aria-labelledby="pg-type-l"><button type="button" data-pg-type="0" aria-pressed="false">PG-30</button><button type="button" data-pg-type="1" aria-pressed="true">PG-45</button><button type="button" data-pg-type="2" aria-pressed="false">PG-60</button></div></div>
+            <div class="ctl"><label for="pg-w">Width <span class="val" id="pg-w-v">4.5 m</span></label><input id="pg-w" type="range" min="2.4" max="8" step="0.1" value="4.5"></div>
+            <div class="ctl"><label for="pg-d">Depth <span class="val" id="pg-d-v">3.0 m</span></label><input id="pg-d" type="range" min="2" max="5" step="0.1" value="3"></div>
+            <div class="ctl"><label for="pg-h">Height <span class="val" id="pg-h-v">2.7 m</span></label><input id="pg-h" type="range" min="2.2" max="3.4" step="0.05" value="2.7"></div>
+            <div class="ctl"><label for="pg-s">Rafter spacing <span class="val" id="pg-s-v">450 mm</span></label><input id="pg-s" type="range" min="250" max="900" step="25" value="450"></div>
+            <div class="ctl"><label for="pg-p">Posts per side <span class="val" id="pg-p-v">3</span></label><input id="pg-p" type="range" min="2" max="5" step="1" value="3"></div>
+          </div>
+          <div class="stat-strip">
+            <div class="stat"><b id="pg-rafters">—</b><span>Rafters</span></div>
+            <div class="stat"><b id="pg-posts">—</b><span>Posts</span></div>
+            <div class="stat"><b id="pg-vol">—</b><span>Timber m³</span></div>
+            <div class="stat"><b id="pg-area">—</b><span>Footprint m²</span></div>
+            <div class="stat"><b id="pg-cover">—</b><span>Rafter cover</span></div>
+          </div>
+        </div>
+        <div class="notes reveal">
+          <div class="note"><h3>Type catalogs, not type soup</h3><p>Standard sizes ship as a catalog, so a project loads only the types it needs and the family stays light. Custom sizes are one instance parameter away and never break the standard ones.</p></div>
+          <div class="note"><h3>Formulas that refuse to fail</h3><p>Rafter count, post spacing and member sizes are derived, not typed. Push a dimension too far and the family clamps it instead of throwing a constraint error at the person who least expects it.</p></div>
+          <div class="note"><h3>Scheduled from day one</h3><p>Shared parameters mean the pergola volume, the planter soil quantity and the bench seat length all land in schedules without a mapping exercise.</p></div>
+          <div class="tags"><span class="tag">Shared parameters</span><span class="tag">Type catalogs</span><span class="tag">Nested families</span><span class="tag">Adaptive</span><span class="tag">Detail items</span></div>
+        </div>
+      </div>
+      <div class="subhead reveal"><h3>The library by category</h3><span class="mono" id="fam-count"></span></div>
+      <div class="panels reveal" id="family-grid"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="files">
+  <div class="wrap sheetgrid">
+    <div class="rail"><span class="ref">R-300</span><span class="no">Revit files</span></div>
+    <div>
+      <div class="head reveal">
+        <h2>Start from a file that is already tidy.</h2>
+        <p>Templates with the view templates, filters and browser organisation done. Sample projects to learn from. Detail libraries and schedule packs you can transfer in with one Transfer Project Standards. Filter the shelf, open a file, see what is inside.</p>
+      </div>
+      <div class="viewport reveal" id="files-browser">
+        <div class="vpbar"><span>Library shelf — browser</span><span id="fb-stats"></span></div>
+        <div class="fbar" id="fb-filters">
+          <button class="chip" type="button" data-ft="all" aria-pressed="true">All</button>
+          <button class="chip" type="button" data-ft="Template" aria-pressed="false">Templates</button>
+          <button class="chip" type="button" data-ft="Project" aria-pressed="false">Sample projects</button>
+          <button class="chip" type="button" data-ft="Details" aria-pressed="false">Detail libraries</button>
+          <button class="chip" type="button" data-ft="Schedules" aria-pressed="false">Schedule packs</button>
+          <select id="fb-version" aria-label="Revit version"><option value="all">Any version</option><option>2026</option><option>2025</option><option>2024</option><option>2023</option></select>
+        </div>
+        <div class="scrollx">
+          <table class="vtable" id="fb-table"><thead><tr><th scope="col">File</th><th scope="col">Type</th><th scope="col">Discipline</th><th scope="col">Versions</th><th scope="col" class="num">Size</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="fdetail" id="fb-detail"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="courses" id="courses">
+  <div class="wrap">
+    <div class="dark-heading">
+      <div class="section-label light"><b>C-400</b> Courses</div>
+      <div>
+        <p class="eyebrow"><span></span> Learn the reasoning</p>
+        <h2 style="margin-top:22px">Learn the <em>why</em> behind every button.</h2>
+      </div>
+      <div class="dark-intro">
+        <p>Short, project-based courses that build the same things the studio ships: a ribbon tab of your own, a family library that flexes, and a documentation set that goes out clean.</p>
+        <button type="button" data-open="tools">Ask about team training <span aria-hidden="true">↗</span></button>
+      </div>
+    </div>
+    <div class="levelbar" id="level-bar" role="group" aria-label="Filter courses by level">
+      <button class="chip" type="button" data-level="all" aria-pressed="true">All levels</button>
+      <button class="chip" type="button" data-level="Beginner" aria-pressed="false">Beginner</button>
+      <button class="chip" type="button" data-level="Intermediate" aria-pressed="false">Intermediate</button>
+      <button class="chip" type="button" data-level="Advanced" aria-pressed="false">Advanced</button>
+    </div>
+    <div class="course-grid" id="course-grid"></div>
+  </div>
+</section>
+
+<section class="notes-section" id="notes">
+  <div class="wrap">
+    <div class="notes-heading">
+      <div class="section-label"><b>05</b> Studio notes</div>
+      <h2>Ideas worth keeping on the desk.</h2>
+      <p>The thinking behind the tools, written for people who want the principle as well as the shortcut.</p>
+    </div>
+    <div class="notes-grid reveal" id="notes-grid"></div>
+    <div class="return-strip reveal">
+      <div><small>New notes</small>As the toolkit grows</div>
+      <div><small>Written around</small>Real project deadlines</div>
+      <a class="button" href="#courses">See the courses <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="updates" id="updates">
+  <div class="wrap">
+    <div class="section-label light"><b>06</b> Updates</div>
+    <div class="version"><span>Current build</span><strong id="ver-num">v2.4.0</strong><small id="ver-date">September 2026</small></div>
+    <div class="copy">
+      <p class="eyebrow"><span></span> Follow Parametra</p>
+      <h2>See what changed. <em>Know what's next.</em></h2>
+      <p>Every release is logged here: new tools, fixes, and which Revit versions the installer covers.</p>
+      <ul class="changelog" id="changelog"></ul>
+    </div>
+  </div>
+</section>
+
+<section class="follow" id="follow">
+  <div class="wrap">
+    <div class="dark-heading">
+      <div class="section-label light"><b>07</b> Follow</div>
+      <div>
+        <p class="eyebrow"><span></span> Stay connected</p>
+        <h2 style="margin-top:22px">See the work. <em>Follow the progress.</em></h2>
+      </div>
+      <div class="dark-intro"><p>New tools, family walkthroughs, release notes and short workflow studies, posted as they ship.</p></div>
+    </div>
+    <div class="follow-grid" id="follow-grid"></div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="section-label"><b>08</b> Contact</div>
+    <div class="copy">
+      <p class="eyebrow"><span></span> Start a conversation</p>
+      <h2>Have a question? <em>Let's talk Revit.</em></h2>
+      <p>Get the toolkit, ask about a family or template, book team training, or tell us about a workflow that still hurts. Teams: send your seat count and we reply with a quotation.</p>
+    </div>
+    <div class="contact-actions">
+      <button class="contact-email" type="button" id="copy-email"><span class="addr"></span><span>Copy</span></button>
+      <button class="button button-primary" type="button" data-open="quote">Request a team quote</button>
+      <button class="button button-outline" type="button" data-open="tools">Get the toolkit</button>
+    </div>
+  </div>
+</section>
+
+<section class="closing" id="get-started">
+  <div class="rings" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <p class="eyebrow" style="justify-content:center"><span></span> Ready when your project is</p>
+  <h2>Parametric by default.<br><em>Productive by design.</em></h2>
+  <p>One installer for the whole BIM Tools tab, one library for families and files, and courses that show how it all fits together. Send your details and we reply with the download link and next steps.</p>
+  <div class="ctas">
+    <button class="button button-primary" type="button" data-open="quote">Request a team quote</button>
+    <button class="button button-ghost" type="button" data-open="tools">Get the toolkit</button>
+  </div>
+</section>
+</main>
+
+<footer>
+  <a class="brand" href="#top"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="3" width="26" height="26" rx="4" fill="none" stroke="#f7b955" stroke-width="2"/><path d="M8.5 21.5 C 12 11, 20 11, 23.5 21.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="8.5" cy="21.5" r="2.3" fill="#f7b955"/><circle cx="23.5" cy="21.5" r="2.3" fill="#f7b955"/></svg><span>Parametra</span></a>
+  <p>Parametric by default. Productive by design.</p>
+  <div class="footer-social" id="footer-social"></div>
+  <p>Revit 2023–2026<span>•</span>Built on live projects</p>
+</footer>
+
+<dialog class="dlg" id="request-dialog" aria-labelledby="dlg-title" aria-describedby="dlg-desc">
+  <div class="dlg-panel">
+    <div class="dlg-intro">
+      <div class="rings" aria-hidden="true"><i></i><i></i><i></i></div>
+      <button class="dlg-close" type="button" aria-label="Close request form">×</button>
+      <p class="eyebrow"><span></span> Talk to Parametra</p>
+      <h2 id="dlg-title">Get the<br><em>toolkit.</em></h2>
+      <p id="dlg-desc"></p>
+      <div class="dlg-detail"><span id="dlg-detail-k"></span><strong id="dlg-detail-v"></strong></div>
+    </div>
+    <form class="dlg-form" id="request-form" novalidate>
+      <div class="field"><label for="rq-name">Your name <span>*</span></label><input id="rq-name" name="name" type="text" autocomplete="name" maxlength="120" required placeholder="Full name"></div>
+      <div class="field"><label for="rq-company">Company <span>*</span></label><input id="rq-company" name="company" type="text" autocomplete="organization" maxlength="160" required placeholder="Company or studio"></div>
+      <div class="field"><label for="rq-seats">Seats required <span>*</span></label><input id="rq-seats" name="seats" type="number" min="1" max="500" required value="1"></div>
+      <div class="field"><label for="rq-version">Revit version <span>*</span></label><select id="rq-version" name="version" required><option>2026</option><option selected>2025</option><option>2024</option><option>2023</option><option>Several versions</option></select></div>
+      <fieldset id="rq-interest"><legend>I am interested in</legend>
+        <label class="opt"><input type="checkbox" name="interest" value="Plugins" checked><strong>Plugins</strong><small>The BIM Tools tab</small></label>
+        <label class="opt"><input type="checkbox" name="interest" value="Families"><strong>Families</strong><small>Parametric library</small></label>
+        <label class="opt"><input type="checkbox" name="interest" value="Files"><strong>Files</strong><small>Templates and packs</small></label>
+        <label class="opt"><input type="checkbox" name="interest" value="Courses"><strong>Courses</strong><small>Self-paced or team</small></label>
+      </fieldset>
+      <div class="field"><label for="rq-email">Email address <span>*</span></label><input id="rq-email" name="email" type="email" autocomplete="email" maxlength="254" required placeholder="name@company.com"></div>
+      <div class="field"><label for="rq-phone">Phone number <small>Optional</small></label><input id="rq-phone" name="phone" type="tel" autocomplete="tel" maxlength="40" placeholder="+971 00 000 0000"></div>
+      <div class="field full"><label for="rq-message">Anything else <small>Optional</small></label><textarea id="rq-message" name="message" maxlength="1200" placeholder="Which workflow should the tools fix first?"></textarea></div>
+      <p class="consent">By sending, you agree that Parametra may use these details to reply to your request. Nothing else, no lists.</p>
+      <button class="button button-primary dlg-submit" type="submit" id="rq-submit">Send request <span aria-hidden="true">→</span></button>
+      <p class="dlg-msg" id="rq-msg" role="status" aria-live="polite" hidden></p>
+      <div class="dlg-summary" id="rq-summary" hidden></div>
+    </form>
+  </div>
+</dialog>
+
+<aside class="preview" id="preview-note" hidden>
+  <div><b>Preview build</b>The plugin panels are your real BIM Tools tab. Families, files, courses, release notes and the contact details are sample content: edit them in the SITE and DATA blocks at the top of the script.</div>
+  <button type="button" aria-label="Dismiss">×</button>
+</aside>
+
+<script>
+/* ===================== SITE CONFIG (edit me) ===================== */
+const SITE = {
+  name: 'Parametra',
+  email: 'hello@parametra.studio',
+  links: { linkedin: 'https://www.linkedin.com/', youtube: 'https://www.youtube.com/' },
+  formEndpoint: '' // e.g. 'https://formsubmit.co/ajax/you@example.com' — leave empty to prepare the request locally
+};
+
+/* ===================== DATA (edit me) ===================== */
+const PANELS = [
+  { name:'Annotation', tools:['Region Tools','Revisions'], desc:'Filled-region and revision utilities for drawing sets.' },
+  { name:'Auto Dimension & Tag', tools:['Auto Dim & Tag'], desc:'Dimension and tag a whole view in one pass.' },
+  { name:'BIMCAD Tools', tools:['CAD Converter','Transfer to CAD','Update from CAD'], desc:'Round-trip between Revit and CAD without redrawing.' },
+  { name:'Ahmed Tools', tools:['Floor to Topo','Topo Links','Parametric Pattern'], desc:'Floors to toposolids, linked topography and seeded paving patterns.' },
+  { name:'Line Styles', tools:['Line Styles'], desc:'Audit, rename and swap line styles across the project.' },
+  { name:'Manage', tools:['Manage tool 1','Manage tool 2'], hideTools:true, desc:'Two project housekeeping utilities.' },
+  { name:'Model', tools:['Floor Tools','Create Edgers'], desc:'Floor editing and edging along boundaries.' },
+  { name:'Planting Audit', tools:['Planting Audit'], desc:'Check spacing, tags and quantities before issue.' },
+  { name:'Planting Scatter', tools:['Plant Library','Path Scatter','Surface Scatter','Edit Scatter'], desc:'Place, scatter and re-flow planting from a library.' },
+  { name:'Position', tools:['Manage Legends','Manage Viewports','Align Viewports','Align Tags','Align Elements','Align Railing'], desc:'Align and arrange tags, viewports, legends, elements and railings.' },
+  { name:'Print', tools:['Print Browser'], desc:'Batch print and export sheets from one browser.' },
+  { name:'Shadow Analysis', tools:['Shadow Analysis','Shadow Links'], desc:'Sun and shadow studies with results linked to elements.' },
+  { name:'Sheet Manager', tools:['Sheet Manager'], desc:'Create, renumber and organise sheets in bulk.' },
+  { name:'Standards Checker', tools:['Check Standards'], desc:'Validate the model against office standards.' },
+  { name:'View Manager', tools:['View Manager'], desc:'Create, rename and organise views at scale.' }
+];
+const FAMILIES = [
+  { name:'Site & landscape', count:42, desc:'Pergolas, planters, benches, bollards, kerbs and steps with type catalogs.' },
+  { name:'Planting', count:120, desc:'Trees, palms, shrubs and groundcovers with height, spread and water-need parameters.' },
+  { name:'Doors & windows', count:36, desc:'Curtain doors, sliders and screens with guarded formulas.' },
+  { name:'Furniture & fixtures', count:58, desc:'Loose and fixed furniture that schedules cleanly.' },
+  { name:'Annotation', count:64, desc:'Tags, symbols, title blocks and key plans that match the templates.' },
+  { name:'Detail items', count:90, desc:'2D components for sections and details, organised by assembly.' }
+];
+const FILES = [
+  { name:'Architecture template', type:'Template', disc:'Architecture', versions:[2026,2025,2024,2023], size:'28 MB', views:46, sheets:12, families:210, schedules:18, inside:'View templates for plans, sections and 3D, browser organisation by phase and discipline, graphic overrides, filters and the office title blocks.' },
+  { name:'Landscape template', type:'Template', disc:'Landscape', versions:[2026,2025,2024], size:'34 MB', views:38, sheets:10, families:260, schedules:22, inside:'Toposolid and planting settings, planting schedules by mix, hardscape filters, and the tags the scatter tools expect.' },
+  { name:'Interiors template', type:'Template', disc:'Interiors', versions:[2026,2025,2024,2023], size:'22 MB', views:32, sheets:9, families:180, schedules:14, inside:'Finish schedules, room data sheets, furniture legends and elevation-per-room view templates.' },
+  { name:'Courtyard housing sample', type:'Project', disc:'Architecture', versions:[2025,2024], size:'96 MB', views:140, sheets:48, families:420, schedules:26, inside:'A complete small project from massing to issue, with the sheet set and worksets used in the courses.' },
+  { name:'Park and promenade sample', type:'Project', disc:'Landscape', versions:[2026,2025], size:'112 MB', views:120, sheets:36, families:390, schedules:30, inside:'Toposolids, scattered planting, shadow study views and a full landscape documentation set.' },
+  { name:'Hardscape details', type:'Details', disc:'Landscape', versions:[2026,2025,2024,2023], size:'18 MB', views:84, sheets:6, families:150, schedules:0, inside:'Paving, kerb, step and wall details drawn as detail items so they transfer between projects.' },
+  { name:'Envelope details', type:'Details', disc:'Architecture', versions:[2026,2025,2024], size:'21 MB', views:96, sheets:8, families:170, schedules:0, inside:'Wall, roof, parapet and opening details keyed to the assembly codes in the template.' },
+  { name:'Planting schedule pack', type:'Schedules', disc:'Landscape', versions:[2026,2025,2024,2023], size:'4 MB', views:0, sheets:0, families:0, schedules:16, inside:'Schedules by mix, by area and by water need, plus a QA schedule that flags untagged plants.' },
+  { name:'QA schedule pack', type:'Schedules', disc:'Architecture', versions:[2026,2025,2024,2023], size:'3 MB', views:0, sheets:0, families:0, schedules:12, inside:'Model checking schedules: unplaced rooms, duplicate marks, missing sheet parameters and warnings by type.' }
+];
+const COURSES = [
+  { n:'01', cat:'Revit API', title:'Build your first ribbon tab with C#', level:'Advanced', lessons:14, hours:9, blurb:'From an empty Visual Studio project to a signed add-in with a panel, a command and a settings dialog.', syllabus:[['Project setup and the .addin manifest','32 min'],['External commands and transactions','48 min'],['Building the ribbon','41 min'],['Reading and writing parameters','55 min'],['A scatter tool, step by step','1 h 10'],['Packaging an installer','38 min']] },
+  { n:'02', cat:'Families', title:'Parametric families masterclass', level:'Intermediate', lessons:12, hours:7, blurb:'Reference planes, formulas, nested families and type catalogs, built into a pergola, a planter and a tag.', syllabus:[['Reference planes that behave','36 min'],['Formulas and guards','44 min'],['Nested and shared families','50 min'],['Type catalogs','28 min'],['Flex testing and QA','32 min']] },
+  { n:'03', cat:'Landscape BIM', title:'Landscape in Revit: topo, planting, scatter', level:'Beginner', lessons:10, hours:6, blurb:'Toposolids, planting libraries, scatter tools and the schedules that make a landscape set coordinate.', syllabus:[['Toposolids and floors','40 min'],['Planting library setup','35 min'],['Surface and path scatter','45 min'],['Shadow studies','30 min'],['Planting schedules and tags','38 min']] },
+  { n:'04', cat:'Production', title:'Sheets, views and standards that scale', level:'Beginner', lessons:9, hours:5, blurb:'Templates, view templates, sheet management and a standards check before every issue.', syllabus:[['Template anatomy','30 min'],['View templates and filters','42 min'],['Sheet Manager and Print Browser','36 min'],['Standards Checker in practice','28 min']] }
+];
+const NOTES = [
+  { n:'01', cat:'Ribbon design', title:'One tab beats ten add-ins.', body:'Every tool on the BIM Tools tab follows the same pattern: select, choose, done. When tools share a home, a vocabulary and a settings dialog, the team learns the whole set in an afternoon instead of one plugin at a time.', link:'#plugins', cta:'See the tab' },
+  { n:'02', cat:'Family practice', title:'Flex the family before the project does.', body:'A family that only works at the sizes you tested is a bug waiting for a deadline. Build the guard formulas first, then push every parameter to its limit and watch what breaks. The flex test above is that habit, made visible.', link:'#families', cta:'Flex the pergola' },
+  { n:'03', cat:'Documentation', title:'Clean files start clean.', body:'Most documentation pain is inherited from the template. A browser organisation that matches how the office thinks, view templates that are actually applied, and a standards check before issue remove most of it.', link:'#files', cta:'Browse the shelf' }
+];
+const CHANGELOG = [
+  ['v2.4.0','Planting Scatter gains Path Scatter and Edit Scatter. Shadow Links added to the Shadow Analysis panel.'],
+  ['v2.3.2','Align Railing handles multi-segment railings. Sheet Manager renumbering keeps revision clouds attached.'],
+  ['v2.3.0','Installer covers Revit 2023 to 2026 from one setup file. Seven legacy tools retired from the tab.']
+];
+
+/* ===================== helpers ===================== */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, attrs={}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const html = (tag, cls, inner) => { const e = document.createElement(tag); if (cls) e.className = cls; if (inner != null) e.innerHTML = inner; return e; };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rng = seed => { let t = seed >>> 0; return () => { t = (t + 0x6D2B79F5) >>> 0; let r = Math.imul(t ^ (t >>> 15), 1 | t); r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r; return ((r ^ (r >>> 14)) >>> 0) / 4294967296; }; };
+const reduced = () => window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const inPoly = (x, y, poly) => { let inside = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const [xi, yi] = poly[i], [xj, yj] = poly[j]; if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) inside = !inside; } return inside; };
+const hull = pts => { const p = pts.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]); const cross = (o, a, b) => (a[0]-o[0])*(b[1]-o[1]) - (a[1]-o[1])*(b[0]-o[0]); const lo = [], up = []; for (const q of p) { while (lo.length >= 2 && cross(lo[lo.length-2], lo[lo.length-1], q) <= 0) lo.pop(); lo.push(q); } for (let i = p.length - 1; i >= 0; i--) { const q = p[i]; while (up.length >= 2 && cross(up[up.length-2], up[up.length-1], q) <= 0) up.pop(); up.push(q); } up.pop(); lo.pop(); return lo.concat(up); };
+const fmt = (n, d=0) => n.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
+const seg = (root, attr, cb) => { $$('button[' + attr + ']', root).forEach(b => b.addEventListener('click', () => { $$('button[' + attr + ']', root).forEach(x => x.setAttribute('aria-pressed', String(x === b))); cb(b.getAttribute(attr)); })); };
+
+/* ===================== header / nav ===================== */
+(() => {
+  const toggle = $('.nav-toggle'), nav = $('#primary-nav');
+  toggle.addEventListener('click', () => { const open = nav.classList.toggle('is-open'); toggle.setAttribute('aria-expanded', String(open)); });
+  nav.addEventListener('click', e => { if (e.target.tagName === 'A') { nav.classList.remove('is-open'); toggle.setAttribute('aria-expanded', 'false'); } });
+})();
+
+/* ===================== hero contour field ===================== */
+(() => {
+  const c = $('#contours'); const ctx = c.getContext('2d'); if (!ctx) return;
+  const blobs = [
+    { x:.2, y:.35, r:.3, a:1, px:1.3e-4, py:.9e-4, ph:0 }, { x:.66, y:.2, r:.27, a:.85, px:-1e-4, py:1.2e-4, ph:2 },
+    { x:.82, y:.7, r:.34, a:1.05, px:.8e-4, py:-1.1e-4, ph:4 }, { x:.4, y:.8, r:.28, a:.75, px:-1.2e-4, py:-.7e-4, ph:1 },
+    { x:.52, y:.5, r:.22, a:.6, px:.9e-4, py:1.3e-4, ph:3 }
+  ];
+  const levels = [.16, .3, .44, .58, .72, .88, 1.06, 1.26];
+  const CELL = 10; let W = 0, H = 0, cols = 0, rows = 0, field = new Float32Array(0), raf = 0, last = 0, visible = true;
+  const size = () => { const r = c.getBoundingClientRect(); W = Math.max(320, Math.round(r.width)); H = Math.max(320, Math.round(r.height)); c.width = W; c.height = H; cols = Math.ceil(W / CELL) + 1; rows = Math.ceil(H / CELL) + 1; field = new Float32Array(cols * rows); };
+  const sample = t => { for (let j = 0; j < rows; j++) { const ny = j * CELL / H; for (let i = 0; i < cols; i++) { const nx = i * CELL / W; let v = 0; for (const b of blobs) { const bx = b.x + Math.sin(t * b.px + b.ph) * .09, by = b.y + Math.cos(t * b.py + b.ph) * .07; const dx = nx - bx, dy = (ny - by) * 1.35; v += b.a * Math.exp(-(dx*dx + dy*dy) / (b.r*b.r)); } field[j * cols + i] = v; } } };
+  const lerp = (a, b, v) => (b - a === 0 ? 0 : (v - a) / (b - a));
+  const iso = v => { ctx.beginPath(); for (let j = 0; j < rows - 1; j++) for (let i = 0; i < cols - 1; i++) {
+      const a = field[j*cols+i], b = field[j*cols+i+1], cc = field[(j+1)*cols+i+1], d = field[(j+1)*cols+i];
+      const idx = (a > v ? 8 : 0) | (b > v ? 4 : 0) | (cc > v ? 2 : 0) | (d > v ? 1 : 0); if (idx === 0 || idx === 15) continue;
+      const x = i * CELL, y = j * CELL; const T = [x + lerp(a, b, v) * CELL, y], R = [x + CELL, y + lerp(b, cc, v) * CELL], B = [x + lerp(d, cc, v) * CELL, y + CELL], L = [x, y + lerp(a, d, v) * CELL];
+      const segs = { 1:[[L,B]], 14:[[L,B]], 2:[[B,R]], 13:[[B,R]], 3:[[L,R]], 12:[[L,R]], 4:[[T,R]], 11:[[T,R]], 6:[[T,B]], 9:[[T,B]], 7:[[L,T]], 8:[[L,T]], 5:[[L,T],[B,R]], 10:[[T,R],[L,B]] }[idx];
+      for (const s of segs) { ctx.moveTo(s[0][0], s[0][1]); ctx.lineTo(s[1][0], s[1][1]); } } ctx.stroke(); };
+  const draw = t => { ctx.clearRect(0, 0, W, H); sample(t); levels.forEach((v, k) => { const f = k / (levels.length - 1); const r = Math.round(90 + (247 - 90) * f), g = Math.round(110 + (185 - 110) * f), b = Math.round(200 + (85 - 200) * f); ctx.strokeStyle = `rgba(${r},${g},${b},${(.18 + .4 * f).toFixed(3)})`; ctx.lineWidth = k >= levels.length - 2 ? 1.6 : 1; iso(v); }); };
+  const loop = t => { if (visible && t - last > 40) { draw(t); last = t; } raf = requestAnimationFrame(loop); };
+  size(); draw(0);
+  if (!reduced()) raf = requestAnimationFrame(loop);
+  if ('IntersectionObserver' in window) new IntersectionObserver(es => es.forEach(e => visible = e.isIntersecting)).observe(c);
+  let tm; window.addEventListener('resize', () => { clearTimeout(tm); tm = setTimeout(() => { size(); draw(performance.now()); }, 160); });
+})();
+
+/* ===================== plugin demo: tabs ===================== */
+(() => {
+  const tabs = $$('#plugin-demo [role=tab]'), titles = { scatter:'Surface Scatter — preview', shadow:'Shadow Analysis — site plan', align:'Align Tags — sheet view' };
+  const show = id => { tabs.forEach(t => { const on = t.id === 'tab-' + id; t.setAttribute('aria-selected', String(on)); $('#' + t.getAttribute('aria-controls')).hidden = !on; }); $('#vp-title').textContent = titles[id]; document.dispatchEvent(new CustomEvent('demo:show', { detail: id })); };
+  tabs.forEach(t => t.addEventListener('click', () => show(t.id.replace('tab-', ''))));
+  tabs.forEach((t, i) => t.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const n = (i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length; tabs[n].focus(); tabs[n].click(); } }));
+})();
+
+/* ===================== plugin demo: scatter ===================== */
+(() => {
+  const svg = $('#scatter-svg'); const bed = [[70,62],[300,36],[520,58],[706,110],[728,262],[640,392],[360,404],[130,362],[44,214]];
+  const path = [[64,384],[210,300],[380,326],[540,214],[706,176]];
+  const species = [{ n:'Pennisetum', r:5, c:'#f7b955' }, { n:'Lantana', r:8, c:'#6d86d6' }, { n:'Tecoma', r:12, c:'#a9b8ec' }];
+  const st = { mode:'surface', layout:'stagger', spacing:1200, jitter:35, seed:4213 }; const PX = 40; // px per metre
+  const bbox = pts => pts.reduce((a, p) => [Math.min(a[0], p[0]), Math.min(a[1], p[1]), Math.max(a[2], p[0]), Math.max(a[3], p[1])], [1e9, 1e9, -1e9, -1e9]);
+  const area = pts => Math.abs(pts.reduce((s, p, i) => { const q = pts[(i + 1) % pts.length]; return s + p[0]*q[1] - q[0]*p[1]; }, 0)) / 2;
+  const render = () => {
+    svg.innerHTML = ''; const r = rng(st.seed), s = st.spacing / 1000 * PX, jit = st.jitter / 100 * s * .5; const pts = [];
+    el('rect', { x:0, y:0, width:760, height:430, fill:'#171a2f' }, svg);
+    for (let x = 40; x < 760; x += 24) el('line', { x1:x, y1:24, x2:x, y2:410, stroke:'rgba(241,242,248,.05)' }, svg);
+    if (st.mode === 'surface') {
+      el('polygon', { points: bed.map(p => p.join(',')).join(' '), fill:'#1f2547', stroke:'#6d86d6', 'stroke-width':1.5, 'stroke-linejoin':'round' }, svg);
+      const [x0, y0, x1, y1] = bbox(bed);
+      if (st.layout === 'random') { const n = Math.round(area(bed) / (s * s)); let tries = 0; while (pts.length < n && tries < n * 30) { tries++; const x = x0 + r() * (x1 - x0), y = y0 + r() * (y1 - y0); if (inPoly(x, y, bed) && !pts.some(p => (p[0]-x)**2 + (p[1]-y)**2 < (s*.55)**2)) pts.push([x, y]); } }
+      else { const dy = st.layout === 'stagger' ? s * .866 : s; let row = 0; for (let y = y0 + s * .4; y < y1; y += dy, row++) { const off = st.layout === 'stagger' && row % 2 ? s / 2 : 0; for (let x = x0 + s * .4 + off; x < x1; x += s) { const px = x + (r() - .5) * 2 * jit, py = y + (r() - .5) * 2 * jit; if (inPoly(px, py, bed)) pts.push([px, py]); } } }
+    } else {
+      el('polyline', { points: path.map(p => p.join(',')).join(' '), fill:'none', stroke:'#6d86d6', 'stroke-width':1.5, 'stroke-dasharray':'6 5' }, svg);
+      let carry = 0; for (let i = 0; i < path.length - 1; i++) { const [ax, ay] = path[i], [bx, by] = path[i+1]; const L = Math.hypot(bx - ax, by - ay), ux = (bx - ax) / L, uy = (by - ay) / L; for (let d = carry; d <= L; d += s) { const j = (r() - .5) * 2 * jit; pts.push([ax + ux * d - uy * j, ay + uy * d + ux * j]); carry = d + s - L; } carry = Math.max(0, carry); }
+    }
+    const counts = [0, 0, 0]; const g = el('g', {}, svg);
+    pts.forEach(([x, y]) => { const u = r(); const si = u < .5 ? 0 : u < .8 ? 1 : 2; counts[si]++; const sp = species[si]; el('circle', { cx:x.toFixed(1), cy:y.toFixed(1), r:sp.r, fill:sp.c, 'fill-opacity':.8, stroke:sp.c, 'stroke-opacity':.5, class:'plant' }, g); el('circle', { cx:x.toFixed(1), cy:y.toFixed(1), r:1.6, fill:'#f1f2f8' }, g); });
+    $('#sc-swatches').innerHTML = species.map((sp, i) => `<div class="sw"><i style="background:${sp.c}"></i><span>${sp.n} <b>${counts[i]}</b></span></div>`).join('') + `<div class="sw"><i style="background:rgba(241,242,248,.3)"></i><span>Total <b>${pts.length}</b></span></div>`;
+    svg.__stats = `spacing <b>${st.spacing}</b> mm · <b>${pts.length}</b> plants · seed <b>${st.seed}</b>`; if ($('#pane-scatter').hidden === false) $('#vp-stats').innerHTML = svg.__stats;
+  };
+  seg($('#pane-scatter'), 'data-sc-mode', v => { st.mode = v; render(); });
+  seg($('#pane-scatter'), 'data-sc-lay', v => { st.layout = v; render(); });
+  $('#sc-spacing').addEventListener('input', e => { st.spacing = +e.target.value; $('#sc-spacing-v').textContent = st.spacing + ' mm'; render(); });
+  $('#sc-jitter').addEventListener('input', e => { st.jitter = +e.target.value; $('#sc-jitter-v').textContent = st.jitter + '%'; render(); });
+  $('#sc-reseed').addEventListener('click', () => { st.seed = 1000 + Math.floor(Math.random() * 8999); render(); });
+  document.addEventListener('demo:show', e => { if (e.detail === 'scatter') $('#vp-stats').innerHTML = svg.__stats || ''; });
+  render();
+})();
+
+/* ===================== plugin demo: shadow ===================== */
+(() => {
+  const svg = $('#shadow-svg'); const PX = 8; // px per metre
+  const blocks = [{ x:110, y:80, w:150, h:96, z:12, n:'B1' }, { x:360, y:64, w:110, h:150, z:18, n:'B2' }, { x:560, y:210, w:130, h:110, z:9, n:'B3' }, { x:160, y:270, w:110, h:84, z:6, n:'B4' }];
+  const site = [40, 34, 720, 400]; const st = { month:5, hour:15, lat:25 };
+  const sun = (lat, month, hour) => { const N = [21,52,80,111,141,172,202,233,264,294,325,355][month]; const dec = 23.44 * Math.PI/180 * Math.sin(2 * Math.PI / 365 * (284 + N)); const la = lat * Math.PI/180, Hh = (hour - 12) * 15 * Math.PI/180; const alt = Math.asin(Math.sin(la)*Math.sin(dec) + Math.cos(la)*Math.cos(dec)*Math.cos(Hh)); let az = Math.acos(Math.min(1, Math.max(-1, (Math.sin(dec) - Math.sin(alt)*Math.sin(la)) / (Math.cos(alt)*Math.cos(la))))); if (Hh > 0) az = 2*Math.PI - az; return { alt, az }; };
+  const render = () => {
+    svg.innerHTML = ''; const { alt, az } = sun(st.lat, st.month, st.hour); const up = alt > 0.5 * Math.PI/180;
+    el('rect', { x:0, y:0, width:760, height:430, fill:'#171a2f' }, svg);
+    el('rect', { x:site[0], y:site[1], width:site[2]-site[0], height:site[3]-site[1], fill: up ? '#2a3a2f' : '#1d2438', stroke:'rgba(241,242,248,.18)' }, svg);
+    for (let x = site[0]; x <= site[2]; x += 40) el('line', { x1:x, y1:site[1], x2:x, y2:site[3], stroke:'rgba(241,242,248,.05)' }, svg);
+    const shadows = []; let longest = 0;
+    if (up) { const L = 1 / Math.tan(alt); const dx = -Math.sin(az), dy = Math.cos(az); blocks.forEach(b => { const len = Math.min(b.z * L, 120) * PX; longest = Math.max(longest, b.z * L); const corners = [[b.x,b.y],[b.x+b.w,b.y],[b.x+b.w,b.y+b.h],[b.x,b.y+b.h]]; const poly = hull(corners.concat(corners.map(([x,y]) => [x + dx*len, y + dy*len]))); shadows.push(poly); el('polygon', { points: poly.map(p => p.map(v => v.toFixed(1)).join(',')).join(' '), fill:'rgba(10,12,30,.62)' }, svg); }); }
+    blocks.forEach(b => { el('rect', { x:b.x, y:b.y, width:b.w, height:b.h, fill:'#6d86d6', 'fill-opacity':.9, stroke:'#a9b8ec' }, svg); const t = el('text', { x:b.x + 8, y:b.y + 18, fill:'#f1f2f8', 'font-size':11, 'font-family':'IBM Plex Mono, monospace' }, svg); t.textContent = `${b.n} · ${b.z} m`; });
+    let shaded = 0, total = 0; if (up) for (let y = site[1] + 8; y < site[3]; y += 12) for (let x = site[0] + 8; x < site[2]; x += 12) { if (blocks.some(b => x > b.x && x < b.x + b.w && y > b.y && y < b.y + b.h)) continue; total++; if (shadows.some(p => inPoly(x, y, p))) shaded++; }
+    // compass + sun marker
+    const cx = 700, cy = 70; el('circle', { cx, cy, r:26, fill:'none', stroke:'rgba(241,242,248,.35)' }, svg); const nt = el('text', { x:cx, y:cy - 31, fill:'#f1f2f8', 'font-size':10, 'text-anchor':'middle', 'font-family':'IBM Plex Mono, monospace' }, svg); nt.textContent = 'N';
+    if (up) el('circle', { cx: cx + Math.sin(az) * 26, cy: cy - Math.cos(az) * 26, r:5, fill:'#f7b955' }, svg);
+    const deg = r => Math.round(r * 180 / Math.PI);
+    $('#sh-alt').textContent = up ? deg(alt) + '°' : 'below horizon'; $('#sh-az').textContent = up ? deg(az) + '°' : '—';
+    $('#sh-cover').textContent = up ? Math.round(shaded / Math.max(1, total) * 100) + '%' : '100%'; $('#sh-longest').textContent = up ? fmt(longest, 1) + ' m' : '—';
+    const hh = Math.floor(st.hour), mm = Math.round((st.hour - hh) * 60); $('#sh-hour-v').textContent = `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
+    svg.__stats = `lat <b>${st.lat}°N</b> · ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][st.month]} 21 · <b>${$('#sh-hour-v').textContent}</b>`; if (!$('#pane-shadow').hidden) $('#vp-stats').innerHTML = svg.__stats;
+  };
+  seg($('#pane-shadow'), 'data-sh-month', v => { st.month = +v; render(); });
+  seg($('#pane-shadow'), 'data-sh-lat', v => { st.lat = +v; render(); });
+  $('#sh-hour').addEventListener('input', e => { st.hour = +e.target.value; render(); });
+  document.addEventListener('demo:show', e => { if (e.detail === 'shadow') $('#vp-stats').innerHTML = svg.__stats || ''; });
+  render();
+})();
+
+/* ===================== plugin demo: align tags ===================== */
+(() => {
+  const svg = $('#align-svg'); const trees = [[150,110],[300,180],[210,300],[430,90],[520,260],[640,150]];
+  const TW = 84, TH = 24; let tags = [], anim = 0;
+  const scatter = () => { const r = rng(Date.now() & 0xffff); tags = trees.map(([x, y], i) => ({ x: x + 40 + r() * 140, y: y - 60 + r() * 100, id: 'PL-0' + (i + 1) })); };
+  const draw = () => { svg.innerHTML = ''; el('rect', { x:0, y:0, width:760, height:430, fill:'#171a2f' }, svg); for (let x = 40; x < 760; x += 40) el('line', { x1:x, y1:20, x2:x, y2:410, stroke:'rgba(241,242,248,.05)' }, svg);
+    trees.forEach(([x, y], i) => { const t = tags[i]; const ax = t.x + (t.x + TW/2 < x ? TW : 0), ay = t.y + TH/2; el('line', { x1:x, y1:y, x2:ax, y2:ay, stroke:'#a9b8ec', 'stroke-width':1 }, svg); el('circle', { cx:x, cy:y, r:16, fill:'#2a3a2f', stroke:'#6d86d6' }, svg); el('circle', { cx:x, cy:y, r:3, fill:'#f7b955' }, svg); const g = el('g', { class:'tagg' }, svg); el('rect', { x:t.x, y:t.y, width:TW, height:TH, rx:2 }, g); const tx = el('text', { x:t.x + 8, y:t.y + 16 }, g); tx.textContent = t.id + ' · 1 no.'; }); };
+  const tween = targets => { cancelAnimationFrame(anim); const from = tags.map(t => ({ x:t.x, y:t.y })); const t0 = performance.now(), D = reduced() ? 1 : 520; const step = now => { const k = Math.min(1, (now - t0) / D), e = 1 - Math.pow(1 - k, 3); tags.forEach((t, i) => { t.x = from[i].x + (targets[i].x - from[i].x) * e; t.y = from[i].y + (targets[i].y - from[i].y) * e; }); draw(); if (k < 1) anim = requestAnimationFrame(step); }; anim = requestAnimationFrame(step); };
+  const act = a => { let T = tags.map(t => ({ x:t.x, y:t.y })); const ys = tags.map(t => t.y);
+    if (a === 'left') { const m = Math.min(...tags.map(t => t.x)); T = T.map(t => ({ ...t, x:m })); }
+    if (a === 'right') { const m = Math.max(...tags.map(t => t.x)); T = T.map(t => ({ ...t, x:m })); }
+    if (a === 'vertical') { const order = tags.map((t, i) => i).sort((p, q) => tags[p].y - tags[q].y); const lo = Math.min(...ys), hi = Math.max(...ys); order.forEach((i, k) => T[i].y = lo + (hi - lo) * k / (order.length - 1)); }
+    if (a === 'column') { const order = tags.map((t, i) => i).sort((p, q) => trees[p][1] - trees[q][1]); order.forEach((i, k) => { T[i] = { x: 640, y: 40 + k * 60 }; }); }
+    if (a === 'reset') { scatter(); draw(); $('#al-last').textContent = 'scatter'; return; }
+    $('#al-last').textContent = a; tween(T); };
+  $$('#pane-align button[data-al]').forEach(b => b.addEventListener('click', () => act(b.dataset.al)));
+  scatter(); draw(); document.addEventListener('demo:show', e => { if (e.detail === 'align') $('#vp-stats').innerHTML = '<b>6</b> tags selected · leaders on'; });
+})();
+
+/* ===================== families demo: pergola ===================== */
+(() => {
+  const svg = $('#pergola-svg'); const st = { w:4.5, d:3, h:2.7, s:450, p:3 }; const PX = 40;
+  const types = [{ w:3, d:2.4, h:2.5, s:400, p:2 }, { w:4.5, d:3, h:2.7, s:450, p:3 }, { w:6, d:3.6, h:2.9, s:500, p:4 }];
+  const sync = () => { $('#pg-w').value = st.w; $('#pg-d').value = st.d; $('#pg-h').value = st.h; $('#pg-s').value = st.s; $('#pg-p').value = st.p; $('#pg-w-v').textContent = fmt(st.w, 1) + ' m'; $('#pg-d-v').textContent = fmt(st.d, 1) + ' m'; $('#pg-h-v').textContent = fmt(st.h, 2) + ' m'; $('#pg-s-v').textContent = st.s + ' mm'; $('#pg-p-v').textContent = st.p; };
+  const render = () => { sync(); svg.innerHTML = ''; el('rect', { x:0, y:0, width:760, height:430, fill:'#171a2f' }, svg);
+    const rafters = Math.floor((st.w - .05) / (st.s / 1000)) + 1, posts = st.p * 2, postSz = .15, beam = { w:.15, d:.3 }, raf = { w:.05, d:.2 };
+    const vol = posts * postSz * postSz * st.h + 2 * st.w * beam.w * beam.d + rafters * (st.d + .4) * raf.w * raf.d;
+    // plan (left)
+    const pw = st.w * PX, pd = st.d * PX, px0 = 40 + (340 - pw) / 2, py0 = 60 + (230 - pd) / 2;
+    const cap = (x, y, s) => { const t = el('text', { x, y, fill:'rgba(241,242,248,.55)', 'font-size':10, 'font-family':'IBM Plex Mono, monospace', 'letter-spacing':'.12em' }, svg); t.textContent = s; };
+    cap(40, 40, 'PLAN · 1:50'); cap(420, 40, 'ELEVATION · 1:50');
+    el('rect', { x:px0, y:py0 - 8, width:pw, height:pd + 16, fill:'none', stroke:'rgba(241,242,248,.12)', 'stroke-dasharray':'3 4' }, svg);
+    for (let i = 0; i < rafters; i++) { const x = px0 + i * st.s / 1000 * PX; el('rect', { x:x - 1, y:py0 - 8, width:2, height:pd + 16, fill:'#a9b8ec', 'fill-opacity':.85 }, svg); }
+    [py0, py0 + pd - beam.w * PX].forEach(y => el('rect', { x:px0, y, width:pw, height:beam.w * PX, fill:'#6d86d6' }, svg));
+    for (let i = 0; i < st.p; i++) { const x = px0 + (st.p === 1 ? 0 : i * (pw - postSz * PX) / (st.p - 1)); [py0, py0 + pd - postSz * PX].forEach(y => el('rect', { x, y, width:postSz * PX, height:postSz * PX, fill:'#f7b955' }, svg)); }
+    // dimension line
+    el('line', { x1:px0, y1:py0 + pd + 26, x2:px0 + pw, y2:py0 + pd + 26, stroke:'#f7b955' }, svg); [px0, px0 + pw].forEach(x => el('line', { x1:x, y1:py0 + pd + 20, x2:x, y2:py0 + pd + 32, stroke:'#f7b955' }, svg));
+    const dt = el('text', { x:px0 + pw / 2, y:py0 + pd + 44, fill:'#f7b955', 'font-size':11, 'text-anchor':'middle', 'font-family':'IBM Plex Mono, monospace' }, svg); dt.textContent = `${Math.round(st.w * 1000)}`;
+    // elevation (right)
+    const ex0 = 420 + (300 - pw) / 2, ground = 330, hpx = st.h * PX;
+    el('line', { x1:410, y1:ground, x2:740, y2:ground, stroke:'rgba(241,242,248,.35)' }, svg);
+    for (let i = 0; i < st.p; i++) { const x = ex0 + (st.p === 1 ? 0 : i * (pw - postSz * PX) / (st.p - 1)); el('rect', { x, y:ground - hpx, width:postSz * PX, height:hpx, fill:'#f7b955' }, svg); }
+    el('rect', { x:ex0 - 6, y:ground - hpx - beam.d * PX, width:pw + 12, height:beam.d * PX, fill:'#6d86d6' }, svg);
+    for (let i = 0; i < rafters; i++) { const x = ex0 + i * st.s / 1000 * PX; el('rect', { x:x - 1, y:ground - hpx - beam.d * PX - raf.d * PX, width:2, height:raf.d * PX, fill:'#a9b8ec' }, svg); }
+    el('line', { x1:ex0 + pw + 26, y1:ground, x2:ex0 + pw + 26, y2:ground - hpx, stroke:'#f7b955' }, svg); const ht = el('text', { x:ex0 + pw + 34, y:ground - hpx / 2, fill:'#f7b955', 'font-size':11, 'font-family':'IBM Plex Mono, monospace' }, svg); ht.textContent = `${Math.round(st.h * 1000)}`;
+    $('#pg-rafters').textContent = rafters; $('#pg-posts').textContent = posts; $('#pg-vol').textContent = fmt(vol, 2); $('#pg-area').textContent = fmt(st.w * st.d, 1); $('#pg-cover').textContent = Math.round(rafters * raf.w / st.w * 100) + '%';
+    $('#pg-stats').innerHTML = `<b>${fmt(st.w,1)} × ${fmt(st.d,1)} m</b> · <b>${rafters}</b> rafters`;
+  };
+  const bind = (id, k, f) => $(id).addEventListener('input', e => { st[k] = f(e.target.value); $$('[data-pg-type]').forEach(b => b.setAttribute('aria-pressed', 'false')); render(); });
+  bind('#pg-w', 'w', Number); bind('#pg-d', 'd', Number); bind('#pg-h', 'h', Number); bind('#pg-s', 's', Number); bind('#pg-p', 'p', Number);
+  seg($('#families'), 'data-pg-type', v => { Object.assign(st, types[+v]); render(); });
+  render();
+})();
+
+/* ===================== panel grids ===================== */
+(() => {
+  const max = Math.max(...PANELS.map(p => p.tools.length));
+  $('#panel-grid').innerHTML = PANELS.map(p => `<div class="pan"><div class="k"><b>${esc(p.name)}</b><span>${p.tools.length}</span></div><div class="meter"><i style="width:${Math.round(p.tools.length / max * 100)}%"></i></div><p>${esc(p.desc)}</p>${p.hideTools ? '' : `<div class="tools">${p.tools.map(t => `<span>${esc(t)}</span>`).join('')}</div>`}</div>`).join('');
+  const fmax = Math.max(...FAMILIES.map(f => f.count));
+  $('#family-grid').innerHTML = FAMILIES.map(f => `<div class="pan"><div class="k"><b>${esc(f.name)}</b><span>${f.count}</span></div><div class="meter"><i style="width:${Math.round(f.count / fmax * 100)}%"></i></div><p>${esc(f.desc)}</p></div>`).join('');
+  $('#fam-count').textContent = `${FAMILIES.length} categories · ${FAMILIES.reduce((s, f) => s + f.count, 0)} families`;
+})();
+
+/* ===================== files browser ===================== */
+(() => {
+  const st = { type:'all', version:'all', sel:0 }; const tbody = $('#fb-table tbody');
+  const list = () => FILES.filter(f => (st.type === 'all' || f.type === st.type) && (st.version === 'all' || f.versions.includes(+st.version)));
+  const detail = f => { if (!f) { $('#fb-detail').innerHTML = '<p>No files match these filters.</p>'; return; }
+    const m = (k, v, max) => `<div>${k}<b>${v}</b><i style="--w:${Math.min(100, Math.round(v / max * 100))}%"></i></div>`;
+    $('#fb-detail').innerHTML = `<div><span class="pill on"><i></i>${esc(f.type)}</span><h4 style="margin-top:12px">${esc(f.name)}</h4><p>${esc(f.inside)}</p><p style="margin-top:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--on-dark-3)">Revit ${f.versions.join(' · ')} · ${esc(f.size)}</p></div><div class="meters">${m('Views', f.views, 140)}${m('Sheets', f.sheets, 48)}${m('Families', f.families, 420)}${m('Schedules', f.schedules, 30)}</div>`; };
+  const render = () => { const rows = list(); if (!rows.includes(FILES[st.sel])) st.sel = FILES.indexOf(rows[0]);
+    tbody.innerHTML = rows.map(f => `<tr class="frow" data-i="${FILES.indexOf(f)}" aria-selected="${FILES.indexOf(f) === st.sel}" tabindex="0"><td><span class="sn">${esc(f.name)}</span></td><td>${esc(f.type)}</td><td>${esc(f.disc)}</td><td style="font-family:var(--mono);font-size:12px">${f.versions.join(' · ')}</td><td class="num">${esc(f.size)}</td></tr>`).join('');
+    $('#fb-stats').innerHTML = `<b>${rows.length}</b> of ${FILES.length} files`; detail(FILES[st.sel]); };
+  tbody.addEventListener('click', e => { const r = e.target.closest('.frow'); if (r) { st.sel = +r.dataset.i; render(); } });
+  tbody.addEventListener('keydown', e => { const r = e.target.closest('.frow'); if (r && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); st.sel = +r.dataset.i; render(); } });
+  seg($('#fb-filters'), 'data-ft', v => { st.type = v; render(); });
+  $('#fb-version').addEventListener('change', e => { st.version = e.target.value; render(); });
+  render();
+})();
+
+/* ===================== courses ===================== */
+(() => {
+  const art = (i) => { const c = ['#f7b955', '#6d86d6', '#a9b8ec', '#3f9a6e'][i % 4]; return `<svg viewBox="0 0 320 180" aria-hidden="true"><rect width="320" height="180" fill="#0f1120"/>${Array.from({ length: 9 }, (_, k) => `<line x1="${20 + k * 35}" y1="20" x2="${20 + k * 35}" y2="160" stroke="rgba(241,242,248,.07)"/>`).join('')}<path d="M20 ${140 - i * 10} C 90 ${60 + i * 12}, 160 ${150 - i * 20}, 300 ${50 + i * 15}" fill="none" stroke="${c}" stroke-width="2.5"/><circle cx="20" cy="${140 - i * 10}" r="5" fill="${c}"/><circle cx="300" cy="${50 + i * 15}" r="5" fill="${c}"/><rect x="${120 + i * 20}" y="${70 - i * 6}" width="60" height="40" fill="none" stroke="rgba(241,242,248,.4)" stroke-dasharray="4 3"/></svg>`; };
+  $('#course-grid').innerHTML = COURSES.map((c, i) => `<article class="course" data-level="${c.level}"><div class="course-art">${art(i)}<span class="dur">${c.hours} h</span></div><div class="course-meta"><span><b>${c.n}</b> ${esc(c.cat)}</span><span>${c.lessons} lessons</span></div><h3>${esc(c.title)}</h3><p>${esc(c.blurb)}</p><div><span class="lvl">${c.level}</span></div><details><summary>Syllabus</summary><ol>${c.syllabus.map(([t, d]) => `<li><span>${esc(t)}</span><span>${d}</span></li>`).join('')}</ol></details></article>`).join('');
+  seg($('#level-bar'), 'data-level', v => $$('#course-grid .course').forEach(c => c.hidden = !(v === 'all' || c.dataset.level === v)));
+})();
+
+/* ===================== notes / changelog / follow ===================== */
+(() => {
+  $('#notes-grid').innerHTML = NOTES.map(n => `<article class="note-card"><div class="note-top"><span>${n.n}</span><span>${esc(n.cat)}</span></div><h3>${esc(n.title)}</h3><p>${esc(n.body)}</p><a href="${n.link}">${esc(n.cta)} <span aria-hidden="true">↗</span></a></article>`).join('');
+  $('#changelog').innerHTML = CHANGELOG.map(([v, t]) => `<li><span>${v}</span>${esc(t)}</li>`).join('');
+  $('#ver-num').textContent = CHANGELOG[0][0];
+  $('#follow-grid').innerHTML = `<a class="social-card li" href="${SITE.links.linkedin}" target="_blank" rel="noopener noreferrer"><span class="ic">in</span><span class="social-copy"><small>LinkedIn</small><strong>Follow ${SITE.name}</strong><span>Releases, family walkthroughs and studio news.</span></span><b aria-hidden="true">↗</b></a><a class="social-card yt" href="${SITE.links.youtube}" target="_blank" rel="noopener noreferrer"><span class="ic">▶</span><span class="social-copy"><small>YouTube</small><strong>Watch the tools</strong><span>Short demos of every plugin and course previews.</span></span><b aria-hidden="true">↗</b></a>`;
+  $('#footer-social').innerHTML = `<a href="${SITE.links.linkedin}" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="${SITE.links.youtube}" target="_blank" rel="noopener noreferrer">YouTube ↗</a>`;
+  $('#copy-email .addr').textContent = SITE.email;
+  $('#copy-email').addEventListener('click', async () => { const b = $('#copy-email'), s = b.querySelector('span:last-child'); try { await navigator.clipboard.writeText(SITE.email); s.textContent = 'Copied'; } catch (e) { const r = document.createRange(); r.selectNodeContents(b.querySelector('.addr')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); s.textContent = 'Selected'; } setTimeout(() => s.textContent = 'Copy', 1600); });
+})();
+
+/* ===================== request dialog ===================== */
+(() => {
+  const dlg = $('#request-dialog'), form = $('#request-form'), msg = $('#rq-msg'), sum = $('#rq-summary'); let mode = 'tools', opener = null;
+  const copy = { tools: { title:'Get the<br><em>toolkit.</em>', desc:'Tell us who you are and which Revit version you run. We reply with the installer link for the BIM Tools tab, access to the family and file library, and what happens next.', k:'What you get', v:'Installer for Revit 2023 to 2026 · every plugin and update · family and file library access' }, quote: { title:'Request<br><em>a quote.</em>', desc:'Tell us how many seats your team needs and which libraries matter. We send a quotation for the exact number, with team training as an option.', k:'Team pricing', v:'Quoted per seat count · training bundles available' } };
+  const open = (m, btn) => { mode = m; opener = btn; $('#dlg-title').innerHTML = copy[m].title; $('#dlg-desc').textContent = copy[m].desc; $('#dlg-detail-k').textContent = copy[m].k; $('#dlg-detail-v').textContent = copy[m].v; msg.hidden = true; sum.hidden = true; $('#rq-submit').disabled = false; $('#rq-submit').firstChild.textContent = m === 'quote' ? 'Request quote ' : 'Send request '; dlg.showModal(); };
+  $$('[data-open]').forEach(b => b.addEventListener('click', () => open(b.dataset.open, b)));
+  const close = () => { dlg.close(); if (opener) opener.focus(); };
+  $('.dlg-close').addEventListener('click', close);
+  dlg.addEventListener('click', e => { if (e.target === dlg) close(); });
+  form.addEventListener('submit', async e => { e.preventDefault(); msg.hidden = false; sum.hidden = true;
+    if (!form.checkValidity()) { msg.className = 'dlg-msg err'; msg.textContent = 'Please fill in your name, company, seats and a working email address.'; const bad = form.querySelector(':invalid'); if (bad) bad.focus(); return; }
+    const fd = new FormData(form); const interest = fd.getAll('interest').join(', ') || 'Not specified';
+    const payload = { 'request type': mode === 'quote' ? 'Team quote' : 'Toolkit access', name: fd.get('name'), company: fd.get('company'), seats: fd.get('seats'), 'revit version': fd.get('version'), interest, phone: fd.get('phone') || 'Not provided', email: fd.get('email'), message: fd.get('message') || '' };
+    const text = Object.entries(payload).map(([k, v]) => `${k}: ${v}`).join('\n');
+    if (SITE.formEndpoint) { $('#rq-submit').disabled = true; msg.className = 'dlg-msg'; msg.textContent = 'Sending your request…';
+      try { const r = await fetch(SITE.formEndpoint, { method:'POST', headers:{ 'Content-Type':'application/json', Accept:'application/json' }, body: JSON.stringify({ ...payload, _subject: `${SITE.name} ${payload['request type']} — ${payload.company}`, _replyto: payload.email, _template:'table' }) }); if (!r.ok) throw new Error('The form service did not accept the request.'); msg.className = 'dlg-msg ok'; msg.textContent = `Thank you. Your request is on its way and we reply to ${payload.email}.`; form.reset(); }
+      catch (err) { msg.className = 'dlg-msg err'; msg.textContent = err.message + ' You can email the request instead:'; sum.hidden = false; sum.innerHTML = summary(text); }
+      finally { $('#rq-submit').disabled = false; } return; }
+    msg.className = 'dlg-msg ok'; msg.textContent = 'Request prepared. This preview is not connected to a mail service yet, so copy the request and send it to the address below.'; sum.hidden = false; sum.innerHTML = summary(text); });
+  const summary = text => `<strong>Send to ${esc(SITE.email)}</strong><pre>${esc(text)}</pre><div class="row"><button class="button button-primary" type="button" id="rq-copy">Copy request</button><button class="button button-outline" type="button" id="rq-done">Done</button></div>`;
+  sum.addEventListener('click', async e => { if (e.target.id === 'rq-copy') { try { await navigator.clipboard.writeText(sum.querySelector('pre').textContent); e.target.textContent = 'Copied'; } catch (err) { const r = document.createRange(); r.selectNodeContents(sum.querySelector('pre')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); e.target.textContent = 'Selected, press copy'; } } if (e.target.id === 'rq-done') close(); });
+})();
+
+/* ===================== preview note ===================== */
+(() => { const n = $('#preview-note'); let seen = false; try { seen = localStorage.getItem('parametra-preview-dismissed') === '1'; } catch (e) {} if (!seen) n.hidden = false; n.querySelector('button').addEventListener('click', () => { n.hidden = true; try { localStorage.setItem('parametra-preview-dismissed', '1'); } catch (e) {} }); })();
+
+/* ===================== reveal on scroll ===================== */
+(() => { const els = $$('.reveal'); if (!('IntersectionObserver' in window) || reduced()) return; const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold:.08 }); els.forEach(e => { if (e.getBoundingClientRect().top > innerHeight) { e.classList.add('pre'); io.observe(e); } }); setTimeout(() => els.forEach(e => e.classList.add('in')), 6000); })();
+</script>
+</body>
+</html>
