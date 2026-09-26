@@ -44,7 +44,15 @@ The audit summary also reports file size, element/type/view/sheet counts, detail
 
 Revit 2023 is the first version whose API can delete worksets, which is why older versions are not targeted.
 
-## Build
+## Install without building (recommended)
+
+1. Download **[RevitModelSlimmer-Installer.zip](RevitModelSlimmer-Installer.zip)** (or the `dist` folder) and extract it.
+2. Double-click `Install.bat`. It detects the Revit versions on your computer (2023 to 2026) and copies the add-in to `%AppData%\Autodesk\Revit\Addins\<version>\`. No administrator rights are needed.
+3. Start Revit and click **Always Load** when it asks about the unsigned add-in. The **Model Slimmer** tab appears once a project is open.
+
+`Uninstall.bat` removes it again. The binaries in `dist` are built from this repository with `build-all.sh` (Linux/macOS) or `build-all.ps1` (Windows).
+
+## Build from source
 
 Requirements: Visual Studio 2022 (17.8+) or the .NET SDK 8 with the .NET Framework 4.8 targeting pack, on Windows. The Revit API assemblies are pulled from the `Nice3point.Revit.Api.*` NuGet packages, so a Revit installation is not required to compile.
 
@@ -55,7 +63,7 @@ dotnet build -c "Release R24"     # or "Release R25", "Debug R26", ...
 
 Output goes to `RevitModelSlimmer\build\<Configuration>\`. A **Debug** build additionally copies the add-in into `%AppData%\Autodesk\Revit\Addins\<version>\` so you can start Revit straight away.
 
-## Install manually
+## Install manually (from a build)
 
 1. Copy `RevitModelSlimmer.addin` to `%AppData%\Autodesk\Revit\Addins\<version>\`.
 2. Copy `RevitModelSlimmer.dll` to `%AppData%\Autodesk\Revit\Addins\<version>\RevitModelSlimmer\` (the manifest points to that sub-folder).
