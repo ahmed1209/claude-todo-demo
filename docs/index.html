@@ -63,7 +63,7 @@ em{font-style:normal}
 .site-header nav a.active{opacity:1;color:var(--text)}
 .nav-ind{position:absolute;left:0;top:50%;height:32px;width:0;margin-top:-16px;border-radius:999px;background:var(--glass-2);border:1px solid var(--glass-border);opacity:0;pointer-events:none;transition:transform .45s cubic-bezier(.2,.8,.2,1),width .45s cubic-bezier(.2,.8,.2,1),opacity .3s;z-index:0}
 .site-header nav{position:relative}
-.progress{position:absolute;left:24px;right:24px;bottom:-1px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--signal),var(--violet));transform:scaleX(0);transform-origin:left;box-shadow:0 0 10px rgba(94,230,255,.6);pointer-events:none}
+.progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:62;background:linear-gradient(90deg,var(--signal),#7fd0ff,var(--violet));transform:scaleX(0);transform-origin:left center;transition:transform .15s ease-out;filter:drop-shadow(0 0 4px rgba(94,230,255,.7));pointer-events:none}
 .site-header nav a:hover{opacity:1;background:var(--glass-2);color:var(--signal)}
 .header-actions{display:flex;align-items:center;gap:8px}
 .header-cta{background:linear-gradient(120deg,var(--signal),var(--violet));color:#06121a;border:0;min-height:42px;padding:0 18px;border-radius:999px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;box-shadow:0 0 18px rgba(94,230,255,.35);transition:transform .2s,box-shadow .2s}
@@ -520,8 +520,13 @@ body[data-hover="magnetic"] :is(.button,.header-cta):hover::before{opacity:1}
 .dots a.active{background:var(--signal);border-color:var(--signal);box-shadow:0 0 14px var(--signal);transform:scale(1.3)}
 .dots a::after{content:attr(data-label);position:absolute;right:22px;top:50%;transform:translate(8px,-50%);white-space:nowrap;padding:6px 11px;border-radius:999px;background:rgba(8,11,24,.92);border:1px solid var(--glass-border-2);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text);opacity:0;transition:opacity .2s,transform .25s;pointer-events:none}
 .dots a:hover::after{opacity:1;transform:translate(0,-50%)}
+.dots a.show::after{animation:fadeOutLabel 2.6s cubic-bezier(.2,.8,.2,1) forwards}
+.dots a.show:hover::after{animation:none}
+@keyframes fadeOutLabel{0%{opacity:0;transform:translate(8px,-50%) scale(.95)}12%,70%{opacity:1;transform:translate(0,-50%) scale(1)}100%{opacity:0;transform:translate(.5rem,-50%) scale(.95)}}
+.dots a.active::before{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid var(--signal);animation:ping 1.6s cubic-bezier(0,0,.2,1) infinite}
+@keyframes ping{0%{transform:scale(.8);opacity:.9}100%{transform:scale(2.1);opacity:0}}
 @media (max-width:980px){.dots{display:none}}
-@media (prefers-reduced-motion:reduce){.divider::after,.dots{display:none} .course,.frow,.pan{animation:none}}
+@media (prefers-reduced-motion:reduce){.divider::after,.dots{display:none} .course,.frow,.pan{animation:none} .progress{transition:none}}
 /* 3D scroll motion composition */
 .m3d{transform:var(--m,none);transition:opacity .12s linear;backface-visibility:hidden;animation:none!important}
 .m3d.tilted{transform:var(--m,translateZ(0)) var(--t,translateZ(0))}
@@ -613,7 +618,7 @@ body.page-open{overflow:hidden}
 </header>
 
 <main id="top">
-<section class="hero" aria-labelledby="hero-title">
+<section class="hero" id="hero" aria-labelledby="hero-title">
   <div class="glow a" aria-hidden="true"></div><div class="glow b" aria-hidden="true"></div>
   <div class="wrap">
     <div class="herobody">
@@ -1331,24 +1336,31 @@ const renderNotes = () => {
   const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(T[0].slice(), 3));
   T.forEach((t, k) => geo.setAttribute('t' + k, new THREE.BufferAttribute(t, 3)));
   geo.setAttribute('col', new THREE.BufferAttribute(col, 3)); geo.setAttribute('kind', new THREE.BufferAttribute(kind, 1)); geo.setAttribute('seed', new THREE.BufferAttribute(seed, 1)); geo.setAttribute('sz', new THREE.BufferAttribute(sz, 1));
-  const uniforms = { uP: { value: 0 }, uTime: { value: 0 }, uVel: { value: 0 }, uTex: { value: tex }, uPR: { value: renderer.getPixelRatio() }, uAlpha: { value: 1 } };
+  const uniforms = { uP: { value: 0 }, uTime: { value: 0 }, uVel: { value: 0 }, uTex: { value: tex }, uPR: { value: renderer.getPixelRatio() }, uAlpha: { value: 1 }, uOff: { value: new THREE.Vector2(0, 0) }, uScale: { value: 1 } };
   const mat = new THREE.ShaderMaterial({ uniforms, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-    vertexShader: 'attribute vec3 t1; attribute vec3 t2; attribute vec3 t3; attribute vec3 t4; attribute vec3 col; attribute float kind; attribute float seed; attribute float sz; uniform float uP; uniform float uTime; uniform float uVel; uniform float uPR; varying vec3 vCol; varying float vKind; varying float vFade;' +
+    vertexShader: 'attribute vec3 t1; attribute vec3 t2; attribute vec3 t3; attribute vec3 t4; attribute vec3 col; attribute float kind; attribute float seed; attribute float sz; uniform float uP; uniform float uTime; uniform float uVel; uniform float uPR; uniform vec2 uOff; uniform float uScale; varying vec3 vCol; varying float vKind; varying float vFade;' +
       'void main(){ float p = uP; float w1 = smoothstep(0.04, 0.17, p), w2 = smoothstep(0.2, 0.34, p), w3 = smoothstep(0.62, 0.8, p), w4 = smoothstep(0.86, 0.98, p);' +
       ' vec3 pos = mix(position, t1, w1); float sp = 4.0 + seed * 6.0; vec3 s2 = t2; s2.z = mod(t2.z + 30.0 + uTime * sp, 60.0) - 30.0; pos = mix(pos, s2, w2); pos = mix(pos, t3, w3); pos = mix(pos, t4, w4);' +
       ' vec3 dir = normalize(vec3(sin(seed * 43.7), cos(seed * 17.3), sin(seed * 91.1))); pos += dir * (sin(uTime * (0.6 + seed) + seed * 20.0) * 0.18 + uVel * (0.8 + seed * 2.6));' +
-      ' float ang = p * 3.2 + uTime * 0.04; float ca = cos(ang), sa = sin(ang); pos = vec3(pos.x * ca - pos.z * sa, pos.y, pos.x * sa + pos.z * ca);' +
+      ' float ang = p * 3.2 + uTime * 0.04; float ca = cos(ang), sa = sin(ang); pos = vec3(pos.x * ca - pos.z * sa, pos.y, pos.x * sa + pos.z * ca); pos = pos * uScale + vec3(uOff, 0.0);' +
       ' vec4 mv = modelViewMatrix * vec4(pos, 1.0); float dist = -mv.z; gl_PointSize = sz * uPR * (30.0 / max(dist, 1.0)) * (kind > 0.5 ? 2.6 : 1.4);' +
       ' vFade = smoothstep(0.6, 6.0, dist) * (1.0 - smoothstep(60.0, 90.0, dist)); vCol = col; vKind = kind; gl_Position = projectionMatrix * mv; }',
     fragmentShader: 'uniform sampler2D uTex; uniform float uAlpha; varying vec3 vCol; varying float vKind; varying float vFade; void main(){ vec2 uv = gl_PointCoord; uv.x = uv.x * 0.5 + (vKind > 0.5 ? 0.5 : 0.0); float a = texture2D(uTex, uv).a; if (a < 0.03) discard; gl_FragColor = vec4(vCol, a * vFade * uAlpha * (vKind > 0.5 ? 0.9 : 0.75)); }' });
   const points = new THREE.Points(geo, mat); points.frustumCulled = false; scene.add(points);
   let tx = 0, ty = 0, mx = 0, my = 0, lastY = scrollY, vel = 0; const still = reduced(), clock = new THREE.Clock();
+  // pose: where the sculpture sits for the active section (percent of viewport), eased like the reference's globe
+  const pose = { from: { left: 50, top: 50, scale: 1, alpha: 1 }, to: { left: 50, top: 50, scale: 1, alpha: 1 }, t0: 0, dur: 1400 };
+  const easeOutQuint = k => 1 - Math.pow(1 - k, 5);
+  window.setSculpturePose = p => { const now = performance.now(); pose.from = window.__poseNow ? window.__poseNow() : { ...pose.to }; pose.to = { left: 50, top: 50, scale: 1, alpha: 1, ...p }; pose.t0 = now; };
+  const poseNow = () => { const k = still ? 1 : Math.min(1, (performance.now() - pose.t0) / pose.dur), e = easeOutQuint(k), f = pose.from, t = pose.to; return { left: f.left + (t.left - f.left) * e, top: f.top + (t.top - f.top) * e, scale: f.scale + (t.scale - f.scale) * e, alpha: f.alpha + (t.alpha - f.alpha) * e }; };
+  window.__poseNow = poseNow;
   window.addEventListener('pointermove', e => { tx = e.clientX / innerWidth - .5; ty = e.clientY / innerHeight - .5; }, { passive: true });
   const size = () => { const b = canvas.getBoundingClientRect(); const w = Math.max(1, Math.round(b.width)), h = Math.max(1, Math.round(b.height)); renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); };
   const motionOn = () => document.body.dataset.depth !== 'off' && !still;
   const frame = t => { uniforms.uTime.value = t; mx += (tx - mx) * .04; my += (ty - my) * .04;
     const max = Math.max(1, document.documentElement.scrollHeight - innerHeight), p = Math.min(1, Math.max(0, scrollY / max));
     uniforms.uP.value = motionOn() ? p : 0; const dy = scrollY - lastY; lastY = scrollY; vel += (Math.min(1, Math.abs(dy) / 90) - vel) * .12; uniforms.uVel.value = motionOn() ? vel : 0;
+    const cur = poseNow(), vh2 = Math.tan(25 * Math.PI / 180) * 26, vw2 = vh2 * camera.aspect; uniforms.uOff.value.set((cur.left - 50) / 100 * 2 * vw2, -(cur.top - 50) / 100 * 2 * vh2); uniforms.uScale.value = cur.scale; uniforms.uAlpha.value = cur.alpha;
     camera.position.set(mx * 3, -my * 2, 26); camera.lookAt(0, 0, 0); renderer.render(scene, camera); };
   window.__particleP = () => uniforms.uP.value;
   size(); frame(0);
@@ -1370,11 +1382,11 @@ window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.
   const overlay = document.createElement('div'); overlay.className = 'warp'; overlay.setAttribute('aria-hidden', 'true'); overlay.innerHTML = '<i></i>'; document.body.appendChild(overlay);
   const header = $('.site-header'), nav = $('#primary-nav'); const links = $$('a[href^="#"]', nav);
   const ind = document.createElement('span'); ind.className = 'nav-ind'; nav.appendChild(ind);
-  const prog = document.createElement('i'); prog.className = 'progress'; header.appendChild(prog);
+  const prog = document.createElement('i'); prog.className = 'progress'; prog.setAttribute('aria-hidden', 'true'); document.body.appendChild(prog);
   const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   let raf = 0, current = '';
   const moveInd = a => { if (!a || getComputedStyle(nav).position === 'absolute') { ind.style.opacity = 0; return; } ind.style.opacity = 1; ind.style.width = a.offsetWidth + 'px'; ind.style.transform = `translateX(${a.offsetLeft}px)`; };
-  const setActive = id => { if (id === current) return; current = id; links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id)); if (window.__dotLinks) window.__dotLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id)); moveInd(links.find(a => a.getAttribute('href') === '#' + id)); };
+  const setActive = id => { if (id === current) return; current = id; links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id)); if (window.__dotLinks) window.__dotLinks.forEach(a => { const on = a.getAttribute('href') === '#' + id; a.classList.toggle('active', on); a.classList.remove('show'); if (on) { void a.offsetWidth; a.classList.add('show'); } }); moveInd(links.find(a => a.getAttribute('href') === '#' + id)); };
   const spotlight = el => { el.classList.remove('arrived'); void el.offsetWidth; el.classList.add('arrived'); $$('.reveal.pre', el).forEach(r => r.classList.add('in')); setTimeout(() => el.classList.remove('arrived'), 1400); };
   const hopTo = el => {
     const start = scrollY, end = Math.max(0, Math.round(el.getBoundingClientRect().top + scrollY - (el.id === 'top' ? 0 : 88))), dist = end - start;
@@ -1405,7 +1417,7 @@ window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.
   const sections = links.map(a => document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
   if ('IntersectionObserver' in window) { const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) setActive(en.target.id); }), { rootMargin: '-38% 0px -55% 0px' }); sections.forEach(s => io.observe(s)); }
   // scroll progress
-  let ticking = false; const onScroll = () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const max = document.documentElement.scrollHeight - innerHeight; prog.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`; if (heroWrap && !reduced()) { const hh = hero.offsetHeight || 1; const k = Math.min(1, Math.max(0, scrollY / (hh * .85))); const wl = document.querySelector('.world'); if (wl) wl.style.opacity = (1 - k * .28).toFixed(3); heroWrap.style.opacity = (1 - k * .9).toFixed(3); heroWrap.style.transform = `translateY(${(k * 70).toFixed(1)}px) scale(${(1 - k * .04).toFixed(4)})`; } ticking = false; }); };
+  let ticking = false; const onScroll = () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const max = document.documentElement.scrollHeight - innerHeight; prog.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`; if (heroWrap && !reduced()) { const hh = hero.offsetHeight || 1; const k = Math.min(1, Math.max(0, scrollY / (hh * .85)));  heroWrap.style.opacity = (1 - k * .9).toFixed(3); heroWrap.style.transform = `translateY(${(k * 70).toFixed(1)}px) scale(${(1 - k * .04).toFixed(4)})`; } ticking = false; }); };
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
   window.addEventListener('resize', () => moveInd(links.find(a => a.classList.contains('active'))));
   if (location.hash && location.hash !== '#admin') { const el = document.getElementById(location.hash.slice(1)); if (el) setTimeout(() => { scrollTo(0, el.getBoundingClientRect().top + scrollY - 88); setActive(el.id); spotlight(el); }, 60); }
@@ -1445,6 +1457,18 @@ window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.
       el.style.setProperty('--m', m); el.style.opacity = Math.max(0, Math.min(1, op)).toFixed(3); } };
   const req = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
   addEventListener('scroll', req, { passive: true }); addEventListener('resize', req); document.addEventListener('effects:changed', req); document.addEventListener('content:rendered', () => { items.length = 0; spec.forEach(([sel, type]) => $$(sel).forEach((el, i) => { if (el.closest('.hero') || el.closest('#item-page')) return; el.classList.add('m3d'); items.push({ el, type, i }); })); req(); }); update();
+})();
+
+/* ===================== sculpture poses: the object glides to a new place and size for each section ===================== */
+(() => {
+  const POSES = { hero: { left: 72, top: 50, scale: 1.15, alpha: 1 }, about: { left: 78, top: 42, scale: .75, alpha: .9 }, plugins: { left: 84, top: 22, scale: .55, alpha: .8 }, families: { left: 16, top: 28, scale: .55, alpha: .8 }, files: { left: 50, top: 14, scale: .5, alpha: .6 }, courses: { left: 50, top: 50, scale: 1.7, alpha: .35 }, notes: { left: 82, top: 62, scale: .7, alpha: .8 }, updates: { left: 20, top: 50, scale: .8, alpha: .85 }, follow: { left: 50, top: 22, scale: .6, alpha: .7 }, contact: { left: 76, top: 50, scale: .9, alpha: .9 }, 'get-started': { left: 50, top: 50, scale: 1.4, alpha: .55 } };
+  const narrow = () => innerWidth < 900;
+  const apply = id => { const p = POSES[id]; if (!p || !window.setSculpturePose) return; setSculpturePose(narrow() ? { ...p, left: 50, scale: p.scale * .8 } : p); };
+  const sections = $$('main > section[id]'); let currentPose = '';
+  const pick = () => { const mid = innerHeight * .5; let best = null, bd = Infinity; sections.forEach(s => { const r = s.getBoundingClientRect(); const c = Math.max(r.top, Math.min(r.bottom, mid)); const d = Math.abs(c - mid) + (mid >= r.top && mid <= r.bottom ? 0 : 1e6); if (d < bd) { bd = d; best = s; } }); if (best && best.id !== currentPose) { currentPose = best.id; apply(best.id); } };
+  let ticking = false; const req = () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { ticking = false; pick(); }); } };
+  addEventListener('scroll', req, { passive: true }); addEventListener('resize', () => { currentPose = ''; req(); });
+  const boot = () => { if (window.setSculpturePose) { currentPose = ''; pick(); } else setTimeout(boot, 200); }; boot();
 })();
 
 /* ===================== detail pages: every panel, card and file opens its own page with a preview ===================== */
