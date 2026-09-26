@@ -20,6 +20,7 @@
   --paper:#06080f; --mist:#0a0e1c; --card:rgba(150,175,255,.05); --field:rgba(150,175,255,.06);
   --ok:#4fd9a0; --warn:#f0b35a; --err:#ff6b8a;
   --glow-c:0 0 24px rgba(94,230,255,.45),0 0 64px rgba(94,230,255,.18);
+  --veil:rgba(6,8,15,.6); --veil-2:rgba(10,14,28,.68);
   --display:"Unbounded","Helvetica Neue",Arial,sans-serif;
   --body:"Instrument Sans","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
   --mono:"JetBrains Mono",Consolas,"SF Mono",Menlo,monospace;
@@ -82,7 +83,9 @@ em{font-style:normal}
 }
 
 /* Hero with WebGL scene */
-.hero{position:relative;isolation:isolate;overflow:hidden;background:var(--void);color:var(--text);min-height:100svh;display:flex;align-items:flex-end}
+.world{position:fixed;inset:0;z-index:0;pointer-events:none}
+.world canvas{position:absolute;inset:0;width:100%;height:100%}
+.hero{position:relative;isolation:isolate;overflow:hidden;background:transparent;color:var(--text);min-height:100svh;display:flex;align-items:flex-end}
 .hero canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0}
 #scene{z-index:1}
 .hero .glow{position:absolute;z-index:0;border-radius:50%;filter:blur(70px);pointer-events:none;opacity:.55}
@@ -90,7 +93,7 @@ em{font-style:normal}
 .hero .glow.b{width:560px;height:560px;right:-160px;top:20%;background:rgba(143,123,255,.28)}
 .hero::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,rgba(6,8,15,.8) 0%,rgba(6,8,15,.52) 42%,rgba(6,8,15,.04) 74%)}
 @media (max-width:900px){.hero::before{background:linear-gradient(180deg,rgba(6,8,15,.25),rgba(6,8,15,.7) 42%,rgba(6,8,15,.9))}}
-.hero::after{content:"";position:absolute;inset:auto 0 0;height:38%;z-index:2;pointer-events:none;background:linear-gradient(to bottom,rgba(6,8,15,0),var(--void) 92%)}
+.hero::after{content:"";position:absolute;inset:auto 0 0;height:38%;z-index:2;pointer-events:none;background:linear-gradient(to bottom,rgba(6,8,15,0),var(--veil) 92%)}
 .hero .wrap{position:relative;z-index:3;width:100%}
 .herobody{max-width:820px;padding:clamp(130px,16vw,190px) 0 clamp(40px,6vw,70px)}
 .hud-chip{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border:1px solid var(--glass-border-2);border-radius:999px;background:rgba(8,11,24,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);margin-bottom:28px}
@@ -106,8 +109,9 @@ em{font-style:normal}
 .fact span{display:block;margin-top:9px;color:var(--text-3);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase}
 
 /* Sheets → decks */
-.sheet{position:relative;padding:clamp(64px,9vw,120px) 0;background:var(--void)}
-.sheet.alt{background:linear-gradient(180deg,var(--void) 0%,var(--void-2) 30%,var(--void-2) 70%,var(--void) 100%)}
+.sheet{position:relative;padding:clamp(64px,9vw,120px) 0;background:var(--veil)}
+.sheet.alt{background:linear-gradient(180deg,var(--veil) 0%,var(--veil-2) 30%,var(--veil-2) 70%,var(--veil) 100%)}
+main > section:not(.hero) > .wrap{backface-visibility:hidden}
 .sheet::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--glass-border-2),transparent)}
 .sheetgrid{display:grid;grid-template-columns:132px minmax(0,1fr);gap:clamp(24px,4vw,56px)}
 .sheetgrid>*{min-width:0}
@@ -225,7 +229,7 @@ em{font-style:normal}
 @media (max-width:640px){.fdetail{grid-template-columns:1fr}}
 
 /* Courses */
-.courses{position:relative;padding:clamp(80px,9vw,120px) 0 clamp(90px,9vw,125px);overflow:hidden;background:linear-gradient(180deg,var(--void),var(--void-3) 50%,var(--void))}
+.courses{position:relative;padding:clamp(80px,9vw,120px) 0 clamp(90px,9vw,125px);overflow:hidden;background:linear-gradient(180deg,var(--veil),rgba(14,19,38,.72) 50%,var(--veil))}
 .courses::before{content:"";position:absolute;left:50%;top:-200px;width:900px;height:900px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(143,123,255,.16),transparent 60%);pointer-events:none}
 .dark-heading{position:relative;display:grid;grid-template-columns:.62fr 1.35fr .9fr;gap:6vw;align-items:end}
 .dark-heading h2{font-size:clamp(30px,4.4vw,58px);letter-spacing:-.02em;line-height:1.04}
@@ -259,7 +263,7 @@ em{font-style:normal}
 @media (max-width:900px){.dark-heading{grid-template-columns:minmax(0,1fr);gap:30px}}
 
 /* Notes */
-.notes-section{position:relative;padding:clamp(80px,9vw,120px) 0 clamp(90px,9vw,125px);background:var(--void)}
+.notes-section{position:relative;padding:clamp(80px,9vw,120px) 0 clamp(90px,9vw,125px);background:var(--veil)}
 .notes-heading{display:grid;grid-template-columns:.62fr 1.35fr .9fr;gap:6vw;align-items:end}
 .notes-heading h2{font-size:clamp(30px,4.4vw,58px);letter-spacing:-.02em;line-height:1.04}
 .notes-heading p{color:var(--text-2);font-size:14px;line-height:1.65}
@@ -280,7 +284,7 @@ em{font-style:normal}
 @media (max-width:900px){.notes-heading{grid-template-columns:minmax(0,1fr);gap:26px} .notes-grid{grid-template-columns:1fr} .note-card{min-height:0;padding:22px} .note-card h3{margin-top:26px} .return-strip{grid-template-columns:1fr}}
 
 /* Updates */
-.updates{position:relative;overflow:hidden;padding:clamp(80px,9vw,110px) 0;background:linear-gradient(180deg,var(--void),var(--void-2))}
+.updates{position:relative;overflow:hidden;padding:clamp(80px,9vw,110px) 0;background:linear-gradient(180deg,var(--veil),var(--veil-2))}
 .updates .wrap{position:relative;z-index:1;display:grid;grid-template-columns:.62fr .55fr 1.4fr;gap:6vw;align-items:center}
 .version{position:relative;display:flex;flex-direction:column;justify-content:space-between;min-height:250px;padding:26px;border-radius:22px;background:rgba(8,11,24,.7);isolation:isolate}
 .version::before{content:"";position:absolute;inset:-1px;z-index:-1;border-radius:23px;background:conic-gradient(from var(--ang,0deg),var(--signal),var(--violet),transparent 40%,transparent 60%,var(--signal));animation:spin 6s linear infinite;filter:blur(.4px)}
@@ -297,7 +301,7 @@ em{font-style:normal}
 @media (max-width:900px){.updates .wrap{grid-template-columns:minmax(0,1fr);gap:32px} .version{min-height:200px}}
 
 /* Follow */
-.follow{position:relative;padding:clamp(60px,7vw,90px) 0 clamp(80px,9vw,110px);background:var(--void-2)}
+.follow{position:relative;padding:clamp(60px,7vw,90px) 0 clamp(80px,9vw,110px);background:var(--veil-2)}
 .follow-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:38px;perspective:1400px}
 .social-card{display:grid;grid-template-columns:64px 1fr auto;gap:22px;align-items:center;min-height:160px;padding:28px;border-radius:22px;color:#fff;border:1px solid rgba(255,255,255,.18);transition:box-shadow .25s,border-color .25s;transform-style:preserve-3d}
 .social-card.li{background:linear-gradient(135deg,rgba(10,102,194,.85),rgba(10,102,194,.35));box-shadow:0 20px 60px -30px rgba(10,102,194,.8)}
@@ -313,7 +317,7 @@ em{font-style:normal}
 @media (max-width:900px){.follow-grid{grid-template-columns:1fr} .social-card{grid-template-columns:52px 1fr auto;gap:16px;padding:22px;min-height:0}}
 
 /* Contact */
-.contact{position:relative;padding:clamp(80px,9vw,100px) 0;background:var(--void)}
+.contact{position:relative;padding:clamp(80px,9vw,100px) 0;background:var(--veil)}
 .contact .wrap{display:grid;grid-template-columns:.62fr 1.3fr .9fr;gap:6vw;align-items:center}
 .contact h2{margin:22px 0 24px;font-size:clamp(30px,4.2vw,56px);letter-spacing:-.02em;line-height:1.04}
 .contact .copy>p{color:var(--text-2);max-width:560px;line-height:1.7}
@@ -325,7 +329,7 @@ em{font-style:normal}
 @media (max-width:900px){.contact .wrap{grid-template-columns:minmax(0,1fr);gap:36px}}
 
 /* Closing */
-.closing{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:560px;padding:100px clamp(20px,5vw,64px);background:radial-gradient(ellipse at 50% 120%,rgba(94,230,255,.22),transparent 55%),radial-gradient(ellipse at 50% -20%,rgba(143,123,255,.25),transparent 55%),var(--void-2);color:var(--text)}
+.closing{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:560px;padding:100px clamp(20px,5vw,64px);background:radial-gradient(ellipse at 50% 120%,rgba(94,230,255,.22),transparent 55%),radial-gradient(ellipse at 50% -20%,rgba(143,123,255,.25),transparent 55%),var(--veil-2);color:var(--text)}
 .rings{position:absolute;width:900px;height:620px;pointer-events:none;left:50%;top:50%;transform:translate(-50%,-50%)}
 .rings i{position:absolute;inset:10%;border:1px solid rgba(94,230,255,.22);border-radius:49%;animation:drift 14s ease-in-out infinite alternate}
 .rings i:nth-child(2){inset:20%;transform:rotate(10deg);animation-duration:18s;border-color:rgba(143,123,255,.25)}
@@ -339,7 +343,7 @@ em{font-style:normal}
 @media (max-width:900px){.closing{min-height:480px;padding:80px 20px} .rings{width:650px;height:500px}}
 
 /* Footer */
-footer{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;min-height:100px;padding:25px clamp(20px,6vw,80px);border-top:1px solid var(--glass-border);color:var(--text-3);font-size:11px;background:var(--void)}
+footer{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;min-height:100px;padding:25px clamp(20px,6vw,80px);border-top:1px solid var(--glass-border);color:var(--text-3);font-size:11px;background:rgba(6,8,15,.82)}
 footer .brand{color:var(--text);font-size:15px}
 footer .brand svg{width:24px;height:24px}
 .footer-social{display:flex;align-items:center;gap:18px}
@@ -521,6 +525,7 @@ body[data-hover="magnetic"] :is(.button,.header-cta):hover::before{opacity:1}
 </style>
 </head>
 <body>
+<div class="world" aria-hidden="true"><canvas id="contours"></canvas><canvas id="scene"></canvas></div>
 <header class="site-header">
   <a class="brand" href="#top" aria-label="Parametra home">
     <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="3" width="26" height="26" rx="4" fill="none" stroke="#5ee6ff" stroke-width="2"/><path d="M8.5 21.5 C 12 11, 20 11, 23.5 21.5" fill="none" stroke="#e4eaff" stroke-width="2" stroke-linecap="round"/><circle cx="8.5" cy="21.5" r="2.3" fill="#5ee6ff"/><circle cx="23.5" cy="21.5" r="2.3" fill="#5ee6ff"/><circle cx="16" cy="13.6" r="1.6" fill="#8f7bff"/></svg>
@@ -544,7 +549,7 @@ body[data-hover="magnetic"] :is(.button,.header-cta):hover::before{opacity:1}
 
 <main id="top">
 <section class="hero" aria-labelledby="hero-title">
-  <canvas id="contours" aria-hidden="true"></canvas><canvas id="scene" aria-hidden="true"></canvas><div class="glow a" aria-hidden="true"></div><div class="glow b" aria-hidden="true"></div>
+  <div class="glow a" aria-hidden="true"></div><div class="glow b" aria-hidden="true"></div>
   <div class="wrap">
     <div class="herobody">
       <p data-edit="hero-chip" class="hud-chip"><i></i> Live site model · plugins · families · files · courses</p>
@@ -862,7 +867,7 @@ const SITE = {
   name: 'Parametra',
   email: 'hello@parametra.studio',
   links: { linkedin: 'https://www.linkedin.com/', youtube: 'https://www.youtube.com/' },
-  effects: { hover: 'liquid', transition: 'warp' }, // hover: shimmer | liquid | beam | magnetic · transition: warp | fade | slide | none
+  effects: { hover: 'liquid', transition: 'warp', depth: 'walk' }, // hover: shimmer | liquid | beam | magnetic · transition: warp | fade | slide | none · depth: walk | off
   formEndpoint: '' // e.g. 'https://formsubmit.co/ajax/you@example.com' — leave empty to prepare the request locally
 };
 
@@ -1186,11 +1191,11 @@ const renderNotes = () => {
   const canvas = $('#scene'); if (!canvas || typeof THREE === 'undefined') return;
   let renderer; try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' }); } catch (e) { return; }
   const flat = $('#contours'); if (flat) flat.style.display = 'none';
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6)); renderer.setClearColor(0x000000, 0);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, innerWidth < 720 ? 1 : 1.6)); renderer.setClearColor(0x000000, 0);
   const scene = new THREE.Scene(); scene.fog = new THREE.FogExp2(0x06080f, 0.03);
   const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 200); camera.position.set(0, 7.5, 17);
-  const SIZE = 64, SEG = 110;
-  const hgt = (x, z) => 1.5 * Math.sin(x * .18 + 1.2) * Math.cos(z * .14) + .8 * Math.sin(x * .42 + z * .31) + .45 * Math.cos(x * .9 - z * .7) + 2.4 * Math.exp(-((x - 7) ** 2 + (z + 5) ** 2) / 70) - 1.6 * Math.exp(-((x + 10) ** 2 + (z - 7) ** 2) / 100);
+  const SIZE = 124, SEG = 160;
+  const hgt = (x, z) => 1.5 * Math.sin(x * .18 + 1.2) * Math.cos(z * .14) + .8 * Math.sin(x * .42 + z * .31) + .45 * Math.cos(x * .9 - z * .7) + 2.4 * Math.exp(-((x - 7) ** 2 + (z + 5) ** 2) / 70) - 1.6 * Math.exp(-((x + 10) ** 2 + (z - 7) ** 2) / 100) + 2.2 * Math.exp(-((x + 9) ** 2 + (z + 26) ** 2) / 90) - 1.3 * Math.exp(-((x - 13) ** 2 + (z + 44) ** 2) / 130) + 1.8 * Math.exp(-((x - 2) ** 2 + (z + 58) ** 2) / 110);
   const geo = new THREE.PlaneGeometry(SIZE, SIZE, SEG, SEG); geo.rotateX(-Math.PI / 2);
   const pos = geo.attributes.position, hs = new Float32Array(pos.count);
   for (let i = 0; i < pos.count; i++) { const y = hgt(pos.getX(i), pos.getZ(i)); pos.setY(i, y); hs[i] = y; }
@@ -1200,27 +1205,39 @@ const renderNotes = () => {
     vertexShader: 'attribute float h; varying float vH; varying vec3 vP; void main(){ vH = h; vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
     fragmentShader: 'uniform float uTime; uniform vec3 uCyan; uniform vec3 uViolet; varying float vH; varying vec3 vP; void main(){ float c = fract(vH * 1.7 - uTime * 0.1); float line = smoothstep(0.0, 0.05, c) * (1.0 - smoothstep(0.05, 0.13, c)); float gx = abs(fract(vP.x * 0.5) - 0.5); float gz = abs(fract(vP.z * 0.5) - 0.5); float grid = (1.0 - smoothstep(0.0, 0.035, min(gx, gz))) * 0.16; float d = length(vP.xz) / 32.0; float fade = 1.0 - smoothstep(0.5, 1.0, d); vec3 col = mix(uViolet, uCyan, clamp(vH * 0.22 + 0.5, 0.0, 1.0)); float a = (line * 0.95 + grid + 0.04) * fade; gl_FragColor = vec4(col, a); }' }));
   scene.add(terrain);
-  const r = rng(90210), N = 1600, pts = new Float32Array(N * 3);
+  const r = rng(90210), N = 3600, pts = new Float32Array(N * 3);
   for (let i = 0; i < N; i++) { const x = (r() - .5) * SIZE * .92, z = (r() - .5) * SIZE * .92; pts[i*3] = x; pts[i*3+1] = hgt(x, z) + .1; pts[i*3+2] = z; }
   const pgeo = new THREE.BufferGeometry(); pgeo.setAttribute('position', new THREE.BufferAttribute(pts, 3));
   scene.add(new THREE.Points(pgeo, new THREE.PointsMaterial({ color: 0x9df1ff, size: .085, transparent: true, opacity: .8 })));
-  // parametric pergola, drawn as glowing edges
-  const pergola = new THREE.Group(), W = 6, D = 4, H = 3, S = .5, segs = [], v = (x, y, z) => new THREE.Vector3(x, y, z);
-  [[-W/2,-D/2],[W/2,-D/2],[W/2,D/2],[-W/2,D/2]].forEach(([x, z]) => segs.push(v(x, -1.2, z), v(x, H, z)));
-  [-D/2, D/2].forEach(z => segs.push(v(-W/2 - .3, H, z), v(W/2 + .3, H, z)));
-  for (let x = -W/2; x <= W/2 + 1e-6; x += S) segs.push(v(x, H + .18, -D/2 - .4), v(x, H + .18, D/2 + .4));
-  pergola.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(segs), new THREE.LineBasicMaterial({ color: 0x5ee6ff, transparent: true, opacity: .95 })));
-  const node = new THREE.SphereGeometry(.09, 10, 10), nmat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-  [[-W/2,-D/2],[W/2,-D/2],[W/2,D/2],[-W/2,D/2]].forEach(([x, z]) => { const m = new THREE.Mesh(node, nmat); m.position.set(x, H, z); pergola.add(m); });
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(5.2, .012, 6, 160), new THREE.MeshBasicMaterial({ color: 0x8f7bff, transparent: true, opacity: .7 })); ring.rotation.x = Math.PI / 2 - .25; ring.position.y = H * .6; pergola.add(ring);
-  const ring2 = ring.clone(); ring2.scale.setScalar(.72); ring2.rotation.x = Math.PI / 2 + .35; pergola.add(ring2);
-  const base = hgt(4, 1) + 1.2; pergola.position.set(4, base, 1); scene.add(pergola);
+  // floating parameter nodes along the walk
+  const FN = 140, fpts = new Float32Array(FN * 3); for (let i = 0; i < FN; i++) { const x = (r() - .5) * 30, z = 24 - r() * 92; fpts[i*3] = x; fpts[i*3+1] = hgt(x, z) + 1.4 + r() * 4.2; fpts[i*3+2] = z; }
+  const fgeo = new THREE.BufferGeometry(); fgeo.setAttribute('position', new THREE.BufferAttribute(fpts, 3));
+  scene.add(new THREE.Points(fgeo, new THREE.PointsMaterial({ color: 0xdff6ff, size: .2, transparent: true, opacity: .9, blending: THREE.AdditiveBlending, depthWrite: false })));
+  // parametric pergolas, drawn as glowing edges, placed along the path
+  const node = new THREE.SphereGeometry(.09, 10, 10), nmat = new THREE.MeshBasicMaterial({ color: 0xffffff }), lmat = new THREE.LineBasicMaterial({ color: 0x5ee6ff, transparent: true, opacity: .95 }), rmat = new THREE.MeshBasicMaterial({ color: 0x8f7bff, transparent: true, opacity: .7 });
+  const buildFrame = (W, D, H, S, rings) => { const g = new THREE.Group(), segs = [], v = (x, y, z) => new THREE.Vector3(x, y, z);
+    [[-W/2,-D/2],[W/2,-D/2],[W/2,D/2],[-W/2,D/2]].forEach(([x, z]) => { segs.push(v(x, -1.2, z), v(x, H, z)); const mm = new THREE.Mesh(node, nmat); mm.position.set(x, H, z); g.add(mm); });
+    [-D/2, D/2].forEach(z => segs.push(v(-W/2 - .3, H, z), v(W/2 + .3, H, z)));
+    for (let x = -W/2; x <= W/2 + 1e-6; x += S) segs.push(v(x, H + .18, -D/2 - .4), v(x, H + .18, D/2 + .4));
+    g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(segs), lmat));
+    if (rings) { const ring = new THREE.Mesh(new THREE.TorusGeometry(W * .87, .012, 6, 160), rmat); ring.rotation.x = Math.PI / 2 - .25; ring.position.y = H * .6; g.add(ring); const ring2 = ring.clone(); ring2.scale.setScalar(.72); ring2.rotation.x = Math.PI / 2 + .35; g.add(ring2); g.userData.rings = [ring, ring2]; }
+    return g; };
+  const pergola = buildFrame(6, 4, 3, .5, true); const base = hgt(4, 1) + 1.2; pergola.position.set(4, base, 1); scene.add(pergola);
+  const frames = [[-7.5, -17, 4.5, 3.2, 2.7, .45], [7, -33, 7, 4.5, 3.1, .5], [-5.5, -49, 5, 3.6, 2.9, .5], [6, -63, 8, 5, 3.4, .55]].map(([x, z, W, D, H, S], i) => { const g = buildFrame(W, D, H, S, i % 2 === 0); g.position.set(x, hgt(x, z) + 1.2, z); scene.add(g); return g; });
+  const ring = pergola.userData.rings[0], ring2 = pergola.userData.rings[1];
   let tx = 0, ty = 0, mx = 0, my = 0, visible = true; const still = reduced(), clock = new THREE.Clock();
   window.addEventListener('pointermove', e => { tx = e.clientX / innerWidth - .5; ty = e.clientY / innerHeight - .5; }, { passive: true });
   const size = () => { const b = canvas.getBoundingClientRect(); const w = Math.max(1, Math.round(b.width)), h = Math.max(1, Math.round(b.height)); renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); };
-  const frame = t => { uniforms.uTime.value = t; mx += (tx - mx) * .04; my += (ty - my) * .04; camera.position.x = mx * 5; camera.position.y = 7.5 - my * 2.2; camera.lookAt(1.5, 1.4, 0); pergola.rotation.y = t * .1; pergola.position.y = base + Math.sin(t * .7) * .18; ring.rotation.z = t * .25; ring2.rotation.z = -t * .18; renderer.render(scene, camera); };
+  const walkOn = () => document.body.dataset.depth !== 'off' && !still;
+  const frame = t => { uniforms.uTime.value = t; mx += (tx - mx) * .04; my += (ty - my) * .04;
+    const max = Math.max(1, document.documentElement.scrollHeight - innerHeight), sp = walkOn() ? Math.min(1, Math.max(0, scrollY / max)) : 0, cz = 20 - sp * 76, bob = walkOn() ? Math.sin(scrollY * .017) * .09 : 0;
+    camera.position.set(mx * 5, 7.4 - my * 2.2 + bob, cz); camera.lookAt(1.5 + mx * 2, 1.3 + bob * .5, cz - 15);
+    pergola.rotation.y = t * .1; pergola.position.y = base + Math.sin(t * .7) * .18; ring.rotation.z = t * .25; ring2.rotation.z = -t * .18;
+    frames.forEach((g, i) => { g.rotation.y = t * (.06 + i * .025) * (i % 2 ? -1 : 1); if (g.userData.rings) { g.userData.rings[0].rotation.z = t * .2; g.userData.rings[1].rotation.z = -t * .15; } });
+    renderer.render(scene, camera); };
+  window.__camZ = () => camera.position.z;
   size(); frame(0);
-  if (!still) { const tick = () => { requestAnimationFrame(tick); if (visible) frame(clock.getElapsedTime()); }; tick(); }
+  let lastT = 0; if (!still) { const tick = () => { requestAnimationFrame(tick); const el = clock.getElapsedTime(); if (visible && el - lastT > .028) { lastT = el; frame(el); } }; tick(); } else { window.addEventListener('scroll', () => frame(clock.getElapsedTime()), { passive: true }); }
   if ('IntersectionObserver' in window) new IntersectionObserver(es => es.forEach(e => visible = e.isIntersecting)).observe(canvas);
   let tm; window.addEventListener('resize', () => { clearTimeout(tm); tm = setTimeout(() => { size(); frame(clock.getElapsedTime()); }, 120); });
 })();
@@ -1233,7 +1250,7 @@ const renderNotes = () => {
 })();
 
 /* ===================== motion: section hops, nav indicator, progress ===================== */
-window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.body.dataset.hover = fx.hover || 'liquid'; document.body.dataset.transition = fx.transition || 'warp'; };
+window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.body.dataset.hover = fx.hover || 'liquid'; document.body.dataset.transition = fx.transition || 'warp'; document.body.dataset.depth = fx.depth || 'walk'; };
 (() => {
   applyEffects();
   const overlay = document.createElement('div'); overlay.className = 'warp'; overlay.setAttribute('aria-hidden', 'true'); overlay.innerHTML = '<i></i>'; document.body.appendChild(overlay);
@@ -1290,12 +1307,27 @@ window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.
   document.addEventListener('pointerdown', e => { const b = e.target.closest && e.target.closest('.button, .header-cta'); if (!b || reduced()) return; const r = b.getBoundingClientRect(); const s = document.createElement('i'); s.className = 'ripple'; const d = Math.max(r.width, r.height) * 2; s.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px`; b.appendChild(s); setTimeout(() => s.remove(), 700); });
 })();
 
+/* ===================== depth walk: content approaches down the corridor as you scroll ===================== */
+(() => {
+  const stages = $$('main > section:not(.hero) > .wrap');
+  let ticking = false;
+  const clear = s => { if (s.style.transform) { s.style.transform = ''; s.style.opacity = ''; s.style.transformOrigin = ''; } };
+  const update = () => { ticking = false; if (document.body.dataset.depth === 'off' || reduced()) { stages.forEach(clear); return; }
+    const vh = innerHeight, mid = vh * .5;
+    stages.forEach(s => { const r = s.getBoundingClientRect(); if (r.bottom < -vh * .5 || r.top > vh * 2.4) { clear(s); return; }
+      const anchor = r.top + Math.min(r.height, vh) * .38, d = (anchor - mid) / vh, ahead = Math.max(0, d), passed = Math.max(0, -d);
+      const z = -Math.min(ahead, 1.7) * 440 + Math.min(passed, .9) * 150, rx = -Math.min(ahead, 1.2) * 6, op = 1 - Math.min(1, Math.max(0, ahead - .6) * 1.1);
+      s.style.transformOrigin = `50% ${(mid - r.top).toFixed(0)}px`; s.style.transform = `perspective(1500px) translateZ(${z.toFixed(1)}px) rotateX(${rx.toFixed(2)}deg)`; s.style.opacity = op.toFixed(3); }); };
+  const req = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+  addEventListener('scroll', req, { passive: true }); addEventListener('resize', req); document.addEventListener('effects:changed', req); update();
+})();
+
 /* ===================== admin mode: edit content on the live page ===================== */
 (() => {
   const LS_KEY = 'parametra-content';
   const RENDER_FOR = { site: 'notes', panels: 'panels', families: 'panels', files: 'files', courses: 'courses', notes: 'notes', changelog: 'notes' };
-  const LABELS = { name: 'Name', email: 'Contact email', formEndpoint: 'Form endpoint (blank keeps preview mode)', links: 'Links', linkedin: 'LinkedIn URL', youtube: 'YouTube URL', tools: 'Tools (comma separated)', desc: 'Description', count: 'Count', hideTools: 'Hide tool names', type: 'Type', disc: 'Discipline', versions: 'Revit versions (comma separated)', size: 'Size', views: 'Views', sheets: 'Sheets', families: 'Families', schedules: 'Schedules', inside: 'What is inside', n: 'Number', cat: 'Category', title: 'Title', level: 'Level (Beginner, Intermediate, Advanced)', lessons: 'Lessons', hours: 'Hours', blurb: 'Blurb', syllabus: 'Syllabus (one per line: Lesson | duration)', body: 'Body', link: 'Link (#section or URL)', cta: 'Button label', 0: 'Version', 1: 'Note', effects: 'Motion and hover options', hover: 'Button hover effect', transition: 'Section transition' };
-  const OPTIONS = { hover: ['shimmer', 'liquid', 'beam', 'magnetic'], transition: ['warp', 'fade', 'slide', 'none'] };
+  const LABELS = { name: 'Name', email: 'Contact email', formEndpoint: 'Form endpoint (blank keeps preview mode)', links: 'Links', linkedin: 'LinkedIn URL', youtube: 'YouTube URL', tools: 'Tools (comma separated)', desc: 'Description', count: 'Count', hideTools: 'Hide tool names', type: 'Type', disc: 'Discipline', versions: 'Revit versions (comma separated)', size: 'Size', views: 'Views', sheets: 'Sheets', families: 'Families', schedules: 'Schedules', inside: 'What is inside', n: 'Number', cat: 'Category', title: 'Title', level: 'Level (Beginner, Intermediate, Advanced)', lessons: 'Lessons', hours: 'Hours', blurb: 'Blurb', syllabus: 'Syllabus (one per line: Lesson | duration)', body: 'Body', link: 'Link (#section or URL)', cta: 'Button label', 0: 'Version', 1: 'Note', effects: 'Motion and hover options', hover: 'Button hover effect', transition: 'Section transition', depth: '3D walk while scrolling' };
+  const OPTIONS = { hover: ['shimmer', 'liquid', 'beam', 'magnetic'], transition: ['warp', 'fade', 'slide', 'none'], depth: ['walk', 'off'] };
   const TABS = [['text', 'Text'], ['site', 'Site'], ['panels', 'Panels'], ['families', 'Families'], ['files', 'Files'], ['courses', 'Courses'], ['notes', 'Notes'], ['changelog', 'Changelog'], ['data', 'Import / export']];
   let mode = 'local', ns = null, canPublish = false, active = false, dirty = false, tab = 'text', timer = 0;
   const fab = document.createElement('button'); fab.type = 'button'; fab.className = 'admin-fab'; fab.hidden = true; fab.setAttribute('aria-expanded', 'false'); fab.innerHTML = '<i></i><span>Admin</span>'; document.body.appendChild(fab);
@@ -1328,7 +1360,7 @@ window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.
 
   const setPath = (path, val) => { const ks = path.split('.'); let o = CONTENT; for (let i = 0; i < ks.length - 1; i++) o = o[ks[i]]; o[ks[ks.length - 1]] = val; };
   const readField = t => { if (t.type === 'checkbox') return t.checked; if (t.type === 'number') return Number(t.value); if (t.dataset.kind === 'list') return t.value.split(',').map(s => s.trim()).filter(Boolean).map(s => (/^-?\d+(\.\d+)?$/.test(s) ? Number(s) : s)); if (t.dataset.kind === 'pairs') return t.value.split('\n').map(l => l.trim()).filter(Boolean).map(l => l.split('|').map(s => s.trim())); return t.value; };
-  const refresh = coll => { setDirty(true); clearTimeout(timer); timer = setTimeout(() => { applyContent(); const fn = __render[RENDER_FOR[coll]]; if (fn) fn(); if (coll === 'site' && window.applyEffects) applyEffects(); }, 250); };
+  const refresh = coll => { setDirty(true); clearTimeout(timer); timer = setTimeout(() => { applyContent(); const fn = __render[RENDER_FOR[coll]]; if (fn) fn(); if (coll === 'site' && window.applyEffects) { applyEffects(); document.dispatchEvent(new Event('effects:changed')); } }, 250); };
   const refreshAll = () => { applyContent(); Object.values(__render).forEach(fn => fn()); applyText(); };
   const restoreText = () => { Object.entries(ORIGINAL_TEXT).forEach(([k, v]) => { const el = document.querySelector('[data-edit="' + k + '"]'); if (el) el.innerHTML = v; }); };
 
