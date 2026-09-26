@@ -593,12 +593,10 @@ body.page-open{overflow:hidden}
 @media (max-width:900px){.page-grid{grid-template-columns:1fr} .page-bar .header-cta{display:none}}
 @media (prefers-reduced-motion:reduce){.page.opening,.page.closing,.page-body{animation:none}}
 /* 3D section transitions */
-main.fold3d{perspective:1100px}
-main.fold3d > section{backface-visibility:hidden}
-main.fold3d > section.folding{will-change:transform}
-.fold{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0;transition:opacity .08s linear;background:linear-gradient(to top,rgba(6,8,15,.95),rgba(6,8,15,0) 58%)}
-.fold[data-dir="out"]{background:linear-gradient(to bottom,rgba(6,8,15,.95),rgba(6,8,15,0) 58%)}
-@media (prefers-reduced-motion:reduce){main.fold3d > section{transform:none!important} .fold{display:none}}
+main.zoom3d{perspective:1100px}
+main.zoom3d > section.zooming{will-change:transform,opacity}
+main.zoom3d > section.zoom-far{pointer-events:none}
+@media (prefers-reduced-motion:reduce){main.zoom3d > section{transform:none!important;opacity:1!important}}
 </style>
 </head>
 <body>
@@ -1396,7 +1394,8 @@ window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.
   const setActive = id => { if (id === current) return; current = id; links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id)); if (window.__dotLinks) window.__dotLinks.forEach(a => { const on = a.getAttribute('href') === '#' + id; a.classList.toggle('active', on); a.classList.remove('show'); if (on) { void a.offsetWidth; a.classList.add('show'); } }); moveInd(links.find(a => a.getAttribute('href') === '#' + id)); };
   const spotlight = el => { el.classList.remove('arrived'); void el.offsetWidth; el.classList.add('arrived'); $$('.reveal.pre', el).forEach(r => r.classList.add('in')); setTimeout(() => el.classList.remove('arrived'), 1400); };
   const hopTo = el => {
-    const start = scrollY, end = Math.max(0, Math.round(el.getBoundingClientRect().top + scrollY - (el.id === 'top' ? 0 : 88))), dist = end - start;
+    const layoutY = n => { let y = 0; for (; n; n = n.offsetParent) y += n.offsetTop; return y; };   // layout position, so a section mid-zoom still lands where it will sit once flat
+    const start = scrollY, end = Math.max(0, Math.round(layoutY(el) - (el.id === 'top' ? 0 : 88))), dist = end - start;
     if (reduced() || Math.abs(dist) < 24) { scrollTo(0, end); spotlight(el); return; }
     const style = document.body.dataset.transition || 'warp', D = Math.min(1700, 850 + Math.abs(dist) * .2), t0 = performance.now();
     document.body.dataset.dir = dist > 0 ? 'down' : 'up'; document.documentElement.classList.add('hopping'); if (style !== 'none') overlay.classList.add('on');
@@ -1478,21 +1477,23 @@ window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.
   const boot = () => { if (window.setSculpturePose) { currentPose = ''; pick(); } else setTimeout(boot, 200); }; boot();
 })();
 
-/* ===================== 3D section transitions: at each boundary the leaving section folds away and the next stands up ===================== */
+/* ===================== 3D section transitions: at each boundary the section you leave zooms out into the distance while the next zooms in to meet you ===================== */
 (() => {
-  const main = $('main'); if (!main) return; main.classList.add('fold3d');
-  const secs = $$('main > section').map(el => { const f = document.createElement('i'); f.className = 'fold'; f.setAttribute('aria-hidden', 'true'); el.appendChild(f); return { el, f }; });
+  const main = $('main'); if (!main) return; main.classList.add('zoom3d');
+  const secs = $$('main > section').filter(el => !el.classList.contains('hero'));   // the hero has its own recede
   const on = () => document.body.dataset.depth !== 'off' && !reduced();
+  const flowTop = el => { let y = 0; for (let n = el; n; n = n.offsetParent) y += n.offsetTop; return y - scrollY; };   // layout position: unaffected by the transform we apply
+  const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
   let ticking = false;
-  const update = () => { ticking = false; const vh = innerHeight, ang = innerWidth < 900 ? 14 : 24, shrink = innerWidth < 900 ? .05 : .08, active = on();
+  const update = () => { ticking = false; const vh = innerHeight, depth = innerWidth < 900 ? 300 : 420, off = 88, leaveAt = vh * .66, active = on();
     const mainTop = main.getBoundingClientRect().top + scrollY; main.style.perspectiveOrigin = active ? `50% ${Math.round(scrollY + vh * .5 - mainTop)}px` : '';
-    for (const s of secs) { const r = s.el.getBoundingClientRect(); let t = '', o = '', k = 0, dir = '';
-      if (active && r.top > 0 && r.top < vh) { k = r.top / vh; t = `rotateX(${(-k * ang).toFixed(2)}deg) scale(${(1 - k * shrink).toFixed(4)})`; o = '50% 0%'; dir = 'in'; }
-      else if (active && r.top <= 0 && r.bottom > 0 && r.bottom < vh) { k = 1 - r.bottom / vh; t = `rotateX(${(k * ang).toFixed(2)}deg) scale(${(1 - k * shrink).toFixed(4)})`; o = '50% 100%'; dir = 'out'; }
-      if (t) { s.el.style.transform = t; s.el.style.transformOrigin = o; s.el.classList.add('folding'); s.f.style.opacity = (Math.min(1, k * 1.25) * .85).toFixed(3); s.f.dataset.dir = dir; }
-      else if (s.el.classList.contains('folding')) { s.el.style.transform = ''; s.el.style.transformOrigin = ''; s.el.classList.remove('folding'); s.f.style.opacity = '0'; } } };
+    for (const el of secs) { let k = 0, dir = '';
+      if (active) { const top = flowTop(el), bottom = top + el.offsetHeight;
+        if (bottom > 0 && top < vh) { const a = clamp01((top - off) / (vh - off)), b = clamp01((leaveAt - bottom) / leaveAt); k = Math.min(1, a + b); dir = b > a ? 'out' : 'in'; } }   // a: still arriving from below (done once its top reaches the header line); b: leaving through the top (starts once its bottom passes two thirds of the viewport)
+      if (k > 0) { el.style.transform = `translateZ(${(-depth * k).toFixed(1)}px)`; el.style.opacity = (1 - Math.pow(k, 1.5)).toFixed(3); el.dataset.zoom = dir; el.classList.add('zooming'); el.classList.toggle('zoom-far', k >= .6); }
+      else if (el.classList.contains('zooming')) { el.style.transform = ''; el.style.opacity = ''; delete el.dataset.zoom; el.classList.remove('zooming', 'zoom-far'); } } };
   const req = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
-  addEventListener('scroll', req, { passive: true }); addEventListener('resize', req); document.addEventListener('effects:changed', req); update();
+  addEventListener('scroll', req, { passive: true }); addEventListener('resize', req); document.addEventListener('effects:changed', req); document.addEventListener('content:rendered', req); update();
 })();
 
 /* ===================== detail pages: every panel, card and file opens its own page with a preview ===================== */
