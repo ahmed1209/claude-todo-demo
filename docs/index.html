@@ -593,7 +593,7 @@ body.page-open{overflow:hidden}
 @media (max-width:900px){.page-grid{grid-template-columns:1fr} .page-bar .header-cta{display:none}}
 @media (prefers-reduced-motion:reduce){.page.opening,.page.closing,.page-body{animation:none}}
 /* 3D section transitions */
-main.zoom3d{perspective:1100px}
+main.zoom3d{perspective:1000px}
 main.zoom3d > section.zooming{will-change:transform,opacity}
 main.zoom3d > section.zoom-far{pointer-events:none}
 @media (prefers-reduced-motion:reduce){main.zoom3d > section{transform:none!important;opacity:1!important}}
@@ -1485,12 +1485,12 @@ window.applyEffects = () => { const fx = (SITE && SITE.effects) || {}; document.
   const flowTop = el => { let y = 0; for (let n = el; n; n = n.offsetParent) y += n.offsetTop; return y - scrollY; };   // layout position: unaffected by the transform we apply
   const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
   let ticking = false;
-  const update = () => { ticking = false; const vh = innerHeight, depth = innerWidth < 900 ? 300 : 420, off = 88, leaveAt = vh * .66, active = on();
+  const update = () => { ticking = false; const vh = innerHeight, depth = innerWidth < 900 ? 650 : 900, off = 88, leaveAt = vh * .72, active = on();
     const mainTop = main.getBoundingClientRect().top + scrollY; main.style.perspectiveOrigin = active ? `50% ${Math.round(scrollY + vh * .5 - mainTop)}px` : '';
     for (const el of secs) { let k = 0, dir = '';
       if (active) { const top = flowTop(el), bottom = top + el.offsetHeight;
         if (bottom > 0 && top < vh) { const a = clamp01((top - off) / (vh - off)), b = clamp01((leaveAt - bottom) / leaveAt); k = Math.min(1, a + b); dir = b > a ? 'out' : 'in'; } }   // a: still arriving from below (done once its top reaches the header line); b: leaving through the top (starts once its bottom passes two thirds of the viewport)
-      if (k > 0) { el.style.transform = `translateZ(${(-depth * k).toFixed(1)}px)`; el.style.opacity = (1 - Math.pow(k, 1.5)).toFixed(3); el.dataset.zoom = dir; el.classList.add('zooming'); el.classList.toggle('zoom-far', k >= .6); }
+      if (k > 0) { el.style.transform = `translateZ(${(-depth * k).toFixed(1)}px)`; el.style.opacity = (1 - Math.pow(k, 1.3)).toFixed(3); el.dataset.zoom = dir; el.classList.add('zooming'); el.classList.toggle('zoom-far', k >= .5); }
       else if (el.classList.contains('zooming')) { el.style.transform = ''; el.style.opacity = ''; delete el.dataset.zoom; el.classList.remove('zooming', 'zoom-far'); } } };
   const req = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
   addEventListener('scroll', req, { passive: true }); addEventListener('resize', req); document.addEventListener('effects:changed', req); document.addEventListener('content:rendered', req); update();
