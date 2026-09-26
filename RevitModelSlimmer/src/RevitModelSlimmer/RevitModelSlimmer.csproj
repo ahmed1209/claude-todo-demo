@@ -1,0 +1,95 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Multi-version Revit add-in.
+    Pick a configuration such as "Release R24" (Revit 2024) or "Debug R25" (Revit 2025).
+    Revit 2023/2024 build against .NET Framework 4.8, Revit 2025/2026 against .NET 8.
+    Revit API assemblies come from the Nice3point.Revit.Api NuGet packages, so no local
+    Revit install is required to compile.
+  -->
+
+  <PropertyGroup>
+    <Configurations>Debug R23;Debug R24;Debug R25;Debug R26;Release R23;Release R24;Release R25;Release R26</Configurations>
+    <Configuration Condition="'$(Configuration)' == ''">Release R24</Configuration>
+    <Platforms>AnyCPU</Platforms>
+    <OutputType>Library</OutputType>
+    <RootNamespace>RevitModelSlimmer</RootNamespace>
+    <AssemblyName>RevitModelSlimmer</AssemblyName>
+    <UseWPF>true</UseWPF>
+    <LangVersion>10</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <PlatformTarget>x64</PlatformTarget>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Version>1.0.0</Version>
+    <Authors>Model Slimmer contributors</Authors>
+    <Product>Revit Model Slimmer</Product>
+    <Description>Cleans unused families, filters, views, view templates and worksets, audits performance hogs and compacts Revit models.</Description>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(Configuration.Contains('R23'))">
+    <RevitVersion>2023</RevitVersion>
+    <TargetFramework>net48</TargetFramework>
+    <DefineConstants>$(DefineConstants);REVIT2023;REVIT2023_OR_GREATER</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('R24'))">
+    <RevitVersion>2024</RevitVersion>
+    <TargetFramework>net48</TargetFramework>
+    <DefineConstants>$(DefineConstants);REVIT2024;REVIT2023_OR_GREATER;REVIT2024_OR_GREATER</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('R25'))">
+    <RevitVersion>2025</RevitVersion>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <DefineConstants>$(DefineConstants);REVIT2025;REVIT2023_OR_GREATER;REVIT2024_OR_GREATER;REVIT2025_OR_GREATER</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('R26'))">
+    <RevitVersion>2026</RevitVersion>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <DefineConstants>$(DefineConstants);REVIT2026;REVIT2023_OR_GREATER;REVIT2024_OR_GREATER;REVIT2025_OR_GREATER;REVIT2026_OR_GREATER</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(Configuration.Contains('Debug'))">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('Release'))">
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputPath>..\..\build\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
+    <PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\*.png" />
+    <None Include="RevitModelSlimmer.addin" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <!-- Deploy to the per-user Revit add-ins folder after a Debug build so F5/attach works right away. -->
+  <Target Name="DeployToRevitAddins" AfterTargets="Build" Condition="$(Configuration.Contains('Debug')) And '$(OS)' == 'Windows_NT'">
+    <PropertyGroup>
+      <RevitAddinsDir>$(AppData)\Autodesk\Revit\Addins\$(RevitVersion)\</RevitAddinsDir>
+      <DeployDir>$(RevitAddinsDir)RevitModelSlimmer\</DeployDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <DeployFiles Include="$(OutDir)RevitModelSlimmer.dll;$(OutDir)RevitModelSlimmer.pdb" />
+    </ItemGroup>
+    <MakeDir Directories="$(DeployDir)" />
+    <Copy SourceFiles="@(DeployFiles)" DestinationFolder="$(DeployDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="RevitModelSlimmer.addin" DestinationFolder="$(RevitAddinsDir)" SkipUnchangedFiles="true" />
+    <Message Importance="high" Text="Deployed RevitModelSlimmer to $(DeployDir)" />
+  </Target>
+
+</Project>
