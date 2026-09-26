@@ -470,30 +470,29 @@ html.hopping body[data-transition="slide"][data-dir="up"] main{transform:transla
 
 /* Hover effects */
 .button,.header-cta,.chip,.vbtn,.contact-email{position:relative;overflow:hidden;isolation:isolate}
-.button>*,.header-cta>*,.chip>*,.vbtn>*,.contact-email>*{position:relative;z-index:2}
 .button span[aria-hidden]{display:inline-block;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
 .button:hover span[aria-hidden]{transform:translateX(6px)}
 .button:active,.header-cta:active,.chip:active,.vbtn:active{transform:translateY(0) scale(.97)!important;transition-duration:.08s}
-.ripple{position:absolute;z-index:1;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(255,255,255,.35),rgba(255,255,255,0) 60%);transform:scale(0);animation:ripple .65s ease-out forwards}
+.ripple{position:absolute;z-index:-1;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(255,255,255,.35),rgba(255,255,255,0) 60%);transform:scale(0);animation:ripple .65s ease-out forwards}
 @keyframes ripple{to{transform:scale(1);opacity:0}}
 /* shimmer */
-body[data-hover="shimmer"] :is(.button,.header-cta,.contact-email)::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(115deg,transparent 25%,rgba(255,255,255,.38) 50%,transparent 75%);transform:translateX(-130%) skewX(-12deg);transition:transform .75s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+body[data-hover="shimmer"] :is(.button,.header-cta,.contact-email)::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(115deg,transparent 25%,rgba(255,255,255,.38) 50%,transparent 75%);transform:translateX(-130%) skewX(-12deg);transition:transform .75s cubic-bezier(.2,.8,.2,1);pointer-events:none}
 body[data-hover="shimmer"] :is(.button,.header-cta,.contact-email):hover::before{transform:translateX(130%) skewX(-12deg)}
 body[data-hover="shimmer"] .button:hover{box-shadow:0 0 28px rgba(94,230,255,.35)}
 /* liquid fill from the cursor */
-body[data-hover="liquid"] :is(.button,.header-cta,.chip,.vbtn,.contact-email)::before{content:"";position:absolute;z-index:1;left:var(--mx,50%);top:var(--my,50%);width:250%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%) scale(0);background:radial-gradient(circle,rgba(94,230,255,.95),rgba(143,123,255,.9) 55%,rgba(143,123,255,0) 72%);transition:transform .55s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+body[data-hover="liquid"] :is(.button,.header-cta,.chip,.vbtn,.contact-email)::before{content:"";position:absolute;z-index:-1;left:var(--mx,50%);top:var(--my,50%);width:250%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%) scale(0);background:radial-gradient(circle,rgba(94,230,255,.95),rgba(143,123,255,.9) 55%,rgba(143,123,255,0) 72%);transition:transform .55s cubic-bezier(.2,.8,.2,1);pointer-events:none}
 body[data-hover="liquid"] :is(.button,.header-cta,.chip,.vbtn,.contact-email):hover::before{transform:translate(-50%,-50%) scale(1)}
 body[data-hover="liquid"] :is(.button,.chip,.vbtn,.contact-email):hover{color:#06121a;border-color:transparent;box-shadow:0 0 30px rgba(94,230,255,.4)}
 body[data-hover="liquid"] .contact-email:hover span,body[data-hover="liquid"] .vbtn:hover,body[data-hover="liquid"] .chip:hover{color:#06121a}
 body[data-hover="liquid"] :is(.button-primary,.header-cta)::before{background:radial-gradient(circle,rgba(255,255,255,.75),rgba(255,255,255,.35) 45%,rgba(255,255,255,0) 72%)}
 /* rotating border beam */
-body[data-hover="beam"] :is(.button,.header-cta,.chip,.vbtn,.contact-email)::after{content:"";position:absolute;inset:0;z-index:1;border-radius:inherit;padding:1.5px;background:conic-gradient(from var(--ang,0deg),transparent 0 62%,var(--signal) 78%,#fff 84%,var(--violet) 90%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;opacity:0;transition:opacity .3s;pointer-events:none}
+body[data-hover="beam"] :is(.button,.header-cta,.chip,.vbtn,.contact-email)::after{content:"";position:absolute;inset:0;z-index:2;border-radius:inherit;padding:1.5px;background:conic-gradient(from var(--ang,0deg),transparent 0 62%,var(--signal) 78%,#fff 84%,var(--violet) 90%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;opacity:0;transition:opacity .3s;pointer-events:none}
 body[data-hover="beam"] :is(.button,.header-cta,.chip,.vbtn,.contact-email):hover::after{opacity:1;animation:spin 1.4s linear infinite}
 body[data-hover="beam"] :is(.button,.header-cta):hover{box-shadow:0 0 34px rgba(94,230,255,.45),inset 0 0 18px rgba(94,230,255,.12)}
 /* magnetic */
 body[data-hover="magnetic"] :is(.button,.header-cta){transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,background .2s,color .2s,border-color .2s}
 body[data-hover="magnetic"] :is(.button,.header-cta):hover{box-shadow:0 0 34px rgba(94,230,255,.45)}
-body[data-hover="magnetic"] :is(.button,.header-cta)::before{content:"";position:absolute;inset:0;z-index:1;background:radial-gradient(120px 60px at var(--mx,50%) var(--my,50%),rgba(255,255,255,.28),transparent 70%);opacity:0;transition:opacity .25s;pointer-events:none}
+body[data-hover="magnetic"] :is(.button,.header-cta)::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(120px 60px at var(--mx,50%) var(--my,50%),rgba(255,255,255,.28),transparent 70%);opacity:0;transition:opacity .25s;pointer-events:none}
 body[data-hover="magnetic"] :is(.button,.header-cta):hover::before{opacity:1}
 @media (prefers-reduced-motion:reduce){.warp,.nav-ind,.ripple{display:none!important} main{transform:none!important}}
 </style>
