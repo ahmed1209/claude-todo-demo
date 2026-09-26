@@ -2,7 +2,7 @@
 
 ## Parametra website
 
-`docs/index.html` is a single-file website for the Parametra catalogue: Revit plugins, parametric families, Revit files and courses. It has no build step and no dependencies beyond Google Fonts.
+`docs/index.html` is a single-file website for the Parametra catalogue: Revit plugins, parametric families, Revit files and courses. It has no build step; its only external dependencies are Google Fonts and three.js (r128, loaded from cdnjs) for the hero's WebGL site model. If WebGL is unavailable the hero falls back to a 2D contour animation.
 
 **Preview locally:** open `docs/index.html` in a browser.
 
@@ -14,4 +14,4 @@
 - `PANELS` – the ribbon panels and tools of the BIM Tools tab (the real lineup, without the seven retired tools).
 - `FAMILIES`, `FILES`, `COURSES`, `NOTES`, `CHANGELOG` – sample content to replace with your own.
 
-The interactive previews (planting scatter, shadow analysis, tag alignment, the pergola flex test, the file browser and the course syllabus) are plain JavaScript inside the same file.
+The interactive previews (planting scatter, shadow analysis, tag alignment, the pergola flex test, the file browser and the course syllabus), the 3D hero scene and the tilt cards are plain JavaScript inside the same file.
