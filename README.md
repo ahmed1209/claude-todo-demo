@@ -15,3 +15,12 @@
 - `FAMILIES`, `FILES`, `COURSES`, `NOTES`, `CHANGELOG` – sample content to replace with your own.
 
 The interactive previews (planting scatter, shadow analysis, tag alignment, the pergola flex test, the file browser and the course syllabus), the 3D hero scene and the tilt cards are plain JavaScript inside the same file.
+
+## Editing the site without code (admin mode)
+
+The page has a built-in editor.
+
+- **On the Claude artifact link:** the owner sees an **Admin** button at the bottom left. Click it, edit any outlined text directly on the page, and use the drawer tabs to change the site details, ribbon panels, families, files, courses, notes and changelog. **Save & publish** writes a new version of the artifact that every visitor sees. If the button is missing, add `#admin` to the end of the link.
+- **On GitHub Pages (this repo's `docs/index.html`):** open the page with `#admin` at the end of the URL. Edits save in your own browser; to publish them, open the **Import / export** tab, copy the JSON, and commit it as `docs/content.json`. The page loads that file automatically for every visitor.
+
+Defaults live in the `SITE` and data blocks inside `docs/index.html`; the editor's **Reset all** returns to them.

@@ -400,6 +400,49 @@ footer p span{color:var(--signal);margin:0 10px}
   *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
   .reveal.pre{opacity:1;transform:none;filter:none}
 }
+/* Admin editor */
+.admin-fab{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:80;display:inline-flex;align-items:center;gap:9px;padding:10px 16px;border-radius:999px;border:1px solid var(--glass-border-2);background:rgba(8,11,24,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:var(--text);font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.admin-fab i{width:8px;height:8px;border-radius:50%;background:var(--signal);box-shadow:0 0 10px var(--signal)}
+.admin-fab.dirty i{background:var(--warn);box-shadow:0 0 10px var(--warn)}
+.admin-drawer{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:85;width:min(420px,calc(100vw - 24px));display:flex;flex-direction:column;background:rgba(10,14,28,.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--glass-border-2);border-radius:22px;box-shadow:0 30px 80px rgba(0,0,0,.6);color:var(--text);font-size:13px}
+.admin-drawer header{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--glass-border)}
+.admin-drawer header b{font-family:var(--display);font-size:14px}
+.admin-mode{margin-left:auto;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--signal)}
+.admin-x{width:30px;height:30px;border-radius:50%;border:1px solid var(--glass-border-2);background:transparent;color:var(--text);font-size:18px;line-height:1;cursor:pointer;padding:0}
+.admin-drawer nav{display:flex;gap:6px;padding:10px 12px;overflow-x:auto;border-bottom:1px solid var(--glass-border)}
+.admin-drawer nav button{flex:none;padding:6px 10px;border-radius:999px;border:1px solid var(--glass-border-2);background:transparent;color:var(--text-2);font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.admin-drawer nav button[aria-pressed="true"]{background:linear-gradient(120deg,var(--signal),#7fd0ff);color:#06121a;border-color:transparent}
+.admin-body{flex:1;overflow:auto;padding:14px 16px;display:grid;gap:12px;align-content:start}
+.admin-help{color:var(--text-2);line-height:1.5;font-size:12.5px}
+.admin-help code{font-family:var(--mono);color:var(--signal);font-size:11px}
+.af{display:grid;gap:5px;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3)}
+.af input[type=text],.af input[type=number],.af textarea,.admin-json,.admin-import{width:100%;padding:8px 10px;border:1px solid var(--glass-border-2);border-radius:10px;background:var(--field);color:var(--text);font:13px/1.4 var(--body);letter-spacing:0;text-transform:none;outline:0}
+.af textarea,.admin-json,.admin-import{font-family:var(--mono);font-size:12px;resize:vertical}
+.af input:focus,.af textarea:focus,.admin-import:focus{border-color:var(--signal)}
+.af-check{display:flex;align-items:center;gap:8px}
+.af-check input{accent-color:var(--signal)}
+.af-group{border:1px solid var(--glass-border);border-radius:12px;padding:10px;display:grid;gap:8px;margin:0}
+.af-group legend{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);padding:0 4px}
+.af-item{border:1px solid var(--glass-border);border-radius:12px;padding:0 10px 10px}
+.af-item summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;cursor:pointer;list-style:none;font-weight:600}
+.af-item summary::-webkit-details-marker{display:none}
+.af-item summary>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.af-item[open] summary{border-bottom:1px solid var(--glass-border);margin-bottom:10px}
+.af-item .af+.af,.af-item .af-group,.af-item .af+.af-group{margin-top:8px}
+.af-tools{display:flex;gap:4px;flex:none}
+.af-tools button{width:26px;height:26px;border-radius:8px;border:1px solid var(--glass-border-2);background:transparent;color:var(--text);cursor:pointer;font-size:12px;padding:0}
+.af-tools button:hover{border-color:var(--signal);color:var(--signal)}
+.admin-add{justify-content:center}
+.admin-drawer footer{display:grid;grid-template-columns:1fr auto;gap:8px;padding:12px 16px;border-top:1px solid var(--glass-border)}
+.admin-drawer footer .button{min-height:42px;justify-content:center}
+.admin-msg{grid-column:1/-1;margin:0;min-height:1em;color:var(--text-2);font-size:12px;line-height:1.5}
+.admin-textlist{display:grid;gap:6px}
+.admin-textlist div{display:flex;justify-content:space-between;gap:8px;align-items:center;font-family:var(--mono);font-size:10.5px;color:var(--text-2);border:1px solid var(--glass-border);border-radius:10px;padding:6px 10px}
+.admin-textlist button{border:0;background:transparent;color:var(--signal);cursor:pointer;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.admin-on [data-edit]{outline:1px dashed rgba(94,230,255,.65);outline-offset:6px;cursor:text;border-radius:4px}
+.admin-on [data-edit]:hover,.admin-on [data-edit]:focus{outline-style:solid;background:rgba(94,230,255,.06)}
+.admin-on .reveal.pre{opacity:1;transform:none;filter:none}
+@media (max-width:640px){.admin-drawer{top:auto;left:12px;right:12px;height:min(78vh,720px);width:auto}}
 </style>
 </head>
 <body>
@@ -429,19 +472,19 @@ footer p span{color:var(--signal);margin:0 10px}
   <canvas id="contours" aria-hidden="true"></canvas><canvas id="scene" aria-hidden="true"></canvas><div class="glow a" aria-hidden="true"></div><div class="glow b" aria-hidden="true"></div>
   <div class="wrap">
     <div class="herobody">
-      <p class="hud-chip"><i></i> Live site model · plugins · families · files · courses</p>
-      <h1 id="hero-title">Parametric by <em class="grad">default.</em></h1>
-      <p class="lede">Thirty-one Revit tools on one ribbon tab. Families that flex instead of break. Project files that start clean. And courses that teach the reasoning behind the button, not just where it is. Move the cursor: the site model above is live.</p>
+      <p data-edit="hero-chip" class="hud-chip"><i></i> Live site model · plugins · families · files · courses</p>
+      <h1 data-edit="hero-title" id="hero-title">Parametric by <em class="grad">default.</em></h1>
+      <p data-edit="hero-lede" class="lede">Thirty-one Revit tools on one ribbon tab. Families that flex instead of break. Project files that start clean. And courses that teach the reasoning behind the button, not just where it is. Move the cursor: the site model above is live.</p>
       <div class="ctas">
         <button class="button button-primary" type="button" data-open="tools">Get the toolkit <span aria-hidden="true">→</span></button>
         <a class="button button-ghost" href="#plugins">Try the scatter demo</a>
       </div>
     </div>
     <div class="facts">
-      <div class="fact"><b>31</b><span>Tools on the ribbon</span></div>
-      <div class="fact"><b>15</b><span>Ribbon panels</span></div>
-      <div class="fact"><b>1</b><span>Tab to learn</span></div>
-      <div class="fact"><b>4</b><span>Libraries: plugins, families, files, courses</span></div>
+      <div data-edit="fact-1" class="fact"><b>31</b><span>Tools on the ribbon</span></div>
+      <div data-edit="fact-2" class="fact"><b>15</b><span>Ribbon panels</span></div>
+      <div data-edit="fact-3" class="fact"><b>1</b><span>Tab to learn</span></div>
+      <div data-edit="fact-4" class="fact"><b>4</b><span>Libraries: plugins, families, files, courses</span></div>
     </div>
   </div>
 </section>
@@ -450,7 +493,7 @@ footer p span{color:var(--signal);margin:0 10px}
   <div class="wrap sheetgrid">
     <div class="rail"><span class="ref">A-001</span><span class="no">About</span></div>
     <div>
-      <div class="head reveal">
+      <div data-edit="head-about" class="head reveal">
         <h2>Fewer workarounds. <span class="grad">More design time.</span></h2>
         <p>Parametra is one studio's answer to the repetitive parts of Revit: the tags that never line up, the planting that has to be placed twice, the sheets that take an afternoon to renumber.</p>
         <p>Everything here comes from live projects. The plugins sit on a single BIM Tools tab, the families are built to be flexed, the files are the templates and libraries we actually start from, and the courses explain how each of them was made.</p>
@@ -463,7 +506,7 @@ footer p span{color:var(--signal);margin:0 10px}
   <div class="wrap sheetgrid">
     <div class="rail"><span class="ref">P-100</span><span class="no">Revit plugins</span></div>
     <div>
-      <div class="head reveal">
+      <div data-edit="head-plugins" class="head reveal">
         <h2>Thirty-one tools, <span class="grad">one tab,</span> no detours.</h2>
         <p>Scatter planting across a surface or along a path, read shadows before the client asks, and line up every tag on the sheet in a click. Each tool below is a live preview of what the ribbon button does inside Revit.</p>
       </div>
@@ -517,14 +560,14 @@ footer p span{color:var(--signal);margin:0 10px}
           </div>
         </div>
         <div class="notes reveal">
-          <div class="note"><h3>Scatter that reads the site</h3><p>Surface Scatter fills a floor, toposolid or filled region from your Plant Library at a spacing you set, with jitter so nothing looks stamped. Path Scatter follows a model line, and Edit Scatter re-flows the set when the boundary moves.</p></div>
-          <div class="note"><h3>Shadows before the meeting</h3><p>Shadow Analysis reads the project location and the sun settings you already have, then reports shaded area per surface. Shadow Links keeps those results tied to the elements, so the schedule updates when the massing does.</p></div>
-          <div class="note"><h3>Sheets that line themselves up</h3><p>Align Tags, Align Elements, Align Viewports and Align Railing share one idea: select, pick an edge, done. Manage Viewports and Manage Legends keep whole sheet sets consistent.</p></div>
+          <div data-edit="note-1" class="note"><h3>Scatter that reads the site</h3><p>Surface Scatter fills a floor, toposolid or filled region from your Plant Library at a spacing you set, with jitter so nothing looks stamped. Path Scatter follows a model line, and Edit Scatter re-flows the set when the boundary moves.</p></div>
+          <div data-edit="note-2" class="note"><h3>Shadows before the meeting</h3><p>Shadow Analysis reads the project location and the sun settings you already have, then reports shaded area per surface. Shadow Links keeps those results tied to the elements, so the schedule updates when the massing does.</p></div>
+          <div data-edit="note-3" class="note"><h3>Sheets that line themselves up</h3><p>Align Tags, Align Elements, Align Viewports and Align Railing share one idea: select, pick an edge, done. Manage Viewports and Manage Legends keep whole sheet sets consistent.</p></div>
           <div class="tags"><span class="tag">Toposolids</span><span class="tag">Filled regions</span><span class="tag">Model lines</span><span class="tag">Schedules</span><span class="tag">Sheets</span></div>
         </div>
       </div>
 
-      <div class="subhead reveal"><h3>The whole tab</h3><span class="mono">15 panels · 31 tools</span></div>
+      <div data-edit="subhead-1" class="subhead reveal"><h3>The whole tab</h3><span class="mono">15 panels · 31 tools</span></div>
       <div class="panels reveal" id="panel-grid"></div>
     </div>
   </div>
@@ -534,7 +577,7 @@ footer p span{color:var(--signal);margin:0 10px}
   <div class="wrap sheetgrid">
     <div class="rail"><span class="ref">F-200</span><span class="no">Parametric families</span></div>
     <div>
-      <div class="head reveal">
+      <div data-edit="head-families" class="head reveal">
         <h2>Families that <span class="grad">flex</span> instead of break.</h2>
         <p>Every family in the library is built the same way: shared parameters, formulas that guard against impossible values, and a type catalog so the office standard sizes are one click away. Drag the sliders and watch the geometry, the schedule values and the material take-off follow.</p>
       </div>
@@ -559,13 +602,13 @@ footer p span{color:var(--signal);margin:0 10px}
           </div>
         </div>
         <div class="notes reveal">
-          <div class="note"><h3>Type catalogs, not type soup</h3><p>Standard sizes ship as a catalog, so a project loads only the types it needs and the family stays light. Custom sizes are one instance parameter away and never break the standard ones.</p></div>
-          <div class="note"><h3>Formulas that refuse to fail</h3><p>Rafter count, post spacing and member sizes are derived, not typed. Push a dimension too far and the family clamps it instead of throwing a constraint error at the person who least expects it.</p></div>
-          <div class="note"><h3>Scheduled from day one</h3><p>Shared parameters mean the pergola volume, the planter soil quantity and the bench seat length all land in schedules without a mapping exercise.</p></div>
+          <div data-edit="note-4" class="note"><h3>Type catalogs, not type soup</h3><p>Standard sizes ship as a catalog, so a project loads only the types it needs and the family stays light. Custom sizes are one instance parameter away and never break the standard ones.</p></div>
+          <div data-edit="note-5" class="note"><h3>Formulas that refuse to fail</h3><p>Rafter count, post spacing and member sizes are derived, not typed. Push a dimension too far and the family clamps it instead of throwing a constraint error at the person who least expects it.</p></div>
+          <div data-edit="note-6" class="note"><h3>Scheduled from day one</h3><p>Shared parameters mean the pergola volume, the planter soil quantity and the bench seat length all land in schedules without a mapping exercise.</p></div>
           <div class="tags"><span class="tag">Shared parameters</span><span class="tag">Type catalogs</span><span class="tag">Nested families</span><span class="tag">Adaptive</span><span class="tag">Detail items</span></div>
         </div>
       </div>
-      <div class="subhead reveal"><h3>The library by category</h3><span class="mono" id="fam-count"></span></div>
+      <div data-edit="subhead-2" class="subhead reveal"><h3>The library by category</h3><span class="mono" id="fam-count"></span></div>
       <div class="panels reveal" id="family-grid"></div>
     </div>
   </div>
@@ -575,7 +618,7 @@ footer p span{color:var(--signal);margin:0 10px}
   <div class="wrap sheetgrid">
     <div class="rail"><span class="ref">R-300</span><span class="no">Revit files</span></div>
     <div>
-      <div class="head reveal">
+      <div data-edit="head-files" class="head reveal">
         <h2>Start from a file that is <span class="grad">already tidy.</span></h2>
         <p>Templates with the view templates, filters and browser organisation done. Sample projects to learn from. Detail libraries and schedule packs you can transfer in with one Transfer Project Standards. Filter the shelf, open a file, see what is inside.</p>
       </div>
@@ -604,10 +647,10 @@ footer p span{color:var(--signal);margin:0 10px}
       <div class="section-label light"><b>C-400</b> Courses</div>
       <div>
         <p class="eyebrow"><span></span> Learn the reasoning</p>
-        <h2 style="margin-top:22px">Learn the <em class="grad">why</em> behind every button.</h2>
+        <h2 data-edit="courses-title" style="margin-top:22px">Learn the <em class="grad">why</em> behind every button.</h2>
       </div>
       <div class="dark-intro">
-        <p>Short, project-based courses that build the same things the studio ships: a ribbon tab of your own, a family library that flexes, and a documentation set that goes out clean.</p>
+        <p data-edit="courses-intro">Short, project-based courses that build the same things the studio ships: a ribbon tab of your own, a family library that flexes, and a documentation set that goes out clean.</p>
         <button type="button" data-open="tools">Ask about team training <span aria-hidden="true">↗</span></button>
       </div>
     </div>
@@ -625,8 +668,8 @@ footer p span{color:var(--signal);margin:0 10px}
   <div class="wrap">
     <div class="notes-heading">
       <div class="section-label"><b>05</b> Studio notes</div>
-      <h2>Ideas worth <span class="grad">keeping on the desk.</span></h2>
-      <p>The thinking behind the tools, written for people who want the principle as well as the shortcut.</p>
+      <h2 data-edit="notes-title">Ideas worth <span class="grad">keeping on the desk.</span></h2>
+      <p data-edit="notes-intro">The thinking behind the tools, written for people who want the principle as well as the shortcut.</p>
     </div>
     <div class="notes-grid reveal" id="notes-grid"></div>
     <div class="return-strip reveal">
@@ -640,11 +683,11 @@ footer p span{color:var(--signal);margin:0 10px}
 <section class="updates" id="updates">
   <div class="wrap">
     <div class="section-label light"><b>06</b> Updates</div>
-    <div class="version"><span>Current build</span><strong id="ver-num">v2.4.0</strong><small id="ver-date">September 2026</small></div>
+    <div data-edit="version-card" class="version"><span>Current build</span><strong id="ver-num">v2.4.0</strong><small id="ver-date">September 2026</small></div>
     <div class="copy">
       <p class="eyebrow"><span></span> Follow Parametra</p>
-      <h2>See what changed. <em class="grad">Know what's next.</em></h2>
-      <p>Every release is logged here: new tools, fixes, and which Revit versions the installer covers.</p>
+      <h2 data-edit="updates-title">See what changed. <em class="grad">Know what's next.</em></h2>
+      <p data-edit="updates-intro">Every release is logged here: new tools, fixes, and which Revit versions the installer covers.</p>
       <ul class="changelog" id="changelog"></ul>
     </div>
   </div>
@@ -656,9 +699,9 @@ footer p span{color:var(--signal);margin:0 10px}
       <div class="section-label light"><b>07</b> Follow</div>
       <div>
         <p class="eyebrow"><span></span> Stay connected</p>
-        <h2 style="margin-top:22px">See the work. <em class="grad">Follow the progress.</em></h2>
+        <h2 data-edit="follow-title" style="margin-top:22px">See the work. <em class="grad">Follow the progress.</em></h2>
       </div>
-      <div class="dark-intro"><p>New tools, family walkthroughs, release notes and short workflow studies, posted as they ship.</p></div>
+      <div class="dark-intro"><p data-edit="follow-intro">New tools, family walkthroughs, release notes and short workflow studies, posted as they ship.</p></div>
     </div>
     <div class="follow-grid" id="follow-grid"></div>
   </div>
@@ -669,8 +712,8 @@ footer p span{color:var(--signal);margin:0 10px}
     <div class="section-label"><b>08</b> Contact</div>
     <div class="copy">
       <p class="eyebrow"><span></span> Start a conversation</p>
-      <h2>Have a question? <em class="grad">Let's talk Revit.</em></h2>
-      <p>Get the toolkit, ask about a family or template, book team training, or tell us about a workflow that still hurts. Teams: send your seat count and we reply with a quotation.</p>
+      <h2 data-edit="contact-title">Have a question? <em class="grad">Let's talk Revit.</em></h2>
+      <p data-edit="contact-intro">Get the toolkit, ask about a family or template, book team training, or tell us about a workflow that still hurts. Teams: send your seat count and we reply with a quotation.</p>
     </div>
     <div class="contact-actions">
       <button class="contact-email" type="button" id="copy-email"><span class="addr"></span><span>Copy</span></button>
@@ -683,8 +726,8 @@ footer p span{color:var(--signal);margin:0 10px}
 <section class="closing" id="get-started">
   <div class="rings" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
   <p class="eyebrow" style="justify-content:center"><span></span> Ready when your project is</p>
-  <h2>Parametric by default.<br><em class="grad">Productive by design.</em></h2>
-  <p>One installer for the whole BIM Tools tab, one library for families and files, and courses that show how it all fits together. Send your details and we reply with the download link and next steps.</p>
+  <h2 data-edit="closing-title">Parametric by default.<br><em class="grad">Productive by design.</em></h2>
+  <p data-edit="closing-intro">One installer for the whole BIM Tools tab, one library for families and files, and courses that show how it all fits together. Send your details and we reply with the download link and next steps.</p>
   <div class="ctas">
     <button class="button button-primary" type="button" data-open="quote">Request a team quote</button>
     <button class="button button-ghost" type="button" data-open="tools">Get the toolkit</button>
@@ -694,9 +737,9 @@ footer p span{color:var(--signal);margin:0 10px}
 
 <footer>
   <a class="brand" href="#top"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="3" width="26" height="26" rx="4" fill="none" stroke="#5ee6ff" stroke-width="2"/><path d="M8.5 21.5 C 12 11, 20 11, 23.5 21.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="8.5" cy="21.5" r="2.3" fill="#5ee6ff"/><circle cx="23.5" cy="21.5" r="2.3" fill="#5ee6ff"/></svg><span>Parametra</span></a>
-  <p>Parametric by default. Productive by design.</p>
+  <p data-edit="footer-tagline">Parametric by default. Productive by design.</p>
   <div class="footer-social" id="footer-social"></div>
-  <p>Revit 2023–2026<span>•</span>Built on live projects</p>
+  <p data-edit="footer-meta">Revit 2023–2026<span>•</span>Built on live projects</p>
 </footer>
 
 <dialog class="dlg" id="request-dialog" aria-labelledby="dlg-title" aria-describedby="dlg-desc">
@@ -735,8 +778,10 @@ footer p span{color:var(--signal);margin:0 10px}
   <div><b>Preview build</b>The plugin panels are your real BIM Tools tab. Families, files, courses, release notes and the contact details are sample content: edit them in the SITE and DATA blocks at the top of the script.</div>
   <button type="button" aria-label="Dismiss">×</button>
 </aside>
+<script type="application/json" id="site-content">{}</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
+<script>window.__PRISTINE_BODY = document.body.innerHTML;
+
 /* ===================== SITE CONFIG (edit me) ===================== */
 const SITE = {
   name: 'Parametra',
@@ -746,7 +791,7 @@ const SITE = {
 };
 
 /* ===================== DATA (edit me) ===================== */
-const PANELS = [
+let PANELS = [
   { name:'Annotation', tools:['Region Tools','Revisions'], desc:'Filled-region and revision utilities for drawing sets.' },
   { name:'Auto Dimension & Tag', tools:['Auto Dim & Tag'], desc:'Dimension and tag a whole view in one pass.' },
   { name:'BIMCAD Tools', tools:['CAD Converter','Transfer to CAD','Update from CAD'], desc:'Round-trip between Revit and CAD without redrawing.' },
@@ -763,7 +808,7 @@ const PANELS = [
   { name:'Standards Checker', tools:['Check Standards'], desc:'Validate the model against office standards.' },
   { name:'View Manager', tools:['View Manager'], desc:'Create, rename and organise views at scale.' }
 ];
-const FAMILIES = [
+let FAMILIES = [
   { name:'Site & landscape', count:42, desc:'Pergolas, planters, benches, bollards, kerbs and steps with type catalogs.' },
   { name:'Planting', count:120, desc:'Trees, palms, shrubs and groundcovers with height, spread and water-need parameters.' },
   { name:'Doors & windows', count:36, desc:'Curtain doors, sliders and screens with guarded formulas.' },
@@ -771,7 +816,7 @@ const FAMILIES = [
   { name:'Annotation', count:64, desc:'Tags, symbols, title blocks and key plans that match the templates.' },
   { name:'Detail items', count:90, desc:'2D components for sections and details, organised by assembly.' }
 ];
-const FILES = [
+let FILES = [
   { name:'Architecture template', type:'Template', disc:'Architecture', versions:[2026,2025,2024,2023], size:'28 MB', views:46, sheets:12, families:210, schedules:18, inside:'View templates for plans, sections and 3D, browser organisation by phase and discipline, graphic overrides, filters and the office title blocks.' },
   { name:'Landscape template', type:'Template', disc:'Landscape', versions:[2026,2025,2024], size:'34 MB', views:38, sheets:10, families:260, schedules:22, inside:'Toposolid and planting settings, planting schedules by mix, hardscape filters, and the tags the scatter tools expect.' },
   { name:'Interiors template', type:'Template', disc:'Interiors', versions:[2026,2025,2024,2023], size:'22 MB', views:32, sheets:9, families:180, schedules:14, inside:'Finish schedules, room data sheets, furniture legends and elevation-per-room view templates.' },
@@ -782,18 +827,18 @@ const FILES = [
   { name:'Planting schedule pack', type:'Schedules', disc:'Landscape', versions:[2026,2025,2024,2023], size:'4 MB', views:0, sheets:0, families:0, schedules:16, inside:'Schedules by mix, by area and by water need, plus a QA schedule that flags untagged plants.' },
   { name:'QA schedule pack', type:'Schedules', disc:'Architecture', versions:[2026,2025,2024,2023], size:'3 MB', views:0, sheets:0, families:0, schedules:12, inside:'Model checking schedules: unplaced rooms, duplicate marks, missing sheet parameters and warnings by type.' }
 ];
-const COURSES = [
+let COURSES = [
   { n:'01', cat:'Revit API', title:'Build your first ribbon tab with C#', level:'Advanced', lessons:14, hours:9, blurb:'From an empty Visual Studio project to a signed add-in with a panel, a command and a settings dialog.', syllabus:[['Project setup and the .addin manifest','32 min'],['External commands and transactions','48 min'],['Building the ribbon','41 min'],['Reading and writing parameters','55 min'],['A scatter tool, step by step','1 h 10'],['Packaging an installer','38 min']] },
   { n:'02', cat:'Families', title:'Parametric families masterclass', level:'Intermediate', lessons:12, hours:7, blurb:'Reference planes, formulas, nested families and type catalogs, built into a pergola, a planter and a tag.', syllabus:[['Reference planes that behave','36 min'],['Formulas and guards','44 min'],['Nested and shared families','50 min'],['Type catalogs','28 min'],['Flex testing and QA','32 min']] },
   { n:'03', cat:'Landscape BIM', title:'Landscape in Revit: topo, planting, scatter', level:'Beginner', lessons:10, hours:6, blurb:'Toposolids, planting libraries, scatter tools and the schedules that make a landscape set coordinate.', syllabus:[['Toposolids and floors','40 min'],['Planting library setup','35 min'],['Surface and path scatter','45 min'],['Shadow studies','30 min'],['Planting schedules and tags','38 min']] },
   { n:'04', cat:'Production', title:'Sheets, views and standards that scale', level:'Beginner', lessons:9, hours:5, blurb:'Templates, view templates, sheet management and a standards check before every issue.', syllabus:[['Template anatomy','30 min'],['View templates and filters','42 min'],['Sheet Manager and Print Browser','36 min'],['Standards Checker in practice','28 min']] }
 ];
-const NOTES = [
+let NOTES = [
   { n:'01', cat:'Ribbon design', title:'One tab beats ten add-ins.', body:'Every tool on the BIM Tools tab follows the same pattern: select, choose, done. When tools share a home, a vocabulary and a settings dialog, the team learns the whole set in an afternoon instead of one plugin at a time.', link:'#plugins', cta:'See the tab' },
   { n:'02', cat:'Family practice', title:'Flex the family before the project does.', body:'A family that only works at the sizes you tested is a bug waiting for a deadline. Build the guard formulas first, then push every parameter to its limit and watch what breaks. The flex test above is that habit, made visible.', link:'#families', cta:'Flex the pergola' },
   { n:'03', cat:'Documentation', title:'Clean files start clean.', body:'Most documentation pain is inherited from the template. A browser organisation that matches how the office thinks, view templates that are actually applied, and a standards check before issue remove most of it.', link:'#files', cta:'Browse the shelf' }
 ];
-const CHANGELOG = [
+let CHANGELOG = [
   ['v2.4.0','Planting Scatter gains Path Scatter and Edit Scatter. Shadow Links added to the Shadow Analysis panel.'],
   ['v2.3.2','Align Railing handles multi-segment railings. Sheet Manager renumbering keeps revision clouds attached.'],
   ['v2.3.0','Installer covers Revit 2023 to 2026 from one setup file. Seven legacy tools retired from the tab.']
@@ -812,6 +857,16 @@ const inPoly = (x, y, poly) => { let inside = false; for (let i = 0, j = poly.le
 const hull = pts => { const p = pts.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]); const cross = (o, a, b) => (a[0]-o[0])*(b[1]-o[1]) - (a[1]-o[1])*(b[0]-o[0]); const lo = [], up = []; for (const q of p) { while (lo.length >= 2 && cross(lo[lo.length-2], lo[lo.length-1], q) <= 0) lo.pop(); lo.push(q); } for (let i = p.length - 1; i >= 0; i--) { const q = p[i]; while (up.length >= 2 && cross(up[up.length-2], up[up.length-1], q) <= 0) up.pop(); up.push(q); } up.pop(); lo.pop(); return lo.concat(up); };
 const fmt = (n, d=0) => n.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
 const seg = (root, attr, cb) => { $$('button[' + attr + ']', root).forEach(b => b.addEventListener('click', () => { $$('button[' + attr + ']', root).forEach(x => x.setAttribute('aria-pressed', String(x === b))); cb(b.getAttribute(attr)); })); };
+
+/* ===================== editable content (defaults above, overrides from the embedded block, content.json or a local draft) ===================== */
+const __render = {};
+const clone = o => JSON.parse(JSON.stringify(o));
+const DEFAULTS = clone({ site: SITE, panels: PANELS, families: FAMILIES, files: FILES, courses: COURSES, notes: NOTES, changelog: CHANGELOG, text: {} });
+const ORIGINAL_TEXT = {}; $$('[data-edit]').forEach(el => { ORIGINAL_TEXT[el.dataset.edit] = el.innerHTML; });
+const loadContent = () => { let c = null; const emb = document.getElementById('site-content'); if (emb) { try { const j = JSON.parse(emb.textContent || '{}'); if (j && typeof j === 'object' && Object.keys(j).length) c = j; } catch (e) {} } if (!c && !(window.claude && typeof window.claude.use === 'function')) { try { const j = JSON.parse(localStorage.getItem('parametra-content') || 'null'); if (j && typeof j === 'object') c = j; } catch (e) {} } return Object.assign(clone(DEFAULTS), c || {}); };
+const applyContent = () => { Object.assign(SITE, CONTENT.site || {}); PANELS = CONTENT.panels; FAMILIES = CONTENT.families; FILES = CONTENT.files; COURSES = CONTENT.courses; NOTES = CONTENT.notes; CHANGELOG = CONTENT.changelog; if (!CONTENT.text) CONTENT.text = {}; };
+const applyText = () => { Object.entries(CONTENT.text || {}).forEach(([k, v]) => { const el = document.querySelector('[data-edit="' + k + '"]'); if (el) el.innerHTML = v; }); };
+let CONTENT = loadContent(); applyContent(); applyText();
 
 /* ===================== header / nav ===================== */
 (() => {
@@ -976,13 +1031,13 @@ const seg = (root, attr, cb) => { $$('button[' + attr + ']', root).forEach(b => 
 })();
 
 /* ===================== panel grids ===================== */
-(() => {
+const renderPanels = () => {
   const max = Math.max(...PANELS.map(p => p.tools.length));
   $('#panel-grid').innerHTML = PANELS.map(p => `<div class="pan"><div class="k"><b>${esc(p.name)}</b><span>${p.tools.length}</span></div><div class="meter"><i style="width:${Math.round(p.tools.length / max * 100)}%"></i></div><p>${esc(p.desc)}</p>${p.hideTools ? '' : `<div class="tools">${p.tools.map(t => `<span>${esc(t)}</span>`).join('')}</div>`}</div>`).join('');
   const fmax = Math.max(...FAMILIES.map(f => f.count));
   $('#family-grid').innerHTML = FAMILIES.map(f => `<div class="pan"><div class="k"><b>${esc(f.name)}</b><span>${f.count}</span></div><div class="meter"><i style="width:${Math.round(f.count / fmax * 100)}%"></i></div><p>${esc(f.desc)}</p></div>`).join('');
   $('#fam-count').textContent = `${FAMILIES.length} categories · ${FAMILIES.reduce((s, f) => s + f.count, 0)} families`;
-})();
+}; renderPanels(); __render.panels = renderPanels;
 
 /* ===================== files browser ===================== */
 (() => {
@@ -998,24 +1053,26 @@ const seg = (root, attr, cb) => { $$('button[' + attr + ']', root).forEach(b => 
   tbody.addEventListener('keydown', e => { const r = e.target.closest('.frow'); if (r && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); st.sel = +r.dataset.i; render(); } });
   seg($('#fb-filters'), 'data-ft', v => { st.type = v; render(); });
   $('#fb-version').addEventListener('change', e => { st.version = e.target.value; render(); });
-  render();
+  render(); __render.files = render;
 })();
 
 /* ===================== courses ===================== */
 (() => {
   const art = (i) => { const c = ['#5ee6ff', '#8f7bff', '#b9c6ff', '#3f9a6e'][i % 4]; return `<svg viewBox="0 0 320 180" aria-hidden="true"><rect width="320" height="180" fill="#070a14"/>${Array.from({ length: 9 }, (_, k) => `<line x1="${20 + k * 35}" y1="20" x2="${20 + k * 35}" y2="160" stroke="rgba(241,242,248,.07)"/>`).join('')}<path d="M20 ${140 - i * 10} C 90 ${60 + i * 12}, 160 ${150 - i * 20}, 300 ${50 + i * 15}" fill="none" stroke="${c}" stroke-width="2.5"/><circle cx="20" cy="${140 - i * 10}" r="5" fill="${c}"/><circle cx="300" cy="${50 + i * 15}" r="5" fill="${c}"/><rect x="${120 + i * 20}" y="${70 - i * 6}" width="60" height="40" fill="none" stroke="rgba(241,242,248,.4)" stroke-dasharray="4 3"/></svg>`; };
-  $('#course-grid').innerHTML = COURSES.map((c, i) => `<article class="course" data-level="${c.level}"><div class="course-art">${art(i)}<span class="dur">${c.hours} h</span></div><div class="course-meta"><span><b>${c.n}</b> ${esc(c.cat)}</span><span>${c.lessons} lessons</span></div><h3>${esc(c.title)}</h3><p>${esc(c.blurb)}</p><div><span class="lvl">${c.level}</span></div><details><summary>Syllabus</summary><ol>${c.syllabus.map(([t, d]) => `<li><span>${esc(t)}</span><span>${d}</span></li>`).join('')}</ol></details></article>`).join('');
+  const renderCourses = () => { $('#course-grid').innerHTML = COURSES.map((c, i) => `<article class="course" data-level="${c.level}"><div class="course-art">${art(i)}<span class="dur">${c.hours} h</span></div><div class="course-meta"><span><b>${c.n}</b> ${esc(c.cat)}</span><span>${c.lessons} lessons</span></div><h3>${esc(c.title)}</h3><p>${esc(c.blurb)}</p><div><span class="lvl">${c.level}</span></div><details><summary>Syllabus</summary><ol>${c.syllabus.map(([t, d]) => `<li><span>${esc(t)}</span><span>${d}</span></li>`).join('')}</ol></details></article>`).join(''); }; renderCourses(); __render.courses = renderCourses;
   seg($('#level-bar'), 'data-level', v => $$('#course-grid .course').forEach(c => c.hidden = !(v === 'all' || c.dataset.level === v)));
 })();
 
 /* ===================== notes / changelog / follow ===================== */
-(() => {
+const renderNotes = () => {
   $('#notes-grid').innerHTML = NOTES.map(n => `<article class="note-card"><div class="note-top"><span>${n.n}</span><span>${esc(n.cat)}</span></div><h3>${esc(n.title)}</h3><p>${esc(n.body)}</p><a href="${n.link}">${esc(n.cta)} <span aria-hidden="true">↗</span></a></article>`).join('');
   $('#changelog').innerHTML = CHANGELOG.map(([v, t]) => `<li><span>${v}</span>${esc(t)}</li>`).join('');
   $('#ver-num').textContent = CHANGELOG[0][0];
   $('#follow-grid').innerHTML = `<a class="social-card li" href="${SITE.links.linkedin}" target="_blank" rel="noopener noreferrer"><span class="ic">in</span><span class="social-copy"><small>LinkedIn</small><strong>Follow ${SITE.name}</strong><span>Releases, family walkthroughs and studio news.</span></span><b aria-hidden="true">↗</b></a><a class="social-card yt" href="${SITE.links.youtube}" target="_blank" rel="noopener noreferrer"><span class="ic">▶</span><span class="social-copy"><small>YouTube</small><strong>Watch the tools</strong><span>Short demos of every plugin and course previews.</span></span><b aria-hidden="true">↗</b></a>`;
   $('#footer-social').innerHTML = `<a href="${SITE.links.linkedin}" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="${SITE.links.youtube}" target="_blank" rel="noopener noreferrer">YouTube ↗</a>`;
-  $('#copy-email .addr').textContent = SITE.email;
+  $('#copy-email .addr').textContent = SITE.email; $$('.brand span').forEach(s => s.textContent = SITE.name); document.title = SITE.name;
+}; renderNotes(); __render.notes = renderNotes;
+(() => {
   $('#copy-email').addEventListener('click', async () => { const b = $('#copy-email'), s = b.querySelector('span:last-child'); try { await navigator.clipboard.writeText(SITE.email); s.textContent = 'Copied'; } catch (e) { const r = document.createRange(); r.selectNodeContents(b.querySelector('.addr')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); s.textContent = 'Selected'; } setTimeout(() => s.textContent = 'Copy', 1600); });
 })();
 
@@ -1097,6 +1154,103 @@ const seg = (root, attr, cb) => { $$('button[' + attr + ']', root).forEach(b => 
   const sel = '.course, .note-card, .social-card, .fact, .pan, .version';
   document.addEventListener('pointermove', e => { const el = e.target.closest && e.target.closest(sel); if (!el) return; const b = el.getBoundingClientRect(); const px = (e.clientX - b.left) / b.width, py = (e.clientY - b.top) / b.height; el.style.setProperty('--mx', (px * 100).toFixed(1) + '%'); el.style.setProperty('--my', (py * 100).toFixed(1) + '%'); if (!reduced() && e.pointerType === 'mouse' && el.matches('.course, .note-card, .social-card')) el.style.transform = `perspective(1200px) rotateX(${((.5 - py) * 7).toFixed(2)}deg) rotateY(${((px - .5) * 9).toFixed(2)}deg) translateZ(4px)`; }, { passive: true });
   document.addEventListener('pointerout', e => { const el = e.target.closest && e.target.closest(sel); if (el && !(e.relatedTarget && el.contains(e.relatedTarget))) el.style.transform = ''; });
+})();
+
+/* ===================== admin mode: edit content on the live page ===================== */
+(() => {
+  const LS_KEY = 'parametra-content';
+  const RENDER_FOR = { site: 'notes', panels: 'panels', families: 'panels', files: 'files', courses: 'courses', notes: 'notes', changelog: 'notes' };
+  const LABELS = { name: 'Name', email: 'Contact email', formEndpoint: 'Form endpoint (blank keeps preview mode)', links: 'Links', linkedin: 'LinkedIn URL', youtube: 'YouTube URL', tools: 'Tools (comma separated)', desc: 'Description', count: 'Count', hideTools: 'Hide tool names', type: 'Type', disc: 'Discipline', versions: 'Revit versions (comma separated)', size: 'Size', views: 'Views', sheets: 'Sheets', families: 'Families', schedules: 'Schedules', inside: 'What is inside', n: 'Number', cat: 'Category', title: 'Title', level: 'Level (Beginner, Intermediate, Advanced)', lessons: 'Lessons', hours: 'Hours', blurb: 'Blurb', syllabus: 'Syllabus (one per line: Lesson | duration)', body: 'Body', link: 'Link (#section or URL)', cta: 'Button label', 0: 'Version', 1: 'Note' };
+  const TABS = [['text', 'Text'], ['site', 'Site'], ['panels', 'Panels'], ['families', 'Families'], ['files', 'Files'], ['courses', 'Courses'], ['notes', 'Notes'], ['changelog', 'Changelog'], ['data', 'Import / export']];
+  let mode = 'local', ns = null, canPublish = false, active = false, dirty = false, tab = 'text', timer = 0;
+  const fab = document.createElement('button'); fab.type = 'button'; fab.className = 'admin-fab'; fab.hidden = true; fab.setAttribute('aria-expanded', 'false'); fab.innerHTML = '<i></i><span>Admin</span>'; document.body.appendChild(fab);
+  const drawer = document.createElement('aside'); drawer.className = 'admin-drawer'; drawer.hidden = true; drawer.setAttribute('aria-label', 'Site editor'); document.body.appendChild(drawer);
+  const msgEl = () => drawer.querySelector('.admin-msg');
+  const say = t => { const m = msgEl(); if (m) m.textContent = t; };
+  const setDirty = v => { dirty = v; fab.classList.toggle('dirty', v); };
+  const label = k => LABELS[k] !== undefined ? LABELS[k] : String(k);
+  const itemTitle = (it, i) => Array.isArray(it) ? String(it[0]) : (it.name || it.title || ('Item ' + (i + 1)));
+
+  const fieldHtml = (path, key, val) => {
+    const id = 'af-' + path.replace(/[^a-z0-9]/gi, '-');
+    if (typeof val === 'boolean') return `<label class="af af-check"><input type="checkbox" id="${id}" data-path="${path}" ${val ? 'checked' : ''}> ${esc(label(key))}</label>`;
+    if (typeof val === 'number') return `<label class="af" for="${id}">${esc(label(key))}<input type="number" id="${id}" data-path="${path}" value="${val}"></label>`;
+    if (Array.isArray(val)) { const pairs = val.length > 0 && Array.isArray(val[0]); const text = pairs ? val.map(p => p.join(' | ')).join('\n') : val.join(', '); return `<label class="af" for="${id}">${esc(label(key))}<textarea id="${id}" data-path="${path}" data-kind="${pairs ? 'pairs' : 'list'}" rows="${pairs ? Math.min(8, val.length + 1) : 2}">${esc(text)}</textarea></label>`; }
+    if (val && typeof val === 'object') return `<fieldset class="af-group"><legend>${esc(label(key))}</legend>${Object.entries(val).map(([k, v]) => fieldHtml(path + '.' + k, k, v)).join('')}</fieldset>`;
+    const s = val == null ? '' : String(val);
+    return `<label class="af" for="${id}">${esc(label(key))}${s.length > 70 ? `<textarea id="${id}" data-path="${path}" rows="3">${esc(s)}</textarea>` : `<input type="text" id="${id}" data-path="${path}" value="${esc(s)}">`}</label>`;
+  };
+  const itemsHtml = name => CONTENT[name].map((it, i) => `<details class="af-item"${i === 0 ? ' open' : ''}><summary><span>${esc(itemTitle(it, i))}</span><span class="af-tools"><button type="button" data-move="${name}:${i}:-1" title="Move up">↑</button><button type="button" data-move="${name}:${i}:1" title="Move down">↓</button><button type="button" data-dup="${name}:${i}" title="Duplicate">⧉</button><button type="button" data-del="${name}:${i}" title="Delete">✕</button></span></summary>${(Array.isArray(it) ? it.map((v, k) => [k, v]) : Object.entries(it)).map(([k, v]) => fieldHtml(`${name}.${i}.${k}`, k, v)).join('')}</details>`).join('') + `<button type="button" class="button admin-add" data-add="${name}">+ Add item</button>`;
+  const textListHtml = () => { const keys = Object.keys(CONTENT.text || {}); return keys.length ? `<div class="admin-textlist">${keys.map(k => `<div><span>${esc(k)}</span><button type="button" data-revert="${esc(k)}">Revert</button></div>`).join('')}</div>` : '<p class="admin-help">No text changes yet.</p>'; };
+  const body = () => {
+    if (tab === 'text') return `<p class="admin-help">Click any outlined text on the page and type. Headings keep their highlighted word if you edit around it. Edits stay on this device until you save.</p>${textListHtml()}`;
+    if (tab === 'site') return Object.entries(CONTENT.site).map(([k, v]) => fieldHtml('site.' + k, k, v)).join('');
+    if (tab === 'data') return `<p class="admin-help">Export copies everything as JSON. For the GitHub Pages copy of the site, save it as <code>docs/content.json</code> next to index.html and it loads automatically.</p><textarea class="admin-json" rows="9" readonly>${esc(JSON.stringify(CONTENT, null, 2))}</textarea><button type="button" class="button admin-copy">Copy JSON</button><p class="admin-help">Import: paste JSON exported earlier, then apply. Save afterwards to keep it.</p><textarea class="admin-import" rows="5" placeholder="{ ... }"></textarea><button type="button" class="button admin-apply">Apply import</button>`;
+    return itemsHtml(tab);
+  };
+  const render = () => { drawer.innerHTML = `<header><b>Site editor</b><span class="admin-mode">${mode === 'artifact' ? (canPublish ? 'Publishes for everyone' : 'Read-only view') : 'Saves in this browser'}</span><button type="button" class="admin-x" aria-label="Close editor">×</button></header><nav>${TABS.map(([k, l]) => `<button type="button" data-tab="${k}" aria-pressed="${k === tab}">${l}</button>`).join('')}</nav><div class="admin-body">${body()}</div><footer><button type="button" class="button button-primary admin-save">${mode === 'artifact' ? 'Save & publish' : 'Save in browser'}</button><button type="button" class="button admin-reset">Reset all</button><p class="admin-msg" role="status" aria-live="polite"></p></footer>`; };
+
+  const setPath = (path, val) => { const ks = path.split('.'); let o = CONTENT; for (let i = 0; i < ks.length - 1; i++) o = o[ks[i]]; o[ks[ks.length - 1]] = val; };
+  const readField = t => { if (t.type === 'checkbox') return t.checked; if (t.type === 'number') return Number(t.value); if (t.dataset.kind === 'list') return t.value.split(',').map(s => s.trim()).filter(Boolean).map(s => (/^-?\d+(\.\d+)?$/.test(s) ? Number(s) : s)); if (t.dataset.kind === 'pairs') return t.value.split('\n').map(l => l.trim()).filter(Boolean).map(l => l.split('|').map(s => s.trim())); return t.value; };
+  const refresh = coll => { setDirty(true); clearTimeout(timer); timer = setTimeout(() => { applyContent(); const fn = __render[RENDER_FOR[coll]]; if (fn) fn(); }, 250); };
+  const refreshAll = () => { applyContent(); Object.values(__render).forEach(fn => fn()); applyText(); };
+  const restoreText = () => { Object.entries(ORIGINAL_TEXT).forEach(([k, v]) => { const el = document.querySelector('[data-edit="' + k + '"]'); if (el) el.innerHTML = v; }); };
+
+  drawer.addEventListener('input', e => { const t = e.target; if (!t.dataset || !t.dataset.path) return; setPath(t.dataset.path, readField(t)); refresh(t.dataset.path.split('.')[0]); });
+  drawer.addEventListener('click', async e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.closest('summary')) e.preventDefault();
+    if (b.dataset.tab) { tab = b.dataset.tab; render(); return; }
+    if (b.classList.contains('admin-x')) { close(); return; }
+    if (b.classList.contains('admin-save')) { save(); return; }
+    if (b.classList.contains('admin-reset')) { if (b.dataset.armed) { CONTENT = clone(DEFAULTS); restoreText(); refreshAll(); try { localStorage.removeItem(LS_KEY); } catch (err) {} setDirty(true); render(); say('Defaults restored. Save to keep it.'); } else { b.dataset.armed = '1'; b.textContent = 'Click again to confirm'; setTimeout(() => { delete b.dataset.armed; b.textContent = 'Reset all'; }, 4000); } return; }
+    if (b.dataset.revert) { const k = b.dataset.revert; delete CONTENT.text[k]; const el = document.querySelector('[data-edit="' + k + '"]'); if (el && ORIGINAL_TEXT[k] !== undefined) el.innerHTML = ORIGINAL_TEXT[k]; setDirty(true); render(); return; }
+    if (b.dataset.add) { const arr = CONTENT[b.dataset.add]; const src = arr[arr.length - 1] || DEFAULTS[b.dataset.add][0]; const it = clone(src); if (!Array.isArray(it)) { if ('name' in it) it.name += ' (copy)'; if ('title' in it) it.title += ' (copy)'; } arr.push(it); refresh(b.dataset.add); render(); drawer.querySelectorAll('.af-item')[arr.length - 1].open = true; return; }
+    if (b.dataset.dup) { const [name, i] = b.dataset.dup.split(':'); CONTENT[name].splice(+i + 1, 0, clone(CONTENT[name][+i])); refresh(name); render(); return; }
+    if (b.dataset.del) { const [name, i] = b.dataset.del.split(':'); if (CONTENT[name].length <= 1) { say('Keep at least one item.'); return; } CONTENT[name].splice(+i, 1); refresh(name); render(); return; }
+    if (b.dataset.move) { const [name, i, d] = b.dataset.move.split(':'); const arr = CONTENT[name], j = +i + +d; if (j < 0 || j >= arr.length) return; [arr[+i], arr[j]] = [arr[j], arr[+i]]; refresh(name); render(); return; }
+    if (b.classList.contains('admin-copy')) { const ta = drawer.querySelector('.admin-json'); try { await navigator.clipboard.writeText(ta.value); b.textContent = 'Copied'; } catch (err) { ta.focus(); ta.select(); b.textContent = 'Selected, press copy'; } setTimeout(() => b.textContent = 'Copy JSON', 1600); return; }
+    if (b.classList.contains('admin-apply')) { const ta = drawer.querySelector('.admin-import'); try { const j = JSON.parse(ta.value); if (!j || typeof j !== 'object') throw new Error('not an object'); CONTENT = Object.assign(clone(DEFAULTS), j); restoreText(); refreshAll(); setDirty(true); render(); say('Import applied. Save to keep it.'); } catch (err) { say('That is not valid JSON: ' + err.message); } }
+  });
+  document.addEventListener('input', e => { if (!active || !e.target.closest) return; const el = e.target.closest('[data-edit]'); if (!el) return; CONTENT.text[el.dataset.edit] = el.innerHTML; setDirty(true); });
+  document.addEventListener('paste', e => { if (!active || !e.target.closest || !e.target.closest('[data-edit]')) return; e.preventDefault(); const t = (e.clipboardData || window.clipboardData).getData('text/plain'); document.execCommand('insertText', false, t); });
+  document.addEventListener('click', e => { if (active && e.target.closest && e.target.closest('[data-edit] a')) e.preventDefault(); });
+
+  const buildDocument = () => {
+    const head = [...document.head.querySelectorAll('meta[charset], meta[name="viewport"]')].map(e => e.outerHTML).join('') + (document.head.querySelector('style') ? document.head.querySelector('style').outerHTML : '');
+    const block = '<script type="application/json" id="site-content">' + JSON.stringify(CONTENT).replace(/</g, '\\u003c') + '</scr' + 'ipt>';
+    let b = window.__PRISTINE_BODY || '';
+    b = /id="site-content"/.test(b) ? b.replace(/<script type="application\/json" id="site-content">[\s\S]*?<\/script>/, () => block) : b.replace(/<script src=/, () => block + '\n<script src=');
+    return '<!doctype html><html><head>' + head + '</head><body>' + b + '</body></html>';
+  };
+  const save = async () => {
+    const btn = drawer.querySelector('.admin-save');
+    if (mode !== 'artifact') { try { localStorage.setItem(LS_KEY, JSON.stringify(CONTENT)); setDirty(false); say('Saved in this browser. To publish on GitHub Pages, copy the JSON from Import / export into docs/content.json.'); } catch (err) { say('Could not save: browser storage is unavailable here.'); } return; }
+    if (!ns) { say('Publishing is not available in this view.'); return; }
+    btn.disabled = true; say('Publishing…'); try { sessionStorage.setItem('parametra-admin-reopen', '1'); } catch (err) {}
+    try { await ns.publish(buildDocument()); setDirty(false); say('Published. Reloading…'); }
+    catch (err) { btn.disabled = false; try { sessionStorage.removeItem('parametra-admin-reopen'); } catch (e2) {} const code = err && err.code;
+      if (code === 'conflict') say('Someone published a newer version first. The page is reloading to it; make your change again there.');
+      else if (code === 'not_writer' || code === 'not_granted' || code === 'not_declared' || code === 'consent_required') { canPublish = false; say('This view is read-only: you cannot publish changes to this page.'); }
+      else if (code === 'too_large') say('The page is too large to publish. Trim some content and try again.');
+      else if (code === 'rate_limited') say('Publishing too often. Wait a moment, then save again.');
+      else say('Publishing failed' + (err && err.message ? ': ' + err.message : '.') + ' Your edits are still here; try again.'); }
+  };
+  const open = () => { active = true; document.body.classList.add('admin-on'); $$('[data-edit]').forEach(el => { el.setAttribute('contenteditable', 'true'); el.setAttribute('spellcheck', 'false'); }); drawer.hidden = false; fab.setAttribute('aria-expanded', 'true'); render(); };
+  const close = () => { active = false; document.body.classList.remove('admin-on'); $$('[data-edit]').forEach(el => { el.removeAttribute('contenteditable'); el.removeAttribute('spellcheck'); }); drawer.hidden = true; fab.setAttribute('aria-expanded', 'false'); };
+  fab.addEventListener('click', () => active ? close() : open());
+  window.addEventListener('beforeunload', e => { if (dirty && mode === 'artifact') { e.preventDefault(); e.returnValue = ''; } });
+
+  const loadRemoteContent = async () => { if (location.protocol === 'file:') return; let draft = null; try { draft = localStorage.getItem(LS_KEY); } catch (err) {} if (draft) return; try { const r = await fetch('content.json', { cache: 'no-store' }); if (!r.ok) return; const j = await r.json(); if (!j || typeof j !== 'object') return; CONTENT = Object.assign(clone(DEFAULTS), j); refreshAll(); } catch (err) {} };
+  const maybeShow = () => { if (canPublish || location.hash === '#admin') fab.hidden = false; };
+  const boot = async () => {
+    if (window.claude && typeof window.claude.use === 'function') { mode = 'artifact'; const [user, art] = await Promise.all([window.claude.use('user'), window.claude.use('artifact')]); ns = art; canPublish = !!(user && await user.canEdit()); }
+    else { mode = 'local'; loadRemoteContent(); }
+    maybeShow(); window.addEventListener('hashchange', maybeShow);
+    let reopen = false; try { reopen = sessionStorage.getItem('parametra-admin-reopen') === '1'; sessionStorage.removeItem('parametra-admin-reopen'); } catch (err) {}
+    if (reopen && !fab.hidden) { open(); say('Published. Everyone who opens the page now sees this version.'); }
+  };
+  boot();
 })();
 </script>
 </body>
