@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ahmed1209.github.io/claude-todo-demo/sitemap.xml
+Sitemap: https://parametra.studio/sitemap.xml
