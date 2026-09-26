@@ -1,0 +1,487 @@
+{
+ "site": {
+  "name": "Parametra",
+  "email": "hello@parametra.studio",
+  "links": {
+   "linkedin": "https://www.linkedin.com/",
+   "youtube": "https://www.youtube.com/"
+  },
+  "effects": {
+   "hover": "beam",
+   "transition": "warp"
+  },
+  "formEndpoint": ""
+ },
+ "panels": [
+  {
+   "name": "Annotation",
+   "tools": [
+    "Region Tools",
+    "Revisions"
+   ],
+   "desc": "Filled-region and revision utilities for drawing sets."
+  },
+  {
+   "name": "Auto Dimension & Tag",
+   "tools": [
+    "Auto Dim & Tag"
+   ],
+   "desc": "Dimension and tag a whole view in one pass."
+  },
+  {
+   "name": "BIMCAD Tools",
+   "tools": [
+    "CAD Converter",
+    "Transfer to CAD",
+    "Update from CAD"
+   ],
+   "desc": "Round-trip between Revit and CAD without redrawing."
+  },
+  {
+   "name": "Ahmed Tools",
+   "tools": [
+    "Floor to Topo",
+    "Topo Links",
+    "Parametric Pattern"
+   ],
+   "desc": "Floors to toposolids, linked topography and seeded paving patterns."
+  },
+  {
+   "name": "Line Styles",
+   "tools": [
+    "Line Styles"
+   ],
+   "desc": "Audit, rename and swap line styles across the project."
+  },
+  {
+   "name": "Manage",
+   "tools": [
+    "Manage tool 1",
+    "Manage tool 2"
+   ],
+   "hideTools": true,
+   "desc": "Two project housekeeping utilities."
+  },
+  {
+   "name": "Model",
+   "tools": [
+    "Floor Tools",
+    "Create Edgers"
+   ],
+   "desc": "Floor editing and edging along boundaries."
+  },
+  {
+   "name": "Planting Audit",
+   "tools": [
+    "Planting Audit"
+   ],
+   "desc": "Check spacing, tags and quantities before issue."
+  },
+  {
+   "name": "Planting Scatter",
+   "tools": [
+    "Plant Library",
+    "Path Scatter",
+    "Surface Scatter",
+    "Edit Scatter"
+   ],
+   "desc": "Place, scatter and re-flow planting from a library."
+  },
+  {
+   "name": "Position",
+   "tools": [
+    "Manage Legends",
+    "Manage Viewports",
+    "Align Viewports",
+    "Align Tags",
+    "Align Elements",
+    "Align Railing"
+   ],
+   "desc": "Align and arrange tags, viewports, legends, elements and railings."
+  },
+  {
+   "name": "Print",
+   "tools": [
+    "Print Browser"
+   ],
+   "desc": "Batch print and export sheets from one browser."
+  },
+  {
+   "name": "Shadow Analysis",
+   "tools": [
+    "Shadow Analysis",
+    "Shadow Links"
+   ],
+   "desc": "Sun and shadow studies with results linked to elements."
+  },
+  {
+   "name": "Sheet Manager",
+   "tools": [
+    "Sheet Manager"
+   ],
+   "desc": "Create, renumber and organise sheets in bulk."
+  },
+  {
+   "name": "Standards Checker",
+   "tools": [
+    "Check Standards"
+   ],
+   "desc": "Validate the model against office standards."
+  },
+  {
+   "name": "View Manager",
+   "tools": [
+    "View Manager"
+   ],
+   "desc": "Create, rename and organise views at scale."
+  }
+ ],
+ "families": [
+  {
+   "name": "Site & landscape",
+   "count": 42,
+   "desc": "Pergolas, planters, benches, bollards, kerbs and steps with type catalogs."
+  },
+  {
+   "name": "Planting",
+   "count": 120,
+   "desc": "Trees, palms, shrubs and groundcovers with height, spread and water-need parameters."
+  },
+  {
+   "name": "Doors & windows",
+   "count": 36,
+   "desc": "Curtain doors, sliders and screens with guarded formulas."
+  },
+  {
+   "name": "Furniture & fixtures",
+   "count": 58,
+   "desc": "Loose and fixed furniture that schedules cleanly."
+  },
+  {
+   "name": "Annotation",
+   "count": 64,
+   "desc": "Tags, symbols, title blocks and key plans that match the templates."
+  },
+  {
+   "name": "Detail items",
+   "count": 90,
+   "desc": "2D components for sections and details, organised by assembly."
+  }
+ ],
+ "files": [
+  {
+   "name": "Architecture template",
+   "type": "Template",
+   "disc": "Architecture",
+   "versions": [
+    2026,
+    2025,
+    2024,
+    2023
+   ],
+   "size": "28 MB",
+   "views": 46,
+   "sheets": 12,
+   "families": 210,
+   "schedules": 18,
+   "inside": "View templates for plans, sections and 3D, browser organisation by phase and discipline, graphic overrides, filters and the office title blocks."
+  },
+  {
+   "name": "Landscape template",
+   "type": "Template",
+   "disc": "Landscape",
+   "versions": [
+    2026,
+    2025,
+    2024
+   ],
+   "size": "34 MB",
+   "views": 38,
+   "sheets": 10,
+   "families": 260,
+   "schedules": 22,
+   "inside": "Toposolid and planting settings, planting schedules by mix, hardscape filters, and the tags the scatter tools expect."
+  },
+  {
+   "name": "Interiors template",
+   "type": "Template",
+   "disc": "Interiors",
+   "versions": [
+    2026,
+    2025,
+    2024,
+    2023
+   ],
+   "size": "22 MB",
+   "views": 32,
+   "sheets": 9,
+   "families": 180,
+   "schedules": 14,
+   "inside": "Finish schedules, room data sheets, furniture legends and elevation-per-room view templates."
+  },
+  {
+   "name": "Courtyard housing sample",
+   "type": "Project",
+   "disc": "Architecture",
+   "versions": [
+    2025,
+    2024
+   ],
+   "size": "96 MB",
+   "views": 140,
+   "sheets": 48,
+   "families": 420,
+   "schedules": 26,
+   "inside": "A complete small project from massing to issue, with the sheet set and worksets used in the courses."
+  },
+  {
+   "name": "Park and promenade sample",
+   "type": "Project",
+   "disc": "Landscape",
+   "versions": [
+    2026,
+    2025
+   ],
+   "size": "112 MB",
+   "views": 120,
+   "sheets": 36,
+   "families": 390,
+   "schedules": 30,
+   "inside": "Toposolids, scattered planting, shadow study views and a full landscape documentation set."
+  },
+  {
+   "name": "Hardscape details",
+   "type": "Details",
+   "disc": "Landscape",
+   "versions": [
+    2026,
+    2025,
+    2024,
+    2023
+   ],
+   "size": "18 MB",
+   "views": 84,
+   "sheets": 6,
+   "families": 150,
+   "schedules": 0,
+   "inside": "Paving, kerb, step and wall details drawn as detail items so they transfer between projects."
+  },
+  {
+   "name": "Envelope details",
+   "type": "Details",
+   "disc": "Architecture",
+   "versions": [
+    2026,
+    2025,
+    2024
+   ],
+   "size": "21 MB",
+   "views": 96,
+   "sheets": 8,
+   "families": 170,
+   "schedules": 0,
+   "inside": "Wall, roof, parapet and opening details keyed to the assembly codes in the template."
+  },
+  {
+   "name": "Planting schedule pack",
+   "type": "Schedules",
+   "disc": "Landscape",
+   "versions": [
+    2026,
+    2025,
+    2024,
+    2023
+   ],
+   "size": "4 MB",
+   "views": 0,
+   "sheets": 0,
+   "families": 0,
+   "schedules": 16,
+   "inside": "Schedules by mix, by area and by water need, plus a QA schedule that flags untagged plants."
+  },
+  {
+   "name": "QA schedule pack",
+   "type": "Schedules",
+   "disc": "Architecture",
+   "versions": [
+    2026,
+    2025,
+    2024,
+    2023
+   ],
+   "size": "3 MB",
+   "views": 0,
+   "sheets": 0,
+   "families": 0,
+   "schedules": 12,
+   "inside": "Model checking schedules: unplaced rooms, duplicate marks, missing sheet parameters and warnings by type."
+  }
+ ],
+ "courses": [
+  {
+   "n": "01",
+   "cat": "Revit API",
+   "title": "Build your first ribbon tab with C#",
+   "level": "Advanced",
+   "lessons": 14,
+   "hours": 9,
+   "blurb": "From an empty Visual Studio project to a signed add-in with a panel, a command and a settings dialog.",
+   "syllabus": [
+    [
+     "Project setup and the .addin manifest",
+     "32 min"
+    ],
+    [
+     "External commands and transactions",
+     "48 min"
+    ],
+    [
+     "Building the ribbon",
+     "41 min"
+    ],
+    [
+     "Reading and writing parameters",
+     "55 min"
+    ],
+    [
+     "A scatter tool, step by step",
+     "1 h 10"
+    ],
+    [
+     "Packaging an installer",
+     "38 min"
+    ]
+   ]
+  },
+  {
+   "n": "02",
+   "cat": "Families",
+   "title": "Parametric families masterclass",
+   "level": "Intermediate",
+   "lessons": 12,
+   "hours": 7,
+   "blurb": "Reference planes, formulas, nested families and type catalogs, built into a pergola, a planter and a tag.",
+   "syllabus": [
+    [
+     "Reference planes that behave",
+     "36 min"
+    ],
+    [
+     "Formulas and guards",
+     "44 min"
+    ],
+    [
+     "Nested and shared families",
+     "50 min"
+    ],
+    [
+     "Type catalogs",
+     "28 min"
+    ],
+    [
+     "Flex testing and QA",
+     "32 min"
+    ]
+   ]
+  },
+  {
+   "n": "03",
+   "cat": "Landscape BIM",
+   "title": "Landscape in Revit: topo, planting, scatter",
+   "level": "Beginner",
+   "lessons": 10,
+   "hours": 6,
+   "blurb": "Toposolids, planting libraries, scatter tools and the schedules that make a landscape set coordinate.",
+   "syllabus": [
+    [
+     "Toposolids and floors",
+     "40 min"
+    ],
+    [
+     "Planting library setup",
+     "35 min"
+    ],
+    [
+     "Surface and path scatter",
+     "45 min"
+    ],
+    [
+     "Shadow studies",
+     "30 min"
+    ],
+    [
+     "Planting schedules and tags",
+     "38 min"
+    ]
+   ]
+  },
+  {
+   "n": "04",
+   "cat": "Production",
+   "title": "Sheets, views and standards that scale",
+   "level": "Beginner",
+   "lessons": 9,
+   "hours": 5,
+   "blurb": "Templates, view templates, sheet management and a standards check before every issue.",
+   "syllabus": [
+    [
+     "Template anatomy",
+     "30 min"
+    ],
+    [
+     "View templates and filters",
+     "42 min"
+    ],
+    [
+     "Sheet Manager and Print Browser",
+     "36 min"
+    ],
+    [
+     "Standards Checker in practice",
+     "28 min"
+    ]
+   ]
+  }
+ ],
+ "notes": [
+  {
+   "n": "01",
+   "cat": "Ribbon design",
+   "title": "One tab beats ten add-ins.",
+   "body": "Every tool on the BIM Tools tab follows the same pattern: select, choose, done. When tools share a home, a vocabulary and a settings dialog, the team learns the whole set in an afternoon instead of one plugin at a time.",
+   "link": "#plugins",
+   "cta": "See the tab"
+  },
+  {
+   "n": "02",
+   "cat": "Family practice",
+   "title": "Flex the family before the project does.",
+   "body": "A family that only works at the sizes you tested is a bug waiting for a deadline. Build the guard formulas first, then push every parameter to its limit and watch what breaks. The flex test above is that habit, made visible.",
+   "link": "#families",
+   "cta": "Flex the pergola"
+  },
+  {
+   "n": "03",
+   "cat": "Documentation",
+   "title": "Clean files start clean.",
+   "body": "Most documentation pain is inherited from the template. A browser organisation that matches how the office thinks, view templates that are actually applied, and a standards check before issue remove most of it.",
+   "link": "#files",
+   "cta": "Browse the shelf"
+  }
+ ],
+ "changelog": [
+  [
+   "v2.4.0",
+   "Planting Scatter gains Path Scatter and Edit Scatter. Shadow Links added to the Shadow Analysis panel."
+  ],
+  [
+   "v2.3.2",
+   "Align Railing handles multi-segment railings. Sheet Manager renumbering keeps revision clouds attached."
+  ],
+  [
+   "v2.3.0",
+   "Installer covers Revit 2023 to 2026 from one setup file. Seven legacy tools retired from the tab."
+  ]
+ ],
+ "text": {}
+}
