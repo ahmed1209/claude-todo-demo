@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Revit plugins, parametric families, project files and courses from one studio: thirty-one tools on a single BIM Tools ribbon tab, families that flex instead of break, templates that start clean and courses that explain the reasoning behind each button.">
+<meta name="description" content="Parametra Studio makes Revit plugins, parametric families, project files and courses: thirty-one tools on a single BIM Tools ribbon tab, families that flex instead of break, templates that start clean and courses that explain the reasoning behind each button.">
 <meta name="theme-color" content="#06080f">
 <link rel="canonical" href="https://parametra.studio/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -11,22 +11,22 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Parametra">
-<meta property="og:title" content="Parametra · Revit plugins, parametric families, files and courses">
-<meta property="og:description" content="Revit plugins, parametric families, project files and courses from one studio: thirty-one tools on a single BIM Tools ribbon tab, families that flex instead of break, templates that start clean and courses that explain the reasoning behind each button.">
+<meta property="og:site_name" content="Parametra Studio">
+<meta property="og:title" content="Parametra Studio">
+<meta property="og:description" content="Parametra Studio makes Revit plugins, parametric families, project files and courses: thirty-one tools on a single BIM Tools ribbon tab, families that flex instead of break, templates that start clean and courses that explain the reasoning behind each button.">
 <meta property="og:url" content="https://parametra.studio/">
 <meta property="og:image" content="https://parametra.studio/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Parametra: Parametric by default. A particle model of a pergola floats beside the headline.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Parametra · Revit plugins, parametric families, files and courses">
-<meta name="twitter:description" content="Revit plugins, parametric families, project files and courses from one studio: thirty-one tools on a single BIM Tools ribbon tab, families that flex instead of break, templates that start clean and courses that explain the reasoning behind each button.">
+<meta name="twitter:title" content="Parametra Studio">
+<meta name="twitter:description" content="Parametra Studio makes Revit plugins, parametric families, project files and courses: thirty-one tools on a single BIM Tools ribbon tab, families that flex instead of break, templates that start clean and courses that explain the reasoning behind each button.">
 <meta name="twitter:image" content="https://parametra.studio/og.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Parametra", "url": "https://parametra.studio/", "description": "Revit plugins, parametric families, project files and courses from one studio: thirty-one tools on a single BIM Tools ribbon tab, families that flex instead of break, templates that start clean and courses that explain the reasoning behind each button.", "publisher": {"@type": "Organization", "name": "Parametra", "url": "https://parametra.studio/", "logo": "https://parametra.studio/icon-512.png"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://parametra.studio/#organization", "name": "Parametra Studio", "alternateName": ["Parametra", "Parametra.studio", "Parametrastudio", "Parametra Studios", "Parametera Studio"], "url": "https://parametra.studio", "logo": {"@type": "ImageObject", "url": "https://parametra.studio/icon-512.png"}, "description": "Parametra Studio makes Revit plugins, parametric families, project files and courses: thirty-one tools on a single BIM Tools ribbon tab, families that flex instead of break, templates that start clean and courses that explain the reasoning behind each button."}, {"@type": "WebSite", "@id": "https://parametra.studio/#website", "name": "Parametra Studio", "url": "https://parametra.studio/", "publisher": {"@id": "https://parametra.studio/#organization"}, "description": "Parametra Studio makes Revit plugins, parametric families, project files and courses: thirty-one tools on a single BIM Tools ribbon tab, families that flex instead of break, templates that start clean and courses that explain the reasoning behind each button."}]}</script>
 <style>.noscript{position:fixed;left:16px;right:16px;bottom:16px;z-index:99;background:#0b1020;color:#eef3ff;border:1px solid rgba(94,230,255,.4);border-radius:12px;padding:12px 16px;font:15px/1.4 system-ui,sans-serif}</style>
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style>
-<title>Parametra · Revit plugins, parametric families, files and courses</title>
+<title>Parametra Studio</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 :root{
@@ -1295,7 +1295,7 @@ const renderNotes = () => {
   $('#ver-num').textContent = CHANGELOG[0][0];
   $('#follow-grid').innerHTML = `<a class="social-card li" href="${SITE.links.linkedin}" target="_blank" rel="noopener noreferrer"><span class="ic">in</span><span class="social-copy"><small>LinkedIn</small><strong>Follow ${SITE.name}</strong><span>Releases, family walkthroughs and studio news.</span></span><b aria-hidden="true">↗</b></a><a class="social-card yt" href="${SITE.links.youtube}" target="_blank" rel="noopener noreferrer"><span class="ic">▶</span><span class="social-copy"><small>YouTube</small><strong>Watch the tools</strong><span>Short demos of every plugin and course previews.</span></span><b aria-hidden="true">↗</b></a>`;
   $('#footer-social').innerHTML = `<a href="${SITE.links.linkedin}" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="${SITE.links.youtube}" target="_blank" rel="noopener noreferrer">YouTube ↗</a>`;
-  $('#copy-email .addr').textContent = SITE.email; $$('.brand span').forEach(s => s.textContent = SITE.name); { const t0 = document.title, sep = t0.indexOf(' · '); document.title = sep > 0 ? SITE.name + t0.slice(sep) : SITE.name; } document.dispatchEvent(new Event('content:rendered'));
+  $('#copy-email .addr').textContent = SITE.email; $$('.brand span').forEach(s => s.textContent = SITE.name); if (!document.title.includes(SITE.name)) document.title = SITE.name; document.dispatchEvent(new Event('content:rendered'));
 }; renderNotes(); __render.notes = renderNotes;
 (() => {
   $('#copy-email').addEventListener('click', async () => { const b = $('#copy-email'), s = b.querySelector('span:last-child'); try { await navigator.clipboard.writeText(SITE.email); s.textContent = 'Copied'; } catch (e) { const r = document.createRange(); r.selectNodeContents(b.querySelector('.addr')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); s.textContent = 'Selected'; } setTimeout(() => s.textContent = 'Copy', 1600); });
