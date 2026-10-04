@@ -40,6 +40,21 @@ The **Site** tab also holds the motion options: the button hover effect (shimmer
 
 Defaults live in the `SITE` and data blocks inside `docs/index.html`; the editor's **Reset all** returns to them.
 
+## Security
+
+The site is static: there is no server, database, session or login behind it, so several classic web-app controls have nothing to attach to. What is in place:
+
+- **Content Security Policy** (a `<meta>` policy in `docs/index.html`): scripts run only if they match the SHA-256 hash of the page's own script or come from cdnjs.cloudflare.com (three.js) or challenges.cloudflare.com (Turnstile); inline event handlers, `eval` and foreign scripts are blocked; frames, plugins and workers are disallowed; `base-uri` and `form-action` are restricted and insecure requests are upgraded. The hash is recomputed by the build, so a rebuilt page always carries a matching policy.
+- **Subresource Integrity** on the three.js file, so a tampered CDN copy will not run, plus a `strict-origin-when-cross-origin` referrer policy.
+- **Clickjacking protection**: GitHub Pages cannot send `X-Frame-Options`, so the public page refuses to run inside another site's frame (the claude.ai preview is exempt).
+- **Request form**: a hidden honeypot field, a minimum fill time and, when a Cloudflare Turnstile site key is entered in the admin **Site** tab, a real CAPTCHA box whose token is sent with the request as `cf-turnstile-response` (the form endpoint must verify it with Cloudflare's siteverify API; Formspree and similar services can do this for you).
+- **Content validation and output encoding**: everything the page loads from the embedded block, `content.json`, a local draft or an import passes through `sanitizeContent`: prototype-pollution keys are dropped, strings are capped and stripped of control characters, link fields accept only `https://`, `http://`, `mailto:` or relative paths, motion options must be known values, and rich text edited in place keeps only harmless inline tags. All content is HTML-escaped when rendered.
+- **Admin editor**: the **Sign out** button forgets the local draft and session flags, resets every form and reloads without the `#admin` flag. Publishing goes through your GitHub login, which carries GitHub's own rate limiting and two-factor protection; the editor itself has no password because it writes only to the visitor's own browser.
+- **Dependencies**: Dependabot (`.github/dependabot.yml`) opens weekly pull requests for the GitHub Actions and the add-in's NuGet packages; `dependabot-auto-merge.yml` merges minor and patch Action updates by itself once **Allow auto-merge** is ticked in Settings → General. The three.js version is pinned on purpose (newer majors change its API) and protected by the integrity hash.
+- **Provided by GitHub Pages**: HTTPS enforced with automatic certificate renewal, no directory listings (a folder without `index.html` returns 404), and `Access-Control-Allow-Origin: *` on static files, which is harmless because nothing here carries credentials.
+
+Not possible on GitHub Pages: custom HTTP response headers such as `Strict-Transport-Security`, `Permissions-Policy` or a header-based CSP. If those are ever required, put the domain behind Cloudflare (free plan) and add them as response header rules.
+
 ## Going live on your own domain
 
 Everything under `docs/` is a complete public build: the page carries a search title and description, Open Graph and Twitter card tags with `og.png` (1200 × 630), an SVG favicon plus PNG and Apple touch icons, `site.webmanifest` (installable on phones), `robots.txt`, `sitemap.xml`, a styled `404.html` that sends visitors home, `.nojekyll` and a `<noscript>` notice. Three steps remain, all in your own accounts.

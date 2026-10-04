@@ -15,3 +15,10 @@ Thumbs.db
 
 # Build output (the ready-to-install binaries live in RevitModelSlimmer/dist instead)
 RevitModelSlimmer/build/
+
+# Secrets and local configuration: never commit environment files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
