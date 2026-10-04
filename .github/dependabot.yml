@@ -1,0 +1,16 @@
+version: 2
+updates:
+  # The GitHub Actions used by the Pages deployment and the auto-merge workflow
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+  # NuGet packages of the Revit Model Slimmer add-in
+  - package-ecosystem: nuget
+    directory: /RevitModelSlimmer/src/RevitModelSlimmer
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
